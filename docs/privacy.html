@@ -42,7 +42,7 @@
     <li>No data is collected by the developer. There is nowhere for it to go — Rulebook has no backend.</li>
     <li>No analytics, no tracking, no advertising identifier, no third-party SDKs of that kind.</li>
     <li>Your rules live in your mailbox. The app edits them in place; it does not keep a copy anywhere else.</li>
-    <li>Rulebook does not read your mail.</li>
+    <li>Rulebook does not read your mail, though one permission it needs would allow reading senders and subjects — <a href="#broader-permission">see below</a>.</li>
   </ul>
 </section>
 
@@ -55,7 +55,7 @@
     <li><strong>Your account name and address</strong> — shown so you can tell which mailbox you're looking at.</li>
   </ul>
 
-  <h3>A permission that is broader than the app's use of it</h3>
+  <h3 id="broader-permission">A permission that is broader than the app's use of it</h3>
   <p>
     Listing your folders through Microsoft Graph requires a permission that also
     grants access to message senders, recipients and subjects. Rulebook does not
