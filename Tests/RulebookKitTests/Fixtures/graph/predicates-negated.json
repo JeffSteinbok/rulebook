@@ -1,0 +1,194 @@
+{
+  "exchanges" : [
+    {
+      "label" : "negated isMeetingRequest",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingRequest" : false
+        },
+        "displayName" : "RuleBook probe – negated isMeetingRequest",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated isMeetingRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf5Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 35
+      },
+      "status" : 201
+    },
+    {
+      "label" : "negated isMeetingRequest (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5Q=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated isMeetingRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf5Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 35
+      },
+      "status" : 200
+    },
+    {
+      "label" : "negated hasAttachments",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : false
+        },
+        "displayName" : "RuleBook probe – negated hasAttachments",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated hasAttachments",
+        "hasError" : false,
+        "id" : "AQAAABSCf5U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 36
+      },
+      "status" : 201
+    },
+    {
+      "label" : "negated hasAttachments (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5U=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated hasAttachments",
+        "hasError" : false,
+        "id" : "AQAAABSCf5U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 36
+      },
+      "status" : 200
+    },
+    {
+      "label" : "negated isEncrypted",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isEncrypted" : false
+        },
+        "displayName" : "RuleBook probe – negated isEncrypted",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated isEncrypted",
+        "hasError" : false,
+        "id" : "AQAAABSCf5Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 37
+      },
+      "status" : 201
+    },
+    {
+      "label" : "negated isEncrypted (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5Y=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated isEncrypted",
+        "hasError" : false,
+        "id" : "AQAAABSCf5Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 37
+      },
+      "status" : 200
+    },
+    {
+      "label" : "negated sentToMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToMe" : false
+        },
+        "displayName" : "RuleBook probe – negated sentToMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated sentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 38
+      },
+      "status" : 201
+    },
+    {
+      "label" : "negated sentToMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – negated sentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 38
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Is a false boolean predicate kept, or dropped as no condition?",
+  "scenario" : "predicates-negated"
+}

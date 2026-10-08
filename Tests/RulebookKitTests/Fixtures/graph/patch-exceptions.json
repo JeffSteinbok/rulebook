@@ -1,0 +1,420 @@
+{
+  "exchanges" : [
+    {
+      "label" : "create",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 201
+    },
+    {
+      "label" : "create (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "omit exceptions",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "displayName" : "RuleBook probe – patch exceptions renamed"
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "omit exceptions (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "exceptions {}",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "exceptions" : {
+
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "exceptions {} (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "re-add",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "re-add (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "exceptions null",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "exceptions" : null
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "exceptions null (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "re-add 2",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "re-add 2 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    },
+    {
+      "label" : "exceptions all-null predicate",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "requestBody" : {
+        "exceptions" : {
+          "subjectContains" : null
+        }
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "RequestBodyRead",
+          "message" : "A null value was found for the property named 'subjectContains', which has the expected type 'Collection(Edm.String)[Nullable=True]'. The expected type 'Collection(Edm.String)[Nullable=True]' cannot be null but it can have null values."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "exceptions all-null predicate (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch exceptions renamed",
+        "exceptions" : {
+          "subjectContains" : [
+            "keep-me"
+          ]
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf6c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 54
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Can a PATCH clear exceptions, and which spelling does it take?",
+  "scenario" : "patch-exceptions"
+}

@@ -1,0 +1,1460 @@
+{
+  "exchanges" : [
+    {
+      "label" : "create unnamed",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 20000,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 20000",
+        "hasError" : false,
+        "id" : "AQAAABSCf8g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 86
+      },
+      "status" : 201
+    },
+    {
+      "label" : "read back",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 20000,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 20000",
+        "hasError" : false,
+        "id" : "AQAAABSCf8g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 86
+      },
+      "status" : 200
+    },
+    {
+      "label" : "list containing an unnamed rule",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules",
+        "value" : [
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – dup a",
+            "hasError" : false,
+            "id" : "AQAAABSCf6o=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 1
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – sequence 1",
+            "hasError" : false,
+            "id" : "AQAAABSCf6w=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 2
+          },
+          {
+            "actions" : {
+              "delete" : true,
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA",
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON1@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 1",
+            "hasError" : false,
+            "id" : "AQAAAAAABVg=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 3
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "fromAddresses" : [
+                {
+                  "emailAddress" : {
+                    "address" : "person2@example.com",
+                    "name" : "person2@example.com"
+                  }
+                }
+              ]
+            },
+            "displayName" : "Existing rule 2",
+            "hasError" : false,
+            "id" : "AQAAAAAABVo=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 4
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON3@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 3",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo4=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 5
+          },
+          {
+            "actions" : {
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "bodyContains" : [
+                "unsubscribe"
+              ]
+            },
+            "displayName" : "Existing rule 4",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo8=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 6
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "bodyContains" : [
+                "rbprobe-body"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf3Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 7
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "bodyOrSubjectContains" : [
+                "rbprobe-either"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf3c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 8
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "categories" : [
+                "RuleBookProbe"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate categories",
+            "hasError" : false,
+            "id" : "AQAAABSCf3g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 9
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "fromAddresses" : [
+                {
+                  "emailAddress" : {
+                    "address" : "rulebook-probe@example.invalid",
+                    "name" : "Probe Sender"
+                  }
+                }
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "hasError" : false,
+            "id" : "AQAAABSCf3k=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 10
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "hasAttachments" : true
+            },
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "hasError" : false,
+            "id" : "AQAAABSCf3o=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 11
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "headerContains" : [
+                "X-RuleBook-Probe"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf3s=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 12
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "importance" : "high"
+            },
+            "displayName" : "RuleBook probe – predicate importance",
+            "hasError" : false,
+            "id" : "AQAAABSCf3w=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 13
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isApprovalRequest" : true
+            },
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "hasError" : false,
+            "id" : "AQAAABSCf30=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 14
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isAutomaticForward" : true
+            },
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "hasError" : false,
+            "id" : "AQAAABSCf34=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 15
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isAutomaticReply" : true
+            },
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "hasError" : false,
+            "id" : "AQAAABSCf38=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 16
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isEncrypted" : true
+            },
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "hasError" : false,
+            "id" : "AQAAABSCf4A=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 17
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isMeetingRequest" : true
+            },
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "hasError" : false,
+            "id" : "AQAAABSCf4E=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 18
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isMeetingResponse" : true
+            },
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "hasError" : false,
+            "id" : "AQAAABSCf4I=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 19
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isNonDeliveryReport" : true
+            },
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "hasError" : false,
+            "id" : "AQAAABSCf4M=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 20
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isPermissionControlled" : true
+            },
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "hasError" : false,
+            "id" : "AQAAABSCf4Q=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 21
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isReadReceipt" : true
+            },
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "hasError" : false,
+            "id" : "AQAAABSCf4U=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 22
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isSigned" : true
+            },
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "hasError" : false,
+            "id" : "AQAAABSCf4Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 23
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "isVoicemail" : true
+            },
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "hasError" : false,
+            "id" : "AQAAABSCf4c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 24
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "messageActionFlag" : "followUp"
+            },
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "hasError" : false,
+            "id" : "AQAAABSCf4g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 25
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "notSentToMe" : true
+            },
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf4k=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 26
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "recipientContains" : [
+                "RBPROBE-RECIPIENT"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf4o=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 27
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf4s=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 28
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sensitivity" : "confidential"
+            },
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "hasError" : false,
+            "id" : "AQAAABSCf4w=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 29
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sentCcMe" : true
+            },
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf40=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 30
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sentOnlyToMe" : true
+            },
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf44=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 31
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sentToAddresses" : [
+                {
+                  "emailAddress" : {
+                    "address" : "rulebook-probe@example.invalid",
+                    "name" : "Probe Recipient"
+                  }
+                }
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "hasError" : false,
+            "id" : "AQAAABSCf48=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 32
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sentToMe" : true
+            },
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf5A=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 33
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "sentToOrCcMe" : true
+            },
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf5E=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 34
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "subjectContains" : [
+                "rbprobe-subject"
+              ]
+            },
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "hasError" : false,
+            "id" : "AQAAABSCf5I=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 35
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 200,
+                "minimumSize" : 10
+              }
+            },
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "hasError" : false,
+            "id" : "AQAAABSCf5M=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 36
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "hasError" : false,
+            "id" : "AQAAABSCf5Q=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 37
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "hasError" : false,
+            "id" : "AQAAABSCf5U=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 38
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "hasError" : false,
+            "id" : "AQAAABSCf5Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 39
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "hasError" : false,
+            "id" : "AQAAABSCf5c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 40
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "hasAttachments" : true,
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ],
+              "subjectContains" : [
+                "a",
+                "b"
+              ]
+            },
+            "displayName" : "RuleBook probe – combined",
+            "exceptions" : {
+              "bodyContains" : [
+                "unsubscribe"
+              ],
+              "importance" : "low"
+            },
+            "hasError" : false,
+            "id" : "AQAAABSCf5g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 41
+          },
+          {
+            "actions" : {
+              "assignCategories" : [
+                "RuleBookProbe"
+              ]
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action assignCategories",
+            "hasError" : false,
+            "id" : "AQAAABSCf5k=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 42
+          },
+          {
+            "actions" : {
+              "assignCategories" : [
+                "RuleBook category that does not exist"
+              ]
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "hasError" : false,
+            "id" : "AQAAABSCf5o=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 43
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "hasError" : false,
+            "id" : "AQAAABSCf5s=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 44
+          },
+          {
+            "actions" : {
+              "delete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action delete",
+            "hasError" : false,
+            "id" : "AQAAABSCf5w=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 45
+          },
+          {
+            "actions" : {
+              "forwardAsAttachmentTo" : [
+                {
+                  "emailAddress" : {
+                    "address" : "rulebook-probe@example.invalid",
+                    "name" : "Probe Recipient"
+                  }
+                }
+              ]
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "hasError" : false,
+            "id" : "AQAAABSCf50=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 46
+          },
+          {
+            "actions" : {
+              "forwardTo" : [
+                {
+                  "emailAddress" : {
+                    "address" : "rulebook-probe@example.invalid",
+                    "name" : "Probe Recipient"
+                  }
+                }
+              ]
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action forwardTo",
+            "hasError" : false,
+            "id" : "AQAAABSCf54=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 47
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action markAsRead",
+            "hasError" : false,
+            "id" : "AQAAABSCf58=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 48
+          },
+          {
+            "actions" : {
+              "markImportance" : "low"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action markImportance",
+            "hasError" : false,
+            "id" : "AQAAABSCf6A=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 49
+          },
+          {
+            "actions" : {
+              "delete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "hasError" : false,
+            "id" : "AQAAABSCf6E=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 50
+          },
+          {
+            "actions" : {
+              "delete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "hasError" : false,
+            "id" : "AQAAABSCf6I=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 51
+          },
+          {
+            "actions" : {
+              "permanentDelete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "hasError" : false,
+            "id" : "AQAAABSCf6M=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 52
+          },
+          {
+            "actions" : {
+              "redirectTo" : [
+                {
+                  "emailAddress" : {
+                    "address" : "rulebook-probe@example.invalid",
+                    "name" : "Probe Recipient"
+                  }
+                }
+              ]
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action redirectTo",
+            "hasError" : false,
+            "id" : "AQAAABSCf6Q=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 53
+          },
+          {
+            "actions" : {
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "hasError" : false,
+            "id" : "AQAAABSCf6U=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 54
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+              "delete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – two moves",
+            "hasError" : false,
+            "id" : "AQAAABSCf6Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 55
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "exceptions" : {
+              "subjectContains" : [
+                "keep-me"
+              ]
+            },
+            "hasError" : false,
+            "id" : "AQAAABSCf6c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 56
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – patch conditions",
+            "hasError" : false,
+            "id" : "AQAAABSCf6g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 57
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – patch actions full",
+            "hasError" : false,
+            "id" : "AQAAABSCf6k=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 58
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – dup b",
+            "hasError" : false,
+            "id" : "AQAAABSCf6s=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 59
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – sequence huge",
+            "hasError" : false,
+            "id" : "AQAAABSCf60=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 60
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 0,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size min only",
+            "hasError" : false,
+            "id" : "AQAAABSCf64=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 61
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 1,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max only",
+            "hasError" : false,
+            "id" : "AQAAABSCf68=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 62
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "displayName" : "RuleBook probe – no conditions",
+            "hasError" : false,
+            "id" : "AQAAABSCf7A=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 63
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – dup name",
+            "hasError" : false,
+            "id" : "AQAAABSCf7E=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 64
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – dup name",
+            "hasError" : false,
+            "id" : "AQAAABSCf7I=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 65
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – read-only fields",
+            "hasError" : false,
+            "id" : "AQAAABSCf7M=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 66
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to archive",
+            "hasError" : false,
+            "id" : "AQAAABSCf7U=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 67
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to archive",
+            "hasError" : false,
+            "id" : "AQAAABSCf7Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 68
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to junkemail",
+            "hasError" : false,
+            "id" : "AQAAABSCf7c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 69
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to junkemail",
+            "hasError" : false,
+            "id" : "AQAAABSCf7g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 70
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to inbox",
+            "hasError" : false,
+            "id" : "AQAAABSCf7k=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 71
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to inbox",
+            "hasError" : false,
+            "id" : "AQAAABSCf7o=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 72
+          },
+          {
+            "actions" : {
+              "delete" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to deleteditems",
+            "hasError" : false,
+            "id" : "AQAAABSCf7s=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 73
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to deleteditems",
+            "hasError" : false,
+            "id" : "AQAAABSCf7w=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 74
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEJAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to sentitems",
+            "hasError" : false,
+            "id" : "AQAAABSCf70=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 75
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEJAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to sentitems",
+            "hasError" : false,
+            "id" : "AQAAABSCf74=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 76
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEPAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move to drafts",
+            "hasError" : false,
+            "id" : "AQAAABSCf78=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 77
+          },
+          {
+            "actions" : {
+              "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEPAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – copy to drafts",
+            "hasError" : false,
+            "id" : "AQAAABSCf8A=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 78
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA",
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – move archive + stop",
+            "hasError" : false,
+            "id" : "AQAAABSCf8E=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 79
+          },
+          {
+            "actions" : {
+              "delete" : true,
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "RULEBOOK-PROBE@EXAMPLE.INVALID"
+              ]
+            },
+            "displayName" : "RuleBook probe – delete + stop false",
+            "hasError" : false,
+            "id" : "AQAAABSCf8I=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 80
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 50,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max 50 only",
+            "hasError" : false,
+            "id" : "AQAAABSCf8M=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 81
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 0,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size min 0 max 0",
+            "hasError" : false,
+            "id" : "AQAAABSCf8Q=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 82
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 2097151,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max 2097151",
+            "hasError" : false,
+            "id" : "AQAAABSCf8U=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 83
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 999999,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max 999999",
+            "hasError" : false,
+            "id" : "AQAAABSCf8Y=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 84
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 102400,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max 102400",
+            "hasError" : false,
+            "id" : "AQAAABSCf8c=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 85
+          },
+          {
+            "actions" : {
+              "markAsRead" : true
+            },
+            "conditions" : {
+              "withinSizeRange" : {
+                "maximumSize" : 20000,
+                "minimumSize" : 0
+              }
+            },
+            "displayName" : "RuleBook probe – size max 20000",
+            "hasError" : false,
+            "id" : "AQAAABSCf8g=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 86
+          }
+        ]
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "A rule with no displayName: how it reads back, alone and in the list.",
+  "scenario" : "unnamed"
+}

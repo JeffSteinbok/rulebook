@@ -1,0 +1,259 @@
+{
+  "exchanges" : [
+    {
+      "label" : "mixed case",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "MiXeD@Example.Invalid",
+                "name" : "MiXeD Name"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "MiXeD"
+          ],
+          "bodyOrSubjectContains" : [
+            "MiXeD"
+          ],
+          "headerContains" : [
+            "MiXeD"
+          ],
+          "recipientContains" : [
+            "MiXeD"
+          ],
+          "senderContains" : [
+            "MiXeD@Example.Invalid"
+          ],
+          "subjectContains" : [
+            "MiXeD"
+          ]
+        },
+        "displayName" : "RuleBook probe – mixed case",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "MiXeD@Example.Invalid",
+                "name" : "MiXeD Name"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "MiXeD"
+          ],
+          "bodyOrSubjectContains" : [
+            "MiXeD"
+          ],
+          "headerContains" : [
+            "MiXeD"
+          ],
+          "recipientContains" : [
+            "MIXED"
+          ],
+          "senderContains" : [
+            "MIXED@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "MiXeD"
+          ]
+        },
+        "displayName" : "RuleBook probe – mixed case",
+        "hasError" : false,
+        "id" : "AQAAABSCf8k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 87
+      },
+      "status" : 201
+    },
+    {
+      "label" : "mixed case (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8k=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "MiXeD@Example.Invalid",
+                "name" : "MiXeD Name"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "MiXeD"
+          ],
+          "bodyOrSubjectContains" : [
+            "MiXeD"
+          ],
+          "headerContains" : [
+            "MiXeD"
+          ],
+          "recipientContains" : [
+            "MIXED"
+          ],
+          "senderContains" : [
+            "MIXED@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "MiXeD"
+          ]
+        },
+        "displayName" : "RuleBook probe – mixed case",
+        "hasError" : false,
+        "id" : "AQAAABSCf8k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 87
+      },
+      "status" : 200
+    },
+    {
+      "label" : "negated exception",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – negated exception",
+        "exceptions" : {
+          "hasAttachments" : true,
+          "isMeetingRequest" : false
+        },
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – negated exception",
+        "exceptions" : {
+          "hasAttachments" : true
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf8o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 88
+      },
+      "status" : 201
+    },
+    {
+      "label" : "negated exception (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – negated exception",
+        "exceptions" : {
+          "hasAttachments" : true
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf8o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 88
+      },
+      "status" : 200
+    },
+    {
+      "label" : "enabled true",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – enabled true",
+        "isEnabled" : true,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – enabled true",
+        "hasError" : false,
+        "id" : "AQAAABSCf8s=",
+        "isEnabled" : true,
+        "isReadOnly" : false,
+        "sequence" : 89
+      },
+      "status" : 201
+    },
+    {
+      "label" : "enabled true (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8s=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – enabled true",
+        "hasError" : false,
+        "id" : "AQAAABSCf8s=",
+        "isEnabled" : true,
+        "isReadOnly" : false,
+        "sequence" : 89
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Which string predicates Graph upper-cases, and whether exceptions are negatable.",
+  "scenario" : "casing"
+}

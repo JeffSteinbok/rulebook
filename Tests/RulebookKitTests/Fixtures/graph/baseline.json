@@ -1,0 +1,372 @@
+{
+  "exchanges" : [
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules",
+        "value" : [
+          {
+            "actions" : {
+              "delete" : true,
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA",
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON1@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 1",
+            "hasError" : false,
+            "id" : "AQAAAAAABVg=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 1
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "fromAddresses" : [
+                {
+                  "emailAddress" : {
+                    "address" : "person2@example.com",
+                    "name" : "person2@example.com"
+                  }
+                }
+              ]
+            },
+            "displayName" : "Existing rule 2",
+            "hasError" : false,
+            "id" : "AQAAAAAABVo=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 2
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON3@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 3",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo4=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 3
+          },
+          {
+            "actions" : {
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "bodyContains" : [
+                "unsubscribe"
+              ]
+            },
+            "displayName" : "Existing rule 4",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo8=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 4
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$top=1",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules",
+        "value" : [
+          {
+            "actions" : {
+              "delete" : true,
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA",
+              "stopProcessingRules" : true
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON1@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 1",
+            "hasError" : false,
+            "id" : "AQAAAAAABVg=",
+            "isEnabled" : false,
+            "isReadOnly" : false,
+            "sequence" : 1
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "fromAddresses" : [
+                {
+                  "emailAddress" : {
+                    "address" : "person2@example.com",
+                    "name" : "person2@example.com"
+                  }
+                }
+              ]
+            },
+            "displayName" : "Existing rule 2",
+            "hasError" : false,
+            "id" : "AQAAAAAABVo=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 2
+          },
+          {
+            "actions" : {
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "senderContains" : [
+                "PERSON3@EXAMPLE.COM"
+              ]
+            },
+            "displayName" : "Existing rule 3",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo4=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 3
+          },
+          {
+            "actions" : {
+              "markAsRead" : true,
+              "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA"
+            },
+            "conditions" : {
+              "bodyContains" : [
+                "unsubscribe"
+              ]
+            },
+            "displayName" : "Existing rule 4",
+            "hasError" : false,
+            "id" : "AQAAAAA1fo8=",
+            "isEnabled" : true,
+            "isReadOnly" : false,
+            "sequence" : 4
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders?includeHiddenFolders=true&$top=100",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders",
+        "value" : [
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Archive",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgElAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "archive"
+          },
+          {
+            "childFolderCount" : 1,
+            "displayName" : "Conversation History",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEfAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "conversationhistory"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Deleted Items",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "deleteditems"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Drafts",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEPAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "drafts"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Inbox",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 488847,
+            "totalItemCount" : 4,
+            "unreadItemCount" : 4,
+            "wellKnownName" : "inbox"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Junk Email",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "junkemail"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Outbox",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgELAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "outbox"
+          },
+          {
+            "childFolderCount" : 0,
+            "displayName" : "Sent Items",
+            "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEJAAAA",
+            "isHidden" : false,
+            "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+            "sizeInBytes" : 0,
+            "totalItemCount" : 0,
+            "unreadItemCount" : 0,
+            "wellKnownName" : "sentitems"
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders\/$entity",
+        "childFolderCount" : 0,
+        "displayName" : "Inbox",
+        "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEMAAAA",
+        "isHidden" : false,
+        "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+        "sizeInBytes" : 488847,
+        "totalItemCount" : 4,
+        "unreadItemCount" : 4,
+        "wellKnownName" : "inbox"
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/childFolders?includeHiddenFolders=true",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/childFolders",
+        "value" : [
+
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/deleteditems",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders\/$entity",
+        "childFolderCount" : 0,
+        "displayName" : "Deleted Items",
+        "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA",
+        "isHidden" : false,
+        "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+        "sizeInBytes" : 0,
+        "totalItemCount" : 0,
+        "unreadItemCount" : 0,
+        "wellKnownName" : "deleteditems"
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/junkemail",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders\/$entity",
+        "childFolderCount" : 0,
+        "displayName" : "Junk Email",
+        "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+        "isHidden" : false,
+        "parentFolderId" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEIAAAA",
+        "sizeInBytes" : 0,
+        "totalItemCount" : 0,
+        "unreadItemCount" : 0,
+        "wellKnownName" : "junkemail"
+      },
+      "status" : 200
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/outlook\/masterCategories",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/outlook\/masterCategories",
+        "value" : [
+          {
+            "color" : "preset0",
+            "displayName" : "Red category",
+            "id" : "bdb195c2-b0da-454d-8107-f9c5929a6df8"
+          },
+          {
+            "color" : "preset1",
+            "displayName" : "Orange category",
+            "id" : "b92fb991-f75c-4ce0-b3cb-3769246b6eae"
+          },
+          {
+            "color" : "preset3",
+            "displayName" : "Yellow category",
+            "id" : "b8b1f658-4ddb-41d9-ad13-fecb9eb07b2b"
+          },
+          {
+            "color" : "preset4",
+            "displayName" : "Green category",
+            "id" : "3f59bc03-4b3a-4862-b81f-a2dfe08e758c"
+          },
+          {
+            "color" : "preset7",
+            "displayName" : "Blue category",
+            "id" : "7cc1e140-25b1-40fc-af9b-94fb9d8989d1"
+          },
+          {
+            "color" : "preset8",
+            "displayName" : "Purple category",
+            "id" : "28656ea7-6948-447c-8a21-b53573f16d23"
+          }
+        ]
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "What an account looks like before we touch it.",
+  "scenario" : "baseline"
+}

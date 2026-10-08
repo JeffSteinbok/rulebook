@@ -1,0 +1,204 @@
+{
+  "exchanges" : [
+    {
+      "label" : "size min only",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min only",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 0,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min only",
+        "hasError" : false,
+        "id" : "AQAAABSCf64=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 61
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size min only (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf64=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 0,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min only",
+        "hasError" : false,
+        "id" : "AQAAABSCf64=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 61
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size max only",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 1
+          }
+        },
+        "displayName" : "RuleBook probe – size max only",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 1,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max only",
+        "hasError" : false,
+        "id" : "AQAAABSCf68=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 62
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max only (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf68=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 1,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max only",
+        "hasError" : false,
+        "id" : "AQAAABSCf68=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 62
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size min > max",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 100,
+            "minimumSize" : 500
+          }
+        },
+        "displayName" : "RuleBook probe – size min > max",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidSizeRange', Message: 'The size range is invalid. The minimum size 500 is greater than the maximum size 100.', Field: 'Condition.WithinSizeRange', Value: '500,100'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "size int max",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 2147483647
+          }
+        },
+        "displayName" : "RuleBook probe – size int max",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'The value isn't valid.', Field: 'Condition.WithinSizeRange', Value: '2147483647'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "size negative",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "minimumSize" : -5
+          }
+        },
+        "displayName" : "RuleBook probe – size negative",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'SizeLessThanZero', Message: 'The size that's specified can't be less than zero.', Field: 'Condition.WithinSizeRange', Value: '-5'."
+        }
+      },
+      "status" : 400
+    }
+  ],
+  "question" : "withinSizeRange units and bounds.",
+  "scenario" : "size"
+}
