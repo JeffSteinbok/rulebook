@@ -35,10 +35,45 @@ final class ProStore {
 
     static let productID = "net.steinbok.Rulebook.pro"
 
-    private(set) var isPro = false
+    /// A $0 non-consumable named for its length, which is how guideline 3.1.1
+    /// lets a one-time-purchase app offer a time-based trial. Claiming it ties
+    /// the trial to the Apple Account, so reinstalling doesn't start it over.
+    static let trialProductID = "net.steinbok.Rulebook.trial"
+    static let trialLength: TimeInterval = 7 * 24 * 60 * 60
+
+    /// Off for launch: Pro is bought or redeemed from an offer code. Flipping
+    /// this on also needs the trial product live in App Store Connect.
+    static let trialEnabled = false
+
+    /// Bought, or redeemed from an offer code — both land as a transaction for
+    /// ``productID``, so a gifted copy needs no special handling.
+    private(set) var isPurchased = false
+
+    /// When the claimed trial runs out; nil if it was never claimed.
+    private(set) var trialEndsAt: Date?
+
     private(set) var product: Product?
+    private(set) var trialProduct: Product?
     private(set) var isWorking = false
     var errorMessage: String?
+
+    /// Whether writes are allowed. Computed rather than stored so a trial that
+    /// lapses mid-session locks at the next write instead of the next launch.
+    var isPro: Bool {
+        if alwaysUnlocked || isPurchased { return true }
+        guard let trialEndsAt else { return false }
+        return Date() < trialEndsAt
+    }
+
+    var isTrialActive: Bool { !isPurchased && trialEndsAt.map { Date() < $0 } == true }
+    var hasTrialEnded: Bool { !isPurchased && trialEndsAt.map { Date() >= $0 } == true }
+    var canStartTrial: Bool { !isPurchased && trialEndsAt == nil && trialProduct != nil }
+
+    /// Whole days left, rounded up so the last afternoon reads "1 day", not "0".
+    var trialDaysLeft: Int {
+        guard let trialEndsAt else { return 0 }
+        return max(0, Int((trialEndsAt.timeIntervalSinceNow / 86_400).rounded(.up)))
+    }
 
     /// Nothing was bought — the entitlement is simply not enforced. Used by the
     /// demo seed and previews, where StoreKit isn't running at all.
@@ -48,7 +83,6 @@ final class ProStore {
 
     init(alwaysUnlocked: Bool = false) {
         self.alwaysUnlocked = alwaysUnlocked
-        self.isPro = alwaysUnlocked
     }
 
     // No deinit cancelling `updatesTask`: the store lives for the life of the
@@ -65,7 +99,8 @@ final class ProStore {
         guard !alwaysUnlocked else { return }
 
         // Started before the first refresh so a purchase completing elsewhere —
-        // Ask to Buy approved later, or a restore on another device — is seen.
+        // Ask to Buy approved later, a restore on another device, or an offer
+        // code redeemed in the App Store app — is seen.
         updatesTask = Task { [weak self] in
             for await update in Transaction.updates {
                 guard let self else { return }
@@ -82,11 +117,15 @@ final class ProStore {
     func loadProduct() async {
         guard !alwaysUnlocked else { return }
         do {
-            product = try await Product.products(for: [Self.productID]).first
+            let ids = Self.trialEnabled ? [Self.productID, Self.trialProductID] : [Self.productID]
+            let products = try await Product.products(for: ids)
+            product = products.first { $0.id == Self.productID }
+            trialProduct = products.first { $0.id == Self.trialProductID }
         } catch {
             // Not surfaced: a missing product means the buy button stays out of
             // the way, and the app is still fully useful for reading.
             product = nil
+            trialProduct = nil
         }
     }
 
@@ -94,20 +133,41 @@ final class ProStore {
     /// is served from the on-device receipt, so this works with no network —
     /// which matters, because a paid user opening the app on a plane must not
     /// find their app locked.
+    ///
+    /// The trial's clock runs from the original claim date, which a restore or a
+    /// second "purchase" of the same item brings back unchanged — neither resets it.
     func refresh() async {
         guard !alwaysUnlocked else { return }
+        var purchased = false
+        var trialEnds: Date?
         for await entitlement in Transaction.currentEntitlements {
-            guard case .verified(let transaction) = entitlement else { continue }
-            if transaction.productID == Self.productID, transaction.revocationDate == nil {
-                isPro = true
-                return
+            guard case .verified(let transaction) = entitlement,
+                  transaction.revocationDate == nil else { continue }
+            switch transaction.productID {
+            case Self.productID:
+                purchased = true
+            case Self.trialProductID where Self.trialEnabled:
+                trialEnds = transaction.originalPurchaseDate.addingTimeInterval(Self.trialLength)
+            default:
+                break
             }
         }
-        isPro = false
+        isPurchased = purchased
+        trialEndsAt = trialEnds
+    }
+
+    func startTrial() async {
+        guard let trialProduct else { return }
+        await purchase(trialProduct)
     }
 
     func purchase() async {
-        guard let product, !isWorking else { return }
+        guard let product else { return }
+        await purchase(product)
+    }
+
+    private func purchase(_ product: Product) async {
+        guard !isWorking else { return }
         isWorking = true
         defer { isWorking = false }
 
@@ -144,7 +204,7 @@ final class ProStore {
         do {
             try await AppStore.sync()
             await refresh()
-            if !isPro {
+            if !isPurchased && !isTrialActive {
                 errorMessage = "No previous purchase found for this Apple Account."
             }
         } catch {
