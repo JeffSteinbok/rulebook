@@ -43,7 +43,7 @@ final class ProStore {
 
     /// Lets the trial be switched off without unpicking it. Needs the trial
     /// product live in App Store Connect; without it the button never shows.
-    static let trialEnabled = true
+    static let trialEnabled = false
 
     /// Bought, or redeemed from an offer code — both land as a transaction for
     /// ``productID``, so a gifted copy needs no special handling.
