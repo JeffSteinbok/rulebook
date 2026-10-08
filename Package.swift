@@ -6,6 +6,9 @@ let package = Package(
     platforms: [.iOS(.v17), .macOS(.v14)],
     products: [
         .library(name: "RulebookKit", targets: ["RulebookKit"]),
+        // A stateful fake of the Graph endpoints the app uses, for tests in
+        // this package and in the app. Never linked into the shipping app.
+        .library(name: "RulebookTesting", targets: ["RulebookTesting"]),
         .executable(name: "rulebook", targets: ["rulebook"]),
     ],
     dependencies: [
@@ -15,6 +18,7 @@ let package = Package(
         // Pure Swift + Foundation only. No UIKit/SwiftUI/AppKit imports here,
         // so this target builds unchanged for macOS CLI, iOS, and the Simulator.
         .target(name: "RulebookKit"),
+        .target(name: "RulebookTesting", dependencies: ["RulebookKit"]),
         .executableTarget(
             name: "rulebook",
             dependencies: [
@@ -25,7 +29,7 @@ let package = Package(
         // Hermetic: no network, no account, no credentials.
         .testTarget(
             name: "RulebookKitTests",
-            dependencies: ["RulebookKit"],
+            dependencies: ["RulebookKit", "RulebookTesting"],
             resources: [.copy("Fixtures")]
         ),
         // Talks to a real mailbox. Skipped unless RULEBOOK_LIVE=1, and kept in

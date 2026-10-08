@@ -11,6 +11,10 @@ Re-record with:
 
     RULEBOOK_LIVE=1 RULEBOOK_PROBE=1 RULEBOOK_CLIENT_ID=<id> swift test --filter GraphProbe
 
+`Sources/RulebookTesting/FakeGraph.swift` implements everything below, and
+`GraphConformanceTests` replays every exchange here against it. If the two
+disagree, that suite fails.
+
 Each file holds `exchanges`: method, path, request body, status, response
 body, and a label. A create is always followed by a GET of the same rule,
 because what Graph stores is not always what it was sent.
@@ -31,8 +35,9 @@ because what Graph stores is not always what it was sent.
 - `isReadOnly` / `hasError` in a POST body are ignored.
 - Duplicate `displayName`s are allowed. An empty name is a 400
   (`EmptyValueFound`). Names are limited to 256 characters (`StringValueTooBig`).
-  A POST with **no** `displayName` succeeds, and the rule gets the name of a
-  different rule (`unnamed.json`). Always send a name.
+  A POST with **no** `displayName` returns 201 but **creates nothing**: it
+  returns the most recently created rule, unchanged (`unnamed.json`,
+  `validation.json` "missing name"). Always send a name.
 
 ### False booleans are silently dropped
 - **`isMeetingRequest: false`, `hasAttachments: false`, `isEncrypted: false`,
@@ -46,6 +51,10 @@ because what Graph stores is not always what it was sent.
   Copying to Deleted Items is kept as a copy.
 - **`delete` and `permanentDelete` always come back with
   `stopProcessingRules: true`**, even when `false` was sent.
+- A move to Deleted Items, stored as a bare `delete`, **gains
+  `stopProcessingRules: true` the first time Graph renumbers it** (another
+  rule moving past it). Graph re-saves shifted rules (`sequence.json`, the
+  final list in `unnamed.json`).
 - `moveToFolder` takes a folder id or a well-known name (`deleteditems`),
   never a display name: `"Deleted Items"` → 400 `InvalidValue` "Id is malformed."
 - Unknown categories in `assignCategories` are accepted as-is.
