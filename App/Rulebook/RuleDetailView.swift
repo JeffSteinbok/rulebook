@@ -170,7 +170,7 @@ struct RuleDetailView: View {
                     // The fill is destructive OR warning; both share the ink rule.
                     .foregroundStyle(DS.Palette.onDestructive)
                     .padding(.horizontal, 16)
-                    .frame(height: 40)
+                    .frame(minHeight: 40)
                     .background(tint(issue.level), in: .rect(cornerRadius: 10))
                     .disabled(isReadOnly)
             }
@@ -192,7 +192,7 @@ struct RuleDetailView: View {
             // Hoisting above the blocking rule is the whole fix — which is why
             // reorder isn't an optional nicety.
             await model.hoist(rule)
-        case .missingFolder:
+        case .missingFolder, .appliesToEverything:
             // The fix is an edit, so it needs Pro like any other. Finding the
             // broken rule stays free — that is the part worth having first.
             guard model.requirePro(.editing) else { return }

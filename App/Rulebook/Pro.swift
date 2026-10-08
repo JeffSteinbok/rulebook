@@ -56,6 +56,14 @@ final class ProStore {
     private(set) var trialProduct: Product?
     private(set) var isWorking = false
     var errorMessage: String?
+    /// Not a failure: an Ask to Buy request waiting on a parent, say.
+    var notice: String?
+
+    /// The last answer StoreKit gave, so a paying user doesn't see every
+    /// control locked for the moment it takes to ask again at launch. Only a
+    /// starting point: ``refresh()`` replaces it straight away.
+    private let defaults: UserDefaults
+    private static let lastKnownKey = "rulebook.pro.lastKnown"
 
     /// Whether writes are allowed. Computed rather than stored so a trial that
     /// lapses mid-session locks at the next write instead of the next launch.
@@ -81,8 +89,12 @@ final class ProStore {
 
     private var updatesTask: Task<Void, Never>?
 
-    init(alwaysUnlocked: Bool = false) {
+    init(alwaysUnlocked: Bool = false, defaults: UserDefaults = .standard) {
         self.alwaysUnlocked = alwaysUnlocked
+        self.defaults = defaults
+        // The last known purchase, until StoreKit answers. A trial isn't cached:
+        // its end date comes from the transaction, which refresh() reads.
+        self.isPurchased = defaults.bool(forKey: Self.lastKnownKey)
     }
 
     // No deinit cancelling `updatesTask`: the store lives for the life of the
@@ -100,7 +112,9 @@ final class ProStore {
 
         // Started before the first refresh so a purchase completing elsewhere —
         // Ask to Buy approved later, a restore on another device, or an offer
-        // code redeemed in the App Store app — is seen.
+        // code redeemed in the App Store app — is seen. A second start (the
+        // scene rebuilt) replaces the listener rather than adding one.
+        updatesTask?.cancel()
         updatesTask = Task { [weak self] in
             for await update in Transaction.updates {
                 guard let self else { return }
@@ -154,6 +168,8 @@ final class ProStore {
         }
         isPurchased = purchased
         trialEndsAt = trialEnds
+        defaults.set(purchased, forKey: Self.lastKnownKey)
+        if isPro { notice = nil }
     }
 
     func startTrial() async {
@@ -185,7 +201,7 @@ final class ProStore {
             case .pending:
                 // Ask to Buy, or a payment needing approval. The updates task
                 // above is what eventually unlocks it.
-                errorMessage = "This purchase is waiting for approval. Rulebook will unlock once it goes through."
+                notice = "This purchase is waiting for approval. Rulebook will unlock once it goes through."
             @unknown default:
                 break
             }

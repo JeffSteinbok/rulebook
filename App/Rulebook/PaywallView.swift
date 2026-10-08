@@ -53,6 +53,12 @@ struct PaywallView: View {
                             .foregroundStyle(DS.Palette.destructive)
                             .fixedSize(horizontal: false, vertical: true)
                     }
+                    if let notice = pro.notice {
+                        Text(notice)
+                            .font(DS.Font.caption)
+                            .foregroundStyle(DS.Palette.ink80)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(DS.Metric.gutter)

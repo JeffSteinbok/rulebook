@@ -11,6 +11,7 @@ struct RulebookApp: App {
     @State private var pro = ProStore()
     @State private var tokens: MSALTokenProvider?
     @State private var bootError: String?
+    @Environment(\.scenePhase) private var scenePhase
 
     /// Set in the build settings or an xcconfig; `register-app.sh` prints it.
     private var clientID: String {
@@ -58,6 +59,11 @@ struct RulebookApp: App {
             .tint(DS.Palette.accent)
             .environment(pro)
             .task { await pro.start() }
+            // A refund, a revocation, or an Ask to Buy approved while Rulebook
+            // was in the background shows up when it comes back.
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .active { Task { await pro.refresh() } }
+            }
         }
     }
 
@@ -84,19 +90,29 @@ struct RootView: View {
         Group {
             if let model {
                 RulesListView(model: model, accounts: accounts, tokens: tokens)
+                    // RulesListView holds its model in @State, which SwiftUI
+                    // keeps across updates. A new identity per mailbox is what
+                    // makes a switch actually show, and write to, the new one.
+                    .id(accounts.active?.id)
             } else {
                 ProgressView()
             }
         }
-        .task(id: accounts.activeID) { rebuild() }
+        .task(id: accounts.active?.id) { rebuild() }
     }
 
     private func rebuild() {
+        guard let account = accounts.active else { model = nil; return }
+        // Pinned to this mailbox's MSAL account, so nothing else can redirect it.
+        let mailbox = tokens.tokenProvider(for: account.id)
         // Both stores are `any RuleStore`, so this is the only line that knows
         // the app talks to Graph at all.
+        // One folder directory for the store and the list, so the tree is
+        // fetched once per mailbox rather than once each.
+        let directory = GraphMailFolderDirectory(tokenProvider: mailbox)
         let built = RulesListViewModel(
-            store: GraphRuleStore(tokenProvider: tokens),
-            folders: GraphMailFolderDirectory(tokenProvider: tokens),
+            store: GraphRuleStore(client: GraphMessageRuleClient(tokenProvider: mailbox), folders: directory),
+            folders: directory,
             profile: ProviderCatalog.outlook
         )
         built.pro = pro

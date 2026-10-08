@@ -16,12 +16,14 @@ Sources/
     Core/                    Neutral model — MailRule, conditions, actions
     Providers/Microsoft/     Graph wire types, mapper, store, auth
     Stores/                  In-memory and JSON-file stores
+  RulebookTesting/         FakeGraph: a Graph fake proven against recordings
   rulebook/                CLI harness
 Tests/
   RulebookKitTests/        Hermetic: no network, no account
+    Fixtures/graph/          Recorded real Graph traffic, and what it taught
   RulebookLiveTests/       Talks to a real mailbox; opt-in
 Scripts/register-app.sh    Creates the Entra ID app registration
-App/                       The iOS app (not yet created)
+App/                       The iOS app, its unit tests and UI tests
 ```
 
 `Package.swift` stays at the repository root on purpose. SwiftPM only
@@ -174,14 +176,17 @@ independently catches what Outlook misses.
 
 ## Tests
 
+[TESTING.md](TESTING.md) has every layer, how to run each, and the checklist
+for what only a person can check before a release.
+
 ```sh
 swift test
 ```
 
-Hermetic — no network, no account. The Graph path is covered against a stubbed
-`URLProtocol`: the bearer header, `@odata.nextLink` paging, the mapped request
-body, error envelopes, and that a rule Outlook cannot express never reaches the
-network.
+Hermetic — no network, no account. The Graph path runs against `FakeGraph`
+(`Sources/RulebookTesting`), which reproduces every exchange recorded from real
+Graph in `Tests/RulebookKitTests/Fixtures/graph/`. `GraphConformanceTests`
+fails if the two ever disagree.
 
 ### Against a real mailbox
 
@@ -191,10 +196,11 @@ structurally cannot: that Graph accepts what the mapper produces, and that
 
 ```sh
 RULEBOOK_LIVE=1 swift test --filter LiveOutlook                        # read-only
-RULEBOOK_LIVE=1 RULEBOOK_LIVE_WRITE=1 swift test --filter LiveOutlook  # + one scratch rule
+RULEBOOK_LIVE=1 RULEBOOK_LIVE_WRITE=1 swift test --filter LiveOutlook  # + scratch rules
 ```
 
-Writes need the second variable, create a single disabled rule named
-"RuleBook scratch — safe to delete …", and remove it again. Point them at a
+Writes need the second variable. They create disabled rules named
+"RuleBook scratch — …" and "RuleBook live – …" (one per condition and action
+the app can build), check Outlook stored each as meant, and delete them. Point them at a
 [Microsoft 365 Developer Program](https://developer.microsoft.com/microsoft-365/dev-program)
 tenant rather than a mailbox you care about.

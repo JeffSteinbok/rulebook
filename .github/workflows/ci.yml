@@ -19,7 +19,9 @@ jobs:
   build-and-test:
     name: Build and test
     runs-on: macos-15
-    timeout-minutes: 30
+    timeout-minutes: 45
+    env:
+      SIMULATOR: iPhone 16
 
     steps:
       - name: Check out repository
@@ -48,11 +50,37 @@ jobs:
       # A simulator destination and no signing: this proves the app compiles,
       # which is all a pull request needs. Signing belongs to the TestFlight
       # workflow, which is the only place the certificates exist.
-      - name: Build app
+      - name: Build app and tests
         run: |
-          xcodebuild build \
+          xcodebuild build-for-testing \
             -project App/Rulebook.xcodeproj \
             -scheme Rulebook \
             -configuration Debug \
-            -destination "generic/platform=iOS Simulator" \
+            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
+            -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO
+
+      # View models and the editor against FakeGraph (RulebookTesting), whose
+      # behaviour `swift test` has just checked against the recorded Graph traffic.
+      - name: App unit tests
+        run: |
+          xcodebuild test-without-building \
+            -project App/Rulebook.xcodeproj \
+            -scheme Rulebook \
+            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
+            -derivedDataPath build \
+            -only-testing:RulebookTests \
+            CODE_SIGNING_ALLOWED=NO
+
+      # The real UI on the demo mailbox, free tier included. StoreKit answers
+      # from Rulebook.storekit via the scheme.
+      - name: UI tests
+        run: |
+          xcodebuild test-without-building \
+            -project App/Rulebook.xcodeproj \
+            -scheme Rulebook \
+            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
+            -derivedDataPath build \
+            -only-testing:RulebookUITests \
+            CODE_SIGNING_ALLOWED=NO
+

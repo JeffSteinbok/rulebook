@@ -202,29 +202,19 @@ final class RuleEditorModel {
     /// Structural checks plus this provider's limits, run locally before any
     /// network call — so "Outlook can't do that" is explainable, not a 400.
     func revalidate() {
-        var found = RuleValidator.validate(cleaned, for: profile.capabilities)
+        // Updates replace what Outlook holds, so clearing every condition or
+        // exception saves as cleared. The validator still warns that a rule
+        // with no conditions applies to every message, and requires an action.
+        issues = RuleValidator.validate(cleaned, for: profile.capabilities)
+    }
 
-        // The library's `updateRule` merges: empty collections leave the stored
-        // values alone, so "remove every condition" cannot currently be
-        // expressed. Report it rather than silently keeping the old ones.
-        if let original, isEditing {
-            if cleaned.conditions.isEmpty && !original.conditions.isEmpty {
-                found.append(.init(
-                    severity: .error, rule: draft.name,
-                    message: "Removing every condition can't be saved yet.",
-                    remedy: "Keep at least one condition, or delete the rule instead."
-                ))
-            }
-            if cleaned.actions.isEmpty && !original.actions.isEmpty {
-                found.append(.init(
-                    severity: .error, rule: draft.name,
-                    message: "Removing every action can't be saved yet.",
-                    remedy: "Keep at least one action, or delete the rule instead."
-                ))
-            }
+    /// Whether leaving now would lose something. Cancel asks first when true.
+    var hasUnsavedChanges: Bool {
+        guard let original else {
+            return !draft.name.trimmingCharacters(in: .whitespaces).isEmpty
+                || draft.conditions.contains(where: \.hasValue) || !draft.actions.isEmpty
         }
-
-        issues = found
+        return cleaned != original.cleanedForComparison
     }
 
     var blockingIssues: [ValidationIssue] { issues.filter { $0.severity == .error } }
@@ -233,11 +223,7 @@ final class RuleEditorModel {
 
     /// Half-typed rows are dropped rather than saved empty.
     private var cleaned: MailRule {
-        var rule = draft
-        rule.name = draft.name.trimmingCharacters(in: .whitespacesAndNewlines)
-        rule.conditions = draft.conditions.filter(\.hasValue)
-        rule.exceptions = draft.exceptions.filter(\.hasValue)
-        return rule
+        draft.cleanedForComparison
     }
 
     func advance() -> Bool {
@@ -264,7 +250,12 @@ final class RuleEditorModel {
 
         do {
             if let id = draft.id {
-                return try await store.updateRule(id: id, with: cleaned)
+                // An edit keeps the rule where it is now. The draft's order was
+                // read when the editor opened; on Outlook, sending it would move
+                // the rule back there if anything was reordered since.
+                var update = cleaned
+                update.order = nil
+                return try await store.updateRule(id: id, with: update)
             }
             return try await store.createRule(cleaned)
         } catch let error as MappingError {
@@ -284,6 +275,17 @@ final class RuleEditorModel {
 }
 
 // MARK: - Condition helpers
+
+extension MailRule {
+    /// Trimmed name, half-typed rows dropped: what saving would send.
+    var cleanedForComparison: MailRule {
+        var rule = self
+        rule.name = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        rule.conditions = conditions.filter(\.hasValue)
+        rule.exceptions = exceptions.filter(\.hasValue)
+        return rule
+    }
+}
 
 extension RuleCondition {
     /// Whether this condition carries enough to be worth saving.
@@ -335,7 +337,9 @@ extension RuleCondition {
         case .subject: .subject(.init("", mode: .contains))
         case .body: .body(.init("", mode: .contains))
         case .subjectOrBody: .subjectOrBody(.init("", mode: .contains))
-        case .header: .header(name: "", match: .init("", mode: .contains))
+        // nil, not "": a header *name* is something Outlook can't test, and an
+        // empty one was being refused as if it were.
+        case .header: .header(name: nil, match: .init("", mode: .contains))
         case .hasAttachment: .hasAttachment(true)
         case .size: .size(.init(minimumBytes: nil, maximumBytes: 5_242_880))
         case .importance: .importance(.high)

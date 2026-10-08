@@ -50,7 +50,7 @@ struct EmptyRulesView: View {
                             Spacer(minLength: 8)
                             if !DS.Metric.isAccessibilitySize(typeSize) {
                                 Image(systemName: "chevron.right")
-                                    .font(.system(size: 14, weight: .semibold))
+                                    .font(.subheadline.weight(.semibold))
                                     .foregroundStyle(DS.Palette.ink40)
                                     .padding(.top, 3)
                             }
