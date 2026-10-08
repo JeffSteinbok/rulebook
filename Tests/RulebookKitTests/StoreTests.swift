@@ -12,7 +12,7 @@ struct InMemoryStoreTests {
         #expect(try await store.rule(id: id).name == "Alpha")
     }
 
-    @Test("Listing is ordered, with unordered rules last")
+    @Test("Listing is ordered, and a rule created with no order goes last")
     func listIsOrdered() async throws {
         let store = InMemoryRuleStore()
         _ = try await store.createRule(.stub(name: "Third", order: 30))
@@ -22,19 +22,45 @@ struct InMemoryStoreTests {
         #expect(try await store.listRules().map(\.name) == ["First", "Third", "Unordered"])
     }
 
-    @Test("Update merges: absent collections leave what is stored alone")
-    func updateIsAMerge() async throws {
+    @Test("Update replaces, as Graph does: an empty list clears what was stored")
+    func updateReplaces() async throws {
         let store = InMemoryRuleStore()
-        let id = try #require(try await store.createRule(.stub(name: "Alpha")).id)
+        var rule = MailRule.stub(name: "Alpha")
+        rule.exceptions = [.subject(StringMatch("keep"))]
+        let id = try #require(try await store.createRule(rule).id)
 
-        // Rename only — no conditions or actions in the patch.
-        let updated = try await store.updateRule(
-            id: id, with: MailRule(name: "Alpha renamed", order: 1)
-        )
+        var edited = try await store.rule(id: id)
+        edited.name = "Alpha renamed"
+        edited.exceptions = []
+        edited.order = nil
+        let updated = try await store.updateRule(id: id, with: edited)
 
         #expect(updated.name == "Alpha renamed")
+        #expect(updated.exceptions.isEmpty)
         #expect(updated.conditions == [.subject(StringMatch("x"))])
-        #expect(updated.actions == [.markAsRead(true)])
+        #expect(updated.order == 1, "A nil order keeps the stored position.")
+    }
+
+    @Test("Moving a rule renumbers 1…N, displacing the rest down")
+    func moveIsDense() async throws {
+        let store = InMemoryRuleStore()
+        for name in ["A", "B", "C", "D"] { _ = try await store.createRule(.stub(name: name, order: nil)) }
+        let d = try #require(try await store.listRules().last?.id)
+
+        try await store.moveRule(id: d, toPosition: 2)
+        let rules = try await store.listRules()
+        #expect(rules.map(\.name) == ["A", "D", "B", "C"])
+        #expect(rules.map(\.order) == [1, 2, 3, 4])
+    }
+
+    @Test("Ids are never reused, even for a store seeded from a file")
+    func idsDoNotCollideWithSeeds() async throws {
+        let seeded = InMemoryRuleStore(seed: [
+            MailRule(id: "rule-1", name: "From file", order: 1, actions: [.markAsRead(true)]),
+        ])
+        let created = try await seeded.createRule(.stub(name: "New"))
+        #expect(created.id != "rule-1")
+        #expect(try await seeded.listRules().count == 2)
     }
 
     @Test("Delete removes it; deleting again reports notFound")

@@ -1,6 +1,7 @@
 import Foundation
 import Testing
 @testable import RulebookKit
+import RulebookTesting
 
 /// Tests that talk to a real Microsoft 365 mailbox.
 ///
@@ -145,7 +146,9 @@ struct LiveOutlookWriteTests {
         // Graph is the authority: read it back rather than trusting the POST response.
         let fetched = try await store.rule(id: id)
         #expect(fetched.name == name)
-        #expect(fetched.order == 900)
+        // Graph keeps sequences dense, so 900 lands at the end of the list.
+        // Other live suites run alongside, so "the end" isn't a fixed number.
+        #expect((fetched.order ?? 0) >= 1 && (fetched.order ?? 0) < 900)
         #expect(fetched.isEnabled == false)
         #expect(Set(fetched.conditions) == Set(rule.conditions), "Graph did not preserve the conditions")
         #expect(Set(fetched.actions) == Set(rule.actions), "Graph did not preserve the actions")
@@ -157,6 +160,120 @@ struct LiveOutlookWriteTests {
             Issue.record("The rule still exists after delete.")
         } catch let RuleStoreError.notFound(missing) {
             #expect(missing == id)
+        }
+    }
+}
+
+
+/// What `OutlookFidelityTests` checks against FakeGraph, checked against real
+/// Outlook: every condition and action the app can build is stored as meant.
+/// Each scratch rule is disabled, named "RuleBook live – …", and deleted
+/// whatever the assertions do.
+@Suite("Live Outlook — fidelity", .serialized, .enabled(if: Live.isWriteEnabled))
+struct LiveOutlookFidelityTests {
+
+    static let prefix = "RuleBook live – "
+
+    /// Creates `rule`, hands back what Graph stored, and always deletes it.
+    func scratch(_ rule: MailRule, _ check: (MailRule, GraphRuleStore) async throws -> Void) async throws {
+        let store = try Live.store()
+        var rule = rule
+        rule.name = Self.prefix + rule.name
+        rule.isEnabled = false
+        let created = try await store.createRule(rule)
+        let id = try #require(created.id)
+        do {
+            try await check(try await store.rule(id: id), store)
+        } catch {
+            try? await store.deleteRule(id: id)
+            throw error
+        }
+        try await store.deleteRule(id: id)
+    }
+
+    @Test("Each condition reads back as meant", arguments: RuleSamples.conditions)
+    func condition(_ condition: RuleCondition) async throws {
+        try await scratch(MailRule(name: condition.description, conditions: [condition], actions: [.markAsRead(true)])) { stored, _ in
+            #expect(stored.conditions == [condition])
+        }
+    }
+
+    @Test("Each condition reads back as meant, as an exception", arguments: RuleSamples.conditions)
+    func exception(_ condition: RuleCondition) async throws {
+        try await scratch(MailRule(
+            name: "unless " + condition.description,
+            conditions: [.from(StringMatch(["rulebook-live@example.invalid"]))],
+            exceptions: [condition], actions: [.markAsRead(true)]
+        )) { stored, _ in
+            #expect(stored.exceptions == [condition])
+        }
+    }
+
+    static let actions: [[RuleAction]] = RuleSamples.folderlessActions + [
+        [.moveTo(.named("Archive"))],
+        [.copyTo(.named("Junk Email"))],
+        [.moveTo(.named("Archive")), .stopProcessing],
+    ]
+
+    @Test("Each action reads back as meant", arguments: actions)
+    func action(_ actions: [RuleAction]) async throws {
+        try await scratch(MailRule(
+            name: actions.map(\.description).joined(separator: ", "),
+            conditions: [.from(StringMatch(["rulebook-live@example.invalid"]))], actions: actions
+        )) { stored, _ in
+            #expect(stored.actions.map(Live.byFolderName) == actions.map(Live.byFolderName))
+        }
+    }
+
+    @Test("Removing every exception clears them")
+    func clearingExceptions() async throws {
+        try await scratch(MailRule(
+            name: "clear exceptions", conditions: [.from(StringMatch(["rulebook-live@example.invalid"]))],
+            exceptions: [.subject(StringMatch("keep"))], actions: [.markAsRead(true)]
+        )) { stored, store in
+            var edited = stored
+            edited.exceptions = []
+            edited.order = nil
+            _ = try await store.updateRule(id: stored.id!, with: edited)
+            #expect(try await store.rule(id: stored.id!).exceptions.isEmpty)
+        }
+    }
+
+    @Test("Moving a rule up is one request and the rest shift down")
+    func reorder() async throws {
+        let store = try Live.store()
+        let condition = RuleCondition.from(StringMatch(["rulebook-live@example.invalid"]))
+        let a = try await store.createRule(MailRule(name: Self.prefix + "reorder A", isEnabled: false, conditions: [condition], actions: [.markAsRead(true)]))
+        let b = try await store.createRule(MailRule(name: Self.prefix + "reorder B", isEnabled: false, conditions: [condition], actions: [.markAsRead(true)]))
+        defer { Task { try? await store.deleteRule(id: a.id!); try? await store.deleteRule(id: b.id!) } }
+
+        let before = try await store.listRules()
+        let positionOfA = try #require(before.firstIndex { $0.id == a.id }) + 1
+        try await store.moveRule(id: b.id!, toPosition: positionOfA)
+
+        let after = try await store.listRules()
+        let ia = try #require(after.firstIndex { $0.id == a.id })
+        let ib = try #require(after.firstIndex { $0.id == b.id })
+        #expect(ib == ia - 1, "B should now sit directly above A.")
+        #expect(after.map(\.order) == Array(1...after.count).map(Optional.some), "Outlook keeps positions 1…N.")
+        let others = { (rules: [MailRule]) in rules.filter { !$0.name.hasPrefix(Self.prefix) }.map(\.id) }
+        #expect(others(after) == others(before), "Rules we didn't move keep their relative order.")
+
+        try await store.deleteRule(id: a.id!)
+        try await store.deleteRule(id: b.id!)
+    }
+}
+
+extension Live {
+    /// Folders compare by their leaf name; the store resolves ids to paths.
+    static func byFolderName(_ action: RuleAction) -> RuleAction {
+        func leaf(_ folder: MailboxFolder) -> MailboxFolder {
+            .named(String((folder.name ?? folder.id ?? "").split(separator: "/").last ?? ""))
+        }
+        switch action {
+        case .moveTo(let f): return .moveTo(leaf(f))
+        case .copyTo(let f): return .copyTo(leaf(f))
+        default: return action
         }
     }
 }

@@ -75,16 +75,15 @@ public actor GraphMailFolderDirectory: FolderDirectory {
     public func id(forName name: String) async throws -> String? {
         let all = try await folders()
 
-        // An exact path wins; otherwise fall back to a unique leaf name, so
-        // "Reading" resolves without anyone typing "Inbox/Reading".
+        // An exact path wins; otherwise fall back to a unique path suffix, so
+        // "Reading" and "Newsletters/Tech" resolve without anyone typing the
+        // "Inbox/" in front.
         if let exact = all.first(where: { $0.name?.caseInsensitiveCompare(name) == .orderedSame }) {
             return exact.id
         }
-        let leaves = all.filter {
-            ($0.name?.split(separator: "/").last).map(String.init)?
-                .caseInsensitiveCompare(name) == .orderedSame
-        }
-        return leaves.count == 1 ? leaves[0].id : nil
+        let suffix = "/" + name.lowercased()
+        let matches = all.filter { $0.name?.lowercased().hasSuffix(suffix) == true }
+        return matches.count == 1 ? matches[0].id : nil
     }
 
     // MARK: - Fetching
@@ -122,26 +121,7 @@ public actor GraphMailFolderDirectory: FolderDirectory {
         request.setValue("Bearer \(try await tokenProvider.accessToken())", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch {
-            throw RuleStoreError.transport(error)
-        }
-
-        guard let http = response as? HTTPURLResponse else {
-            throw RuleStoreError.provider(.microsoft, status: -1, code: nil, message: "Non-HTTP response.")
-        }
-        guard (200..<300).contains(http.statusCode) else {
-            let error = try? JSONDecoder().decode(GraphErrorEnvelope.self, from: data)
-            throw RuleStoreError.provider(
-                .microsoft,
-                status: http.statusCode,
-                code: error?.error.code,
-                message: error?.error.message
-            )
-        }
+        let data = try await GraphHTTP.send(request, session: session, retry: .standard)
 
         do {
             return try JSONDecoder().decode(T.self, from: data)

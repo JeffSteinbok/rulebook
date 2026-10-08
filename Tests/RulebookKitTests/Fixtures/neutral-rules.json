@@ -12,7 +12,7 @@
       { "kind": "from", "match": { "anyOf": ["owner@example.com"], "mode": "equals" } }
     ],
     "actions": [
-      { "kind": "moveTo", "folder": { "name": "Reading" } },
+      { "kind": "moveTo", "folder": { "id": "folder-reading", "name": "Reading" } },
       { "kind": "markAsRead", "value": true },
       { "kind": "stopProcessing" }
     ],

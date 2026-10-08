@@ -19,15 +19,37 @@ public struct GraphMessageRuleClient: Sendable {
     private let baseURL: URL
     private let tokenProvider: any TokenProvider
     private let session: URLSession
+    private let retryPolicy: RetryPolicy
 
     public init(
         tokenProvider: any TokenProvider,
         baseURL: URL = GraphMessageRuleClient.defaultBaseURL,
-        session: URLSession = .shared
+        session: URLSession = .shared,
+        retryPolicy: RetryPolicy = .standard
     ) {
         self.tokenProvider = tokenProvider
         self.baseURL = baseURL
         self.session = session
+        self.retryPolicy = retryPolicy
+    }
+
+    /// How throttling (429) and brief outages (503, 504) are retried.
+    public struct RetryPolicy: Sendable {
+        /// Retries after the first attempt.
+        public var attempts: Int
+        /// Used when Graph sends no `Retry-After`.
+        public var defaultDelay: Duration
+        /// A `Retry-After` longer than this is not waited out; the error surfaces.
+        public var longestDelay: Duration
+
+        public init(attempts: Int, defaultDelay: Duration, longestDelay: Duration) {
+            self.attempts = attempts
+            self.defaultDelay = defaultDelay
+            self.longestDelay = longestDelay
+        }
+
+        public static let standard = RetryPolicy(attempts: 2, defaultDelay: .seconds(1), longestDelay: .seconds(10))
+        public static let none = RetryPolicy(attempts: 0, defaultDelay: .zero, longestDelay: .zero)
     }
 
     private var rulesURL: URL {
@@ -50,7 +72,7 @@ public struct GraphMessageRuleClient: Sendable {
             url = page.nextLink.flatMap(URL.init(string:))
         }
 
-        return all.sorted { ($0.sequence, $0.displayName) < ($1.sequence, $1.displayName) }
+        return all.sorted { ($0.sequence ?? .max, $0.displayName) < ($1.sequence ?? .max, $1.displayName) }
     }
 
     public func rule(id: String) async throws -> MessageRule {
@@ -74,6 +96,20 @@ public struct GraphMessageRuleClient: Sendable {
     public func updateRule(id: String, with rule: MessageRule) async throws -> MessageRule {
         var req = try await request(.patch, url: rulesURL.appendingPathComponent(id))
         req.httpBody = try Self.encoder.encode(rule.writablePayload())
+        req.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        do {
+            return try await send(req, expecting: MessageRule.self)
+        } catch let RuleStoreError.provider(_, status, _, _) where status == 404 {
+            throw RuleStoreError.notFound(id: id)
+        }
+    }
+
+    /// Moves a rule to `sequence` and nothing else. Graph shifts the rules it
+    /// displaces, so one request is a whole reorder, and no other field of
+    /// the rule is rewritten from a possibly stale copy.
+    public func moveRule(id: String, toSequence sequence: Int) async throws -> MessageRule {
+        var req = try await request(.patch, url: rulesURL.appendingPathComponent(id))
+        req.httpBody = try JSONSerialization.data(withJSONObject: ["sequence": sequence])
         req.setValue("application/json", forHTTPHeaderField: "Content-Type")
         do {
             return try await send(req, expecting: MessageRule.self)
@@ -120,27 +156,7 @@ public struct GraphMessageRuleClient: Sendable {
     }
 
     private func validated(_ request: URLRequest) async throws -> Data {
-        let data: Data
-        let response: URLResponse
-        do {
-            (data, response) = try await session.data(for: request)
-        } catch {
-            throw RuleStoreError.transport(error)
-        }
-
-        guard let http = response as? HTTPURLResponse else {
-            throw RuleStoreError.provider(.microsoft, status: -1, code: nil, message: "Non-HTTP response.")
-        }
-        guard (200..<300).contains(http.statusCode) else {
-            let error = try? Self.decoder.decode(GraphErrorEnvelope.self, from: data)
-            throw RuleStoreError.provider(
-                .microsoft,
-                status: http.statusCode,
-                code: error?.error.code,
-                message: error?.error.message
-            )
-        }
-        return data
+        try await GraphHTTP.send(request, session: session, retry: retryPolicy)
     }
 }
 
@@ -153,6 +169,52 @@ struct GraphCollection<Element: Decodable>: Decodable {
     private enum CodingKeys: String, CodingKey {
         case value
         case nextLink = "@odata.nextLink"
+    }
+}
+
+/// Sending, status handling and retries, shared by every Graph caller.
+enum GraphHTTP {
+    static func send(_ request: URLRequest, session: URLSession, retry: GraphMessageRuleClient.RetryPolicy) async throws -> Data {
+        var attempt = 0
+        while true {
+            let data: Data
+            let response: URLResponse
+            do {
+                (data, response) = try await session.data(for: request)
+            } catch {
+                throw RuleStoreError.transport(error)
+            }
+
+            guard let http = response as? HTTPURLResponse else {
+                throw RuleStoreError.provider(.microsoft, status: -1, code: nil, message: "Non-HTTP response.")
+            }
+            if (200..<300).contains(http.statusCode) { return data }
+
+            if [429, 503, 504].contains(http.statusCode), attempt < retry.attempts {
+                let delay = retryAfter(http) ?? retry.defaultDelay
+                if delay <= retry.longestDelay {
+                    attempt += 1
+                    try await Task.sleep(for: delay)
+                    continue
+                }
+            }
+
+            let error = try? JSONDecoder().decode(GraphErrorEnvelope.self, from: data)
+            // An expired or revoked token: the caller has to sign in again,
+            // which is a different remedy from any other failure.
+            if http.statusCode == 401 { throw RuleStoreError.notAuthenticated }
+            throw RuleStoreError.provider(
+                .microsoft,
+                status: http.statusCode,
+                code: error?.error.code,
+                message: error?.error.message
+            )
+        }
+    }
+
+    /// `Retry-After` in seconds. Graph does not send the HTTP-date form.
+    private static func retryAfter(_ response: HTTPURLResponse) -> Duration? {
+        (response.value(forHTTPHeaderField: "Retry-After")).flatMap(Double.init).map { .milliseconds(Int($0 * 1000)) }
     }
 }
 

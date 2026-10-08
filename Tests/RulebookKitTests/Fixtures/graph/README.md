@@ -75,7 +75,8 @@ because what Graph stores is not always what it was sent.
   and the addresses and names in `fromAddresses`/`sentToAddresses`/`forwardTo`
   keep their case (`casing.json`). Compare those two predicates case-insensitively.
 - Display names on recipients (`fromAddresses`, `forwardTo`, …) are stored
-  and returned.
+  and returned. A recipient sent **without** a name comes back with the
+  address as its name (live fidelity suite; "Existing rule 2" here).
 
 ### Size (`withinSizeRange`, kilobytes)
 - **There is no "at least" alone:** an omitted `maximumSize` is read as 0, so

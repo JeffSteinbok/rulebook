@@ -49,6 +49,11 @@ public actor JSONFileRuleStore: RuleStore {
         return updated
     }
 
+    public func moveRule(id: String, toPosition position: Int) async throws {
+        try await inner.moveRule(id: id, toPosition: position)
+        try await persist()
+    }
+
     public func deleteRule(id: String) async throws {
         try await inner.deleteRule(id: id)
         try await persist()

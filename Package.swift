@@ -36,7 +36,7 @@ let package = Package(
         // its own target so the default suite cannot accidentally depend on it.
         .testTarget(
             name: "RulebookLiveTests",
-            dependencies: ["RulebookKit"]
+            dependencies: ["RulebookKit", "RulebookTesting"]
         ),
     ]
 )

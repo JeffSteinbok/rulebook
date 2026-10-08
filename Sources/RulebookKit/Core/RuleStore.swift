@@ -9,10 +9,23 @@ public protocol RuleStore: Sendable {
     /// What this backend can express. Check a rule against it before writing.
     var capabilities: RuleCapabilities { get }
 
+    /// Every rule, in evaluation order.
     func listRules() async throws -> [MailRule]
     func rule(id: String) async throws -> MailRule
+
+    /// A rule with no `order` goes after every existing rule.
     func createRule(_ rule: MailRule) async throws -> MailRule
+
+    /// Replaces the rule's name, state, conditions, exceptions and actions
+    /// with `rule`'s, so an empty list clears what was there. A `nil` order
+    /// leaves the rule where it is.
     func updateRule(id: String, with rule: MailRule) async throws -> MailRule
+
+    /// Moves a rule to a 1-based position. The rules it displaces shift down
+    /// one place, so positions stay 1…N, which is how Outlook numbers them.
+    /// A position past the end means last.
+    func moveRule(id: String, toPosition position: Int) async throws
+
     func deleteRule(id: String) async throws
 }
 

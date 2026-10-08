@@ -42,27 +42,38 @@ public struct GraphRuleStore: RuleStore {
     }
 
     public func listRules() async throws -> [MailRule] {
+        let natives = try await client.listRules()
+        // One folder fetch for the whole list. If it fails (no Mail.ReadBasic,
+        // a blip), rules still load and show raw ids, and the directory is
+        // not asked again for every action.
+        let canResolve = await folderDirectoryIsAvailable()
         var resolved: [MailRule] = []
-        for native in try await client.listRules() {
-            resolved.append(await resolvingFolders(in: try mapper.decode(native)))
+        for native in natives {
+            let rule = try mapper.decode(native)
+            resolved.append(canResolve ? await namingFolders(in: rule) : rule)
         }
         return resolved
     }
 
     public func rule(id: String) async throws -> MailRule {
-        await resolvingFolders(in: try mapper.decode(try await client.rule(id: id)))
+        await namingFolders(in: try mapper.decode(try await client.rule(id: id)))
     }
 
     public func createRule(_ rule: MailRule) async throws -> MailRule {
-        let addressed = await resolvingFolders(in: rule)
-        return await resolvingFolders(in: try mapper.decode(try await client.createRule(try mapper.encode(addressed))))
+        var native = try mapper.encode(try await addressingFolders(in: rule))
+        // Graph requires a sequence on create, and clamps one past the end to
+        // N+1, so this appends without knowing N.
+        if native.sequence == nil { native.sequence = GraphRuleMapper.appendSequence }
+        return await namingFolders(in: try mapper.decode(try await client.createRule(native)))
     }
 
     public func updateRule(id: String, with rule: MailRule) async throws -> MailRule {
-        let addressed = await resolvingFolders(in: rule)
-        return await resolvingFolders(
-            in: try mapper.decode(try await client.updateRule(id: id, with: try mapper.encode(addressed)))
-        )
+        let native = try mapper.encode(try await addressingFolders(in: rule))
+        return await namingFolders(in: try mapper.decode(try await client.updateRule(id: id, with: native)))
+    }
+
+    public func moveRule(id: String, toPosition position: Int) async throws {
+        _ = try await client.moveRule(id: id, toSequence: max(1, position))
     }
 
     public func deleteRule(id: String) async throws {
@@ -71,25 +82,58 @@ public struct GraphRuleStore: RuleStore {
 
     // MARK: - Folder resolution
 
-    /// One pass serves both directions: ``FolderDirectory/resolve(_:)`` fills
-    /// in whichever half of the reference is missing — the name when reading,
-    /// the id when writing.
-    private func resolvingFolders(in rule: MailRule) async -> MailRule {
-        guard let directory else { return rule }
+    private func folderDirectoryIsAvailable() async -> Bool {
+        guard let directory else { return false }
+        return (try? await directory.folders()) != nil
+    }
 
-        var resolved: [RuleAction] = []
+    /// Reading: opaque ids gain readable names. Best-effort, since a rule with
+    /// a raw id is still a rule worth showing.
+    private func namingFolders(in rule: MailRule) async -> MailRule {
+        guard let directory else { return rule }
+        return await rule.mappingFolders { await directory.resolve($0) }
+    }
+
+    /// Writing: a folder chosen by name needs its id, and Graph refuses a
+    /// display name ("Id is malformed."). A failed lookup is thrown, not
+    /// swallowed, so the person sees why rather than a bad request.
+    private func addressingFolders(in rule: MailRule) async throws -> MailRule {
+        guard let directory else { return rule }
+        var updated = rule
+        updated.actions = []
         for action in rule.actions {
             switch action {
-            case .moveTo(let folder): resolved.append(.moveTo(await directory.resolve(folder)))
-            case .copyTo(let folder): resolved.append(.copyTo(await directory.resolve(folder)))
-            case .addLabel(let folder): resolved.append(.addLabel(await directory.resolve(folder)))
-            case .removeLabel(let folder): resolved.append(.removeLabel(await directory.resolve(folder)))
-            default: resolved.append(action)
+            case .moveTo(let folder): updated.actions.append(.moveTo(try await directory.addressing(folder)))
+            case .copyTo(let folder): updated.actions.append(.copyTo(try await directory.addressing(folder)))
+            default: updated.actions.append(action)
             }
         }
+        return updated
+    }
+}
 
-        var updated = rule
-        updated.actions = resolved
+private extension FolderDirectory {
+    func addressing(_ folder: MailboxFolder) async throws -> MailboxFolder {
+        guard folder.id == nil, let name = folder.name, !name.isEmpty else { return folder }
+        var resolved = folder
+        resolved.id = try await id(forName: name)
+        return resolved
+    }
+}
+
+private extension MailRule {
+    func mappingFolders(_ transform: (MailboxFolder) async -> MailboxFolder) async -> MailRule {
+        var updated = self
+        updated.actions = []
+        for action in actions {
+            switch action {
+            case .moveTo(let folder): updated.actions.append(.moveTo(await transform(folder)))
+            case .copyTo(let folder): updated.actions.append(.copyTo(await transform(folder)))
+            // Categories are not folders; looking one up by name could pick
+            // up a folder that happens to share it.
+            default: updated.actions.append(action)
+            }
+        }
         return updated
     }
 }

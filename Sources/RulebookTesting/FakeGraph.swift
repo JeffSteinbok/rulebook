@@ -61,8 +61,11 @@ public final class FakeGraph: @unchecked Sendable {
 
     /// A failure the fake returns instead of handling a request.
     public struct Fault: Sendable {
+        /// Which endpoints a fault applies to.
+        public enum Target: Sendable { case any, rules, folders }
+
         public var method: String?
-        public var pathContains: String?
+        public var target: Target
         public var status: Int
         public var code: String
         public var message: String
@@ -70,12 +73,12 @@ public final class FakeGraph: @unchecked Sendable {
         public var remaining: Int
 
         public init(
-            method: String? = nil, pathContains: String? = nil, status: Int,
+            method: String? = nil, target: Target = .any, status: Int,
             code: String = "ServiceUnavailable", message: String = "Injected failure.",
             headers: [String: String] = [:], times: Int = 1
         ) {
             self.method = method
-            self.pathContains = pathContains
+            self.target = target
             self.status = status
             self.code = code
             self.message = message
@@ -104,8 +107,6 @@ public final class FakeGraph: @unchecked Sendable {
         renumber()
         FakeGraphURLProtocol.register(self)
     }
-
-    deinit { FakeGraphURLProtocol.unregister(self) }
 
     // MARK: - Wiring
 
@@ -185,10 +186,16 @@ public final class FakeGraph: @unchecked Sendable {
 
             log.append(Request(method: method, path: path, query: components?.query, body: body))
 
-            if let index = faults.firstIndex(where: {
-                ($0.method == nil || $0.method == method)
-                    && ($0.pathContains.map { path.contains($0) } ?? true)
-            }) {
+            let isRules = path.contains("messageRules")
+            func applies(_ fault: Fault) -> Bool {
+                guard fault.method == nil || fault.method == method else { return false }
+                switch fault.target {
+                case .any: return true
+                case .rules: return isRules
+                case .folders: return !isRules && path.hasPrefix("me/mailFolders")
+                }
+            }
+            if let index = faults.firstIndex(where: applies) {
                 let fault = faults[index]
                 faults[index].remaining -= 1
                 if faults[index].remaining <= 0 { faults.remove(at: index) }
@@ -399,7 +406,7 @@ public final class FakeGraph: @unchecked Sendable {
             case .enumeration:
                 out[key] = value
             case .recipients:
-                out[key] = value
+                out[key] = Self.namingRecipients(value)
             case .size:
                 let range = value as! JSON
                 let minimum = range["minimumSize"] as? Int ?? 0
@@ -452,7 +459,7 @@ public final class FakeGraph: @unchecked Sendable {
                                                    field: field, value: ":" + address))
                     }
                 }
-                out[key] = value
+                out[key] = Self.namingRecipients(value)
             case .strings, .enumeration:
                 out[key] = value
             default:
@@ -603,6 +610,18 @@ public final class FakeGraph: @unchecked Sendable {
         value.replacingOccurrences(of: "-", with: "/").replacingOccurrences(of: "_", with: "+")
     }
 
+    /// A recipient sent without a display name is stored with its address as
+    /// the name (live fidelity suite; "Existing rule 2" in `baseline.json`).
+    private static func namingRecipients(_ value: Any) -> Any {
+        (value as? [JSON] ?? []).map { recipient in
+            var recipient = recipient
+            var email = recipient["emailAddress"] as? JSON ?? [:]
+            if email["name"] == nil || email["name"] is NSNull { email["name"] = email["address"] }
+            recipient["emailAddress"] = email
+            return recipient
+        }
+    }
+
     private static func isAddress(_ value: String) -> Bool {
         let parts = value.split(separator: "@")
         return parts.count == 2 && !value.contains(" ") && parts[1].contains(".")
@@ -699,18 +718,16 @@ public final class FakeGraph: @unchecked Sendable {
 
 /// Routes requests to whichever ``FakeGraph`` owns their host, so fakes in
 /// concurrently running tests never see each other's traffic.
+///
+/// Fakes are held for the life of the process: a store built from one must
+/// keep working after the test's own reference is gone, and a fake that
+/// vanished would send its requests to real DNS.
 public final class FakeGraphURLProtocol: URLProtocol, @unchecked Sendable {
     private static let lock = NSLock()
-    nonisolated(unsafe) private static var fakes: [String: WeakFake] = [:]
-
-    private struct WeakFake { weak var fake: FakeGraph? }
+    nonisolated(unsafe) private static var fakes: [String: FakeGraph] = [:]
 
     static func register(_ fake: FakeGraph) {
-        lock.withLock { fakes[fake.baseURL.host!] = WeakFake(fake: fake) }
-    }
-
-    static func unregister(_ fake: FakeGraph) {
-        lock.withLock { _ = fakes.removeValue(forKey: fake.baseURL.host!) }
+        lock.withLock { fakes[fake.baseURL.host!] = fake }
     }
 
     override public class func canInit(with request: URLRequest) -> Bool {
@@ -723,7 +740,7 @@ public final class FakeGraphURLProtocol: URLProtocol, @unchecked Sendable {
 
     override public func startLoading() {
         guard let url = request.url, let host = url.host,
-              let fake = Self.lock.withLock({ Self.fakes[host]?.fake }) else {
+              let fake = Self.lock.withLock({ Self.fakes[host] }) else {
             client?.urlProtocol(self, didFailWithError: URLError(.cannotConnectToHost))
             return
         }

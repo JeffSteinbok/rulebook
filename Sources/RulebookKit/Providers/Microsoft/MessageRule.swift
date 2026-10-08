@@ -10,9 +10,11 @@ public struct MessageRule: Codable, Hashable, Sendable, Identifiable {
 
     public var displayName: String
 
-    /// Evaluation order. Lower numbers run first; Graph expects these to be
-    /// unique within the mailbox.
-    public var sequence: Int
+    /// Evaluation order, 1-based. Graph keeps these dense (1…N): writing *k*
+    /// inserts the rule at *k* and shifts the rest down, and anything past
+    /// the end lands at N+1. `nil` in a PATCH leaves the position alone;
+    /// a POST must carry one, or Graph answers 400.
+    public var sequence: Int?
 
     public var isEnabled: Bool?
 
@@ -29,7 +31,7 @@ public struct MessageRule: Codable, Hashable, Sendable, Identifiable {
     public init(
         id: String? = nil,
         displayName: String,
-        sequence: Int,
+        sequence: Int?,
         isEnabled: Bool? = true,
         conditions: MessageRulePredicates? = nil,
         exceptions: MessageRulePredicates? = nil,
@@ -50,6 +52,25 @@ public struct MessageRule: Codable, Hashable, Sendable, Identifiable {
     ///
     /// Nil optionals are omitted by `JSONEncoder`, which is exactly the
     /// semantics PATCH wants: only the properties you set are changed.
+    private enum CodingKeys: String, CodingKey {
+        case id, displayName, sequence, isEnabled, hasError, isReadOnly, conditions, exceptions, actions
+    }
+
+    /// Tolerant on the way in: one rule with an absent name or sequence must
+    /// not make the whole list unreadable.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        id = try c.decodeIfPresent(String.self, forKey: .id)
+        displayName = try c.decodeIfPresent(String.self, forKey: .displayName) ?? ""
+        sequence = try c.decodeIfPresent(Int.self, forKey: .sequence)
+        isEnabled = try c.decodeIfPresent(Bool.self, forKey: .isEnabled)
+        hasError = try c.decodeIfPresent(Bool.self, forKey: .hasError)
+        isReadOnly = try c.decodeIfPresent(Bool.self, forKey: .isReadOnly)
+        conditions = try c.decodeIfPresent(MessageRulePredicates.self, forKey: .conditions)
+        exceptions = try c.decodeIfPresent(MessageRulePredicates.self, forKey: .exceptions)
+        actions = try c.decodeIfPresent(MessageRuleActions.self, forKey: .actions)
+    }
+
     public func writablePayload() -> MessageRule {
         var copy = self
         copy.id = nil

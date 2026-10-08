@@ -318,15 +318,31 @@ extension RulebookCLI {
 
             let store = try options.store()
             let existing = try await store.listRules()
-            let byName = Dictionary(existing.map { ($0.name, $0) }, uniquingKeysWith: { first, _ in first })
+            let byName = Dictionary(grouping: existing, by: \.name)
 
+            // Refuse ambiguity up front rather than half-applying a file.
+            let ambiguous = desired.map(\.name).filter { (byName[$0]?.count ?? 0) > 1 }
+            guard ambiguous.isEmpty else {
+                throw ValidationError("The mailbox has more than one rule named \(ambiguous.map { "\"\($0)\"" }.joined(separator: ", ")); rename them first.")
+            }
+
+            var done = 0
             for rule in desired {
-                if let match = byName[rule.name], let id = match.id {
-                    print("\(dryRun ? "would update" : "update") \(id) — \(rule.name)")
-                    if !dryRun { _ = try await store.updateRule(id: id, with: rule) }
-                } else {
-                    print("\(dryRun ? "would create" : "create") — \(rule.name)")
-                    if !dryRun { _ = try await store.createRule(rule) }
+                do {
+                    if let match = byName[rule.name]?.first, let id = match.id {
+                        if match.status.isReadOnly {
+                            print("skip \(id) — \(rule.name) (read-only in the mailbox)")
+                            continue
+                        }
+                        print("\(dryRun ? "would update" : "update") \(id) — \(rule.name)")
+                        if !dryRun { _ = try await store.updateRule(id: id, with: rule) }
+                    } else {
+                        print("\(dryRun ? "would create" : "create") — \(rule.name)")
+                        if !dryRun { _ = try await store.createRule(rule) }
+                    }
+                    done += 1
+                } catch {
+                    throw ValidationError("Stopped at \"\(rule.name)\" after \(done) of \(desired.count): \(error.localizedDescription)")
                 }
             }
         }
@@ -476,7 +492,11 @@ enum Format {
     static func decodeRules(_ path: String) throws -> [MailRule] {
         let data = try Data(contentsOf: URL(fileURLWithPath: path))
         let decoder = JSONDecoder()
-        if let many = try? decoder.decode([MailRule].self, from: data) { return many }
+        // Decide by shape, so a mistake inside an array is reported as that
+        // mistake, not as "expected a dictionary".
+        if (try? JSONSerialization.jsonObject(with: data)) is [Any] {
+            return try decoder.decode([MailRule].self, from: data)
+        }
         return [try decoder.decode(MailRule.self, from: data)]
     }
 

@@ -21,6 +21,9 @@ public struct RuleCapabilities: Hashable, Sendable {
     public var supportsDisabling: Bool
     /// Whether a rule can name a header to test, vs. searching all headers.
     public var supportsNamedHeaders: Bool
+    /// Whether a yes/no test can be set to "no" ("has no attachment"). Outlook
+    /// stores a false test as no test, so the rule would match every message.
+    public var supportsNegatedTests: Bool
 
     public init(
         provider: ProviderID,
@@ -31,7 +34,8 @@ public struct RuleCapabilities: Hashable, Sendable {
         supportsExceptions: Bool = false,
         supportsOrdering: Bool = false,
         supportsDisabling: Bool = false,
-        supportsNamedHeaders: Bool = false
+        supportsNamedHeaders: Bool = false,
+        supportsNegatedTests: Bool = true
     ) {
         self.provider = provider
         self.conditions = conditions
@@ -42,6 +46,7 @@ public struct RuleCapabilities: Hashable, Sendable {
         self.supportsOrdering = supportsOrdering
         self.supportsDisabling = supportsDisabling
         self.supportsNamedHeaders = supportsNamedHeaders
+        self.supportsNegatedTests = supportsNegatedTests
     }
 
     /// The local stores accept anything, so a rule can be authored and kept
@@ -55,7 +60,8 @@ public struct RuleCapabilities: Hashable, Sendable {
         supportsExceptions: true,
         supportsOrdering: true,
         supportsDisabling: true,
-        supportsNamedHeaders: true
+        supportsNamedHeaders: true,
+        supportsNegatedTests: true
     )
 }
 
@@ -73,21 +79,37 @@ public enum RuleCompatibility {
             ))
         }
 
-        for condition in rule.conditions + rule.exceptions {
+        for (condition, isException) in rule.conditions.map({ ($0, false) }) + rule.exceptions.map({ ($0, true) }) {
             if !capabilities.conditions.contains(condition.kind) {
                 unsupported("the condition \"\(condition.description)\"")
                 continue
             }
             switch condition {
             case .from(let m), .recipient(let m), .subject(let m),
-                 .body(let m), .subjectOrBody(let m), .header(_, let m):
+                 .body(let m), .subjectOrBody(let m):
                 if !capabilities.matchModes.contains(m.mode) {
                     unsupported("the \(m.mode.rawValue) match mode")
                 }
-            case .header(let name, _) where name != nil && !capabilities.supportsNamedHeaders:
-                unsupported("testing a named header")
+            case .header(let name, let m):
+                if !capabilities.matchModes.contains(m.mode) {
+                    unsupported("the \(m.mode.rawValue) match mode")
+                }
+                if name != nil && !capabilities.supportsNamedHeaders {
+                    unsupported("testing a named header")
+                }
             case .rawQuery(let queryProvider, _) where queryProvider != capabilities.provider:
                 unsupported("a raw \(queryProvider.rawValue) query")
+            case .hasAttachment(false), .messageKind(_, false):
+                guard !capabilities.supportsNegatedTests else { break }
+                let positive: RuleCondition = switch condition {
+                case .messageKind(let kind, _): .messageKind(kind, true)
+                default: .hasAttachment(true)
+                }
+                issues.append(ValidationIssue(
+                    severity: .error, rule: rule.name,
+                    message: "\(provider) ignores a test for \u{201C}\(condition.description)\u{201D}, so this rule would apply to every message.",
+                    remedy: "Add \u{201C}\(positive.description)\u{201D} as \(isException ? "a condition" : "an exception") instead; that means the same thing."
+                ))
             default:
                 break
             }

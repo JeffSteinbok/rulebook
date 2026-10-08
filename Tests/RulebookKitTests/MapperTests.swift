@@ -17,7 +17,8 @@ struct GraphMapperTests {
         #expect(native.conditions?.subjectContains == ["weekly"])
         // `.equals` on an address maps to fromAddresses, not senderContains.
         #expect(native.exceptions?.fromAddresses?.first?.emailAddress.address == "owner@example.com")
-        #expect(native.actions?.moveToFolder == "Reading")
+        // Graph takes a folder id, never a display name ("Id is malformed.").
+        #expect(native.actions?.moveToFolder == "folder-reading")
         #expect(native.actions?.markAsRead == true)
         #expect(native.actions?.stopProcessingRules == true)
     }
@@ -127,8 +128,8 @@ struct CapabilityCheckTests {
         let rule = MailRule(
             name: "Newsletters",
             order: 1,
-            conditions: [.from(StringMatch(["newsletter"])), .hasAttachment(false)],
-            actions: [.moveTo(.named("Reading")), .markAsRead(true)]
+            conditions: [.from(StringMatch(["newsletter"])), .hasAttachment(true)],
+            actions: [.moveTo(MailboxFolder(id: "folder-reading", name: "Reading")), .markAsRead(true)]
         )
 
         #expect(RuleCompatibility.check(rule, against: GraphRuleMapper.capabilities).isEmpty)
@@ -146,11 +147,11 @@ struct CapabilityCheckTests {
 struct GraphOrderTests {
     let mapper = GraphRuleMapper()
 
-    @Test("A rule with no stated order gets sequence 1, never 0")
-    func defaultsToOne() throws {
-        // Graph rejects a sequence of 0 at request time:
-        //   MessageRuleValidationError ... Field: 'Sequence', Value: '0'
-        #expect(try mapper.encode(MailRule.stub(order: nil)).sequence == 1)
+    @Test("A rule with no stated order sends no sequence, so an update leaves it in place")
+    func omitsAbsentOrder() throws {
+        // On PATCH an absent sequence keeps the rule's position. On create,
+        // GraphRuleStore appends instead (Graph refuses a POST without one).
+        #expect(try mapper.encode(MailRule.stub(order: nil)).sequence == nil)
     }
 
     @Test("An explicit order of 0 is refused, with the reason")
