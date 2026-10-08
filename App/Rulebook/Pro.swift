@@ -41,9 +41,9 @@ final class ProStore {
     static let trialProductID = "net.steinbok.Rulebook.trial"
     static let trialLength: TimeInterval = 7 * 24 * 60 * 60
 
-    /// Off for launch: Pro is bought or redeemed from an offer code. Flipping
-    /// this on also needs the trial product live in App Store Connect.
-    static let trialEnabled = false
+    /// Lets the trial be switched off without unpicking it. Needs the trial
+    /// product live in App Store Connect; without it the button never shows.
+    static let trialEnabled = true
 
     /// Bought, or redeemed from an offer code — both land as a transaction for
     /// ``productID``, so a gifted copy needs no special handling.
