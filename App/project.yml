@@ -12,7 +12,9 @@ packages:
     path: ..
   MSAL:
     url: https://github.com/AzureAD/microsoft-authentication-library-for-objc
-    from: 2.0.0
+    # Pinned, not ranged: MSAL ships as a binary target, and 2.16.1 was tagged
+    # without its MSAL.zip — a range resolved to it and every build 404'd.
+    exactVersion: 2.16.0
 
 targets:
   Rulebook:

@@ -16,6 +16,21 @@
       "productID" : "net.steinbok.Rulebook.pro",
       "referenceName" : "Rulebook Pro",
       "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "0.00",
+      "familyShareable" : false,
+      "internalID" : "RULEBOOK_TRIAL",
+      "localizations" : [
+        {
+          "description" : "Try everything in Rulebook Pro free for 7 days. Nothing is charged and nothing renews.",
+          "displayName" : "7-day Trial",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "net.steinbok.Rulebook.trial",
+      "referenceName" : "7-day Trial",
+      "type" : "NonConsumable"
     }
   ],
   "settings" : {

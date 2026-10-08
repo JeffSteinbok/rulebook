@@ -10,6 +10,7 @@ struct PaywallView: View {
     let pro: ProStore
 
     @Environment(\.dismiss) private var dismiss
+    @State private var redeemingCode = false
 
     private let included = [
         "Edit, create, and delete rules",
@@ -27,7 +28,7 @@ struct PaywallView: View {
                         .foregroundStyle(DS.Palette.ink)
                         .fixedSize(horizontal: false, vertical: true)
 
-                    Text("Reading your rules is free and always will be. Changing them is a one-time purchase — no subscription.")
+                    Text(pitch)
                         .font(DS.Font.body)
                         .foregroundStyle(DS.Palette.ink60)
                         .fixedSize(horizontal: false, vertical: true)
@@ -59,24 +60,45 @@ struct PaywallView: View {
             .background(DS.Palette.ground)
             .safeAreaInset(edge: .bottom) {
                 VStack(spacing: 10) {
-                    PrimaryButton(
-                        title: buyTitle,
-                        trailing: nil
-                    ) {
-                        Task {
-                            await pro.purchase()
-                            if pro.isPro { dismiss() }
+                    if pro.canStartTrial {
+                        PrimaryButton(title: trialTitle, trailing: nil) {
+                            Task {
+                                await pro.startTrial()
+                                if pro.isPro { dismiss() }
+                            }
                         }
-                    }
-                    .disabled(pro.product == nil || pro.isWorking)
+                        .disabled(pro.isWorking)
 
-                    Button("Restore purchase") {
-                        Task {
-                            await pro.restore()
-                            if pro.isPro { dismiss() }
+                        Button(buyTitle) {
+                            Task {
+                                await pro.purchase()
+                                if pro.isPro { dismiss() }
+                            }
                         }
+                        .buttonStyle(SecondaryButtonStyle())
+                        .disabled(pro.product == nil || pro.isWorking)
+                    } else {
+                        PrimaryButton(title: buyTitle, trailing: nil) {
+                            Task {
+                                await pro.purchase()
+                                if pro.isPro { dismiss() }
+                            }
+                        }
+                        .disabled(pro.product == nil || pro.isWorking)
                     }
-                    .buttonStyle(SecondaryButtonStyle())
+
+                    HStack(spacing: 24) {
+                        Button("Restore purchase") {
+                            Task {
+                                await pro.restore()
+                                if pro.isPro { dismiss() }
+                            }
+                        }
+                        // Offer codes are how Pro is gifted: a redeemed code
+                        // arrives as an ordinary Pro transaction.
+                        Button("Redeem code") { redeemingCode = true }
+                    }
+                    .font(DS.Font.caption)
                     .disabled(pro.isWorking)
                 }
                 .padding(DS.Metric.gutter)
@@ -94,7 +116,32 @@ struct PaywallView: View {
             // The product may not have loaded yet if the app opened offline.
             if pro.product == nil { await pro.loadProduct() }
         }
+        .offerCodeRedemption(isPresented: $redeemingCode) { _ in
+            Task {
+                await pro.refresh()
+                if pro.isPro { dismiss() }
+            }
+        }
         .onDisappear { pro.errorMessage = nil }
+    }
+
+    private var days: Int { Int(ProStore.trialLength / 86_400) }
+
+    /// Guideline 3.1.1 asks a trial offer to say how long it lasts, what stops
+    /// at the end, and what it costs after — all three are here.
+    private var pitch: String {
+        let price = pro.product.map { " of \($0.displayPrice)" } ?? ""
+        if pro.canStartTrial {
+            return "Reading your rules is free and always will be. Try Pro free for \(days) days — nothing is charged and nothing renews. After that, changing rules is a one-time purchase\(price)."
+        }
+        if pro.hasTrialEnded {
+            return "Your \(days)-day free trial has ended. Reading your rules is still free; changing them is a one-time purchase\(price) — no subscription."
+        }
+        return "Reading your rules is free and always will be. Changing them is a one-time purchase — no subscription."
+    }
+
+    private var trialTitle: String {
+        pro.isWorking ? "Working…" : "Start \(days)-day free trial"
     }
 
     private var buyTitle: String {
