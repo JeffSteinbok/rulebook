@@ -383,4 +383,31 @@ struct ProviderErrorTextTests {
         #expect(text.contains("A brand new failure."))
         #expect(text.contains("500"))
     }
+
+    @Test("Every error real Graph returned reads as a sentence, not Graph's syntax")
+    func recordedErrorsAreReadable() throws {
+        var checked = 0
+        for name in GraphConformanceTests.scenarios {
+            for exchange in try Recording.load(name).exchanges where exchange.status >= 400 {
+                let error = (exchange.responseBody as? [String: Any])?["error"] as? [String: Any]
+                let failure = RuleStoreError.provider(
+                    .microsoft, status: exchange.status,
+                    code: error?["code"] as? String, message: error?["message"] as? String
+                )
+                let text = try #require(failure.errorDescription)
+                #expect(!text.contains("ErrorCode:"), "\(exchange.label ?? exchange.path): \(text)")
+                #expect(!text.contains("Field:"), "\(exchange.label ?? exchange.path): \(text)")
+                #expect(text.count < 160, "\(exchange.label ?? exchange.path): \(text)")
+                checked += 1
+            }
+        }
+        #expect(checked > 20)
+    }
+
+    @Test("A folder Outlook can't find is named as the destination folder")
+    func folderErrorWording() {
+        let text = RuleStoreError.provider(.microsoft, status: 400, code: "MessageRuleValidationError",
+            message: "ErrorCode: 'InvalidValue', Message: 'Id is malformed.', Field: 'Action.MoveToFolder', Value: 'Deleted Items'.").errorDescription
+        #expect(text == "Outlook rejected the destination folder: \u{201C}Deleted Items\u{201D} isn\u{2019}t allowed.")
+    }
 }

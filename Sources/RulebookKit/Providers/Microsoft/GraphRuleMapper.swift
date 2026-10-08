@@ -59,6 +59,10 @@ public struct GraphRuleMapper: RuleMapper {
         if rule.match == .any {
             reject("matching any of several conditions; Graph ANDs every predicate")
         }
+        // `validation.json`: StringValueTooBig past 256.
+        if rule.name.count > 256 {
+            reject("a name longer than 256 characters", remedy: "Shorten the name.")
+        }
         // Outlook numbers rules from 1. Sending 0 is rejected at request time
         // with: MessageRuleValidationError ... Field: 'Sequence', Value: '0'.
         if let order = rule.order, order < 1 {
@@ -145,7 +149,7 @@ public struct GraphRuleMapper: RuleMapper {
                 if claim("bodyOrSubjectContains", condition) { predicates.bodyOrSubjectContains = match.anyOf }
 
             case .header(let name, let match):
-                if name != nil { reject("a test on the named header \"\(name!)\"; Graph searches all headers", nil) }
+                if let name, !name.isEmpty { reject("a test on the named header \"\(name)\"; Graph searches all headers", nil) }
                 guard match.mode == .contains else { reject("a \(match.mode.rawValue) match on headers", nil); continue }
                 if claim("headerContains", condition) { predicates.headerContains = match.anyOf }
 

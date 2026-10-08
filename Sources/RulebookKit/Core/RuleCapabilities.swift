@@ -94,7 +94,7 @@ public enum RuleCompatibility {
                 if !capabilities.matchModes.contains(m.mode) {
                     unsupported("the \(m.mode.rawValue) match mode")
                 }
-                if name != nil && !capabilities.supportsNamedHeaders {
+                if !(name ?? "").isEmpty && !capabilities.supportsNamedHeaders {
                     unsupported("testing a named header")
                 }
             case .rawQuery(let queryProvider, _) where queryProvider != capabilities.provider:
