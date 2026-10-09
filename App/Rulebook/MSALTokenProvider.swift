@@ -134,7 +134,18 @@ actor MSALTokenProvider: TokenProvider {
 
         self.application = try MSALPublicClientApplication(configuration: config)
         self.scopes = scopes.filter { !Self.reservedScopes.contains($0.lowercased()) }
-        self.account = try? application.allAccounts().first
+        self.account = Self.cachedAccount(in: application)
+    }
+
+    /// Logged rather than swallowed: an unreadable cache and an empty one both
+    /// end in a sign-in prompt, but only the log says which it was.
+    private static func cachedAccount(in application: MSALPublicClientApplication) -> MSALAccount? {
+        do {
+            return try application.allAccounts().first
+        } catch {
+            DiagnosticsLog.shared.append("token cache unreadable: \((error as NSError).domain) \((error as NSError).code)")
+            return nil
+        }
     }
 
     var isSignedIn: Bool { account != nil }
@@ -149,7 +160,17 @@ actor MSALTokenProvider: TokenProvider {
     /// Silent first, interactive only when the refresh token is gone. The app
     /// should never see a login screen on a warm launch.
     func accessToken() async throws -> String {
-        guard let account else { throw AuthError.noAccount }
+        // The app's mailbox list and MSAL's token cache are stored apart, and
+        // can disagree: a new phone restored from backup brings the list back
+        // without the keychain tokens, and a prewarmed launch can run before
+        // first unlock, when the keychain can't be read. Look again, and if
+        // there's still nothing, ask Microsoft — "No mailbox is connected"
+        // next to a mailbox in the list is a dead end.
+        if account == nil { account = Self.cachedAccount(in: application) }
+        guard let account else {
+            DiagnosticsLog.shared.append("no cached account; signing in again")
+            return try await signIn()
+        }
 
         do {
             let params = MSALSilentTokenParameters(scopes: scopes, account: account)
