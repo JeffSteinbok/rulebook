@@ -27,7 +27,22 @@ final class RulesListViewModel {
     private(set) var issues: [RuleIssue] = []
     private(set) var isLoading = false
     private(set) var lastSync: Date?
-    var errorMessage: String?
+    var errorMessage: String? {
+        didSet { if errorMessage == nil { needsSignIn = false } }
+    }
+
+    /// The last error was the token cache having no usable sign-in, so the
+    /// alert offers Sign in rather than just OK.
+    private(set) var needsSignIn = false
+
+    /// Every failure that reaches the alert goes through here, so a lapsed
+    /// sign-in is recognised whichever call happened to hit it first.
+    func report(_ error: Error) {
+        errorMessage = error.localizedDescription
+        if case .signInRequired? = error as? MSALTokenProvider.AuthError {
+            needsSignIn = true
+        }
+    }
 
     /// Rules the user changed that haven't reached the server.
     ///
@@ -202,7 +217,7 @@ final class RulesListViewModel {
         } catch {
             // Keep whatever is on screen: stale rules are still the last known
             // truth, and they're still running on the server.
-            errorMessage = error.localizedDescription
+            report(error)
         }
     }
 
@@ -243,7 +258,7 @@ final class RulesListViewModel {
             await load()
             return created
         } catch {
-            errorMessage = error.localizedDescription
+            report(error)
             return nil
         }
     }
@@ -310,7 +325,7 @@ final class RulesListViewModel {
                 _ = try await store.updateRule(id: id, with: patch)
             } catch {
                 failed = true
-                errorMessage = error.localizedDescription
+                report(error)
                 break
             }
         }

@@ -27,8 +27,13 @@ struct RulesListView: View {
                 .safeAreaInset(edge: .bottom) { bottomBar }
                 .task { await model.load() }
                 .refreshable { await model.load() }
-                .alert("Something went wrong", isPresented: errorBinding) {
-                    Button("OK") { model.errorMessage = nil }
+                .alert(model.needsSignIn ? "Sign in again" : "Something went wrong", isPresented: errorBinding) {
+                    if model.needsSignIn {
+                        Button("Sign in") { Task { await signInAgain() } }
+                        Button("Not now", role: .cancel) { model.errorMessage = nil }
+                    } else {
+                        Button("OK") { model.errorMessage = nil }
+                    }
                 } message: {
                     Text(model.errorMessage ?? "")
                 }
@@ -333,6 +338,21 @@ struct RulesListView: View {
             get: { model.errorMessage != nil },
             set: { if !$0 { model.errorMessage = nil } }
         )
+    }
+
+    /// Runs from the alert's button, so the scene is active and Microsoft's
+    /// page has a window to present on.
+    private func signInAgain() async {
+        guard let tokens else { return }
+        model.errorMessage = nil
+        do {
+            try await tokens.signIn()
+            await model.load()
+        } catch MSALTokenProvider.AuthError.cancelled {
+            // The person closed Microsoft's page; leave the list as it was.
+        } catch {
+            model.report(error)
+        }
     }
 }
 
