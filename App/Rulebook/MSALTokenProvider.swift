@@ -15,6 +15,7 @@ actor MSALTokenProvider: TokenProvider {
 
     enum AuthError: LocalizedError {
         case noAccount
+        case signInRequired
         case cancelled
         case interactionRequired
         case offline
@@ -23,6 +24,7 @@ actor MSALTokenProvider: TokenProvider {
         var errorDescription: String? {
             switch self {
             case .noAccount: "No mailbox is connected."
+            case .signInRequired: "Microsoft needs you to sign in to this mailbox again."
             case .cancelled: "Sign-in was cancelled."
             case .interactionRequired: "Please sign in again."
             case .offline: "Rulebook couldn't reach Microsoft. Check your connection and try again."
@@ -164,12 +166,17 @@ actor MSALTokenProvider: TokenProvider {
         // can disagree: a new phone restored from backup brings the list back
         // without the keychain tokens, and a prewarmed launch can run before
         // first unlock, when the keychain can't be read. Look again, and if
-        // there's still nothing, ask Microsoft — "No mailbox is connected"
-        // next to a mailbox in the list is a dead end.
+        // there's still nothing, say sign-in is needed — "No mailbox is
+        // connected" next to a mailbox in the list is a dead end.
+        //
+        // Not signIn() from here: the first call comes from the rules list
+        // loading at launch, before the scene is active, so there's no window
+        // to present on and it failed as "Sign-in was cancelled". The list
+        // offers a Sign in button instead, which only runs from a tap.
         if account == nil { account = Self.cachedAccount(in: application) }
         guard let account else {
-            DiagnosticsLog.shared.append("no cached account; signing in again")
-            return try await signIn()
+            DiagnosticsLog.shared.append("no cached account; sign-in required")
+            throw AuthError.signInRequired
         }
 
         do {
@@ -181,7 +188,8 @@ actor MSALTokenProvider: TokenProvider {
                 }
             }
         } catch let error as NSError where error.code == MSALError.interactionRequired.rawValue {
-            return try await signIn()
+            // Same reason as above: this can run at launch, with no window.
+            throw AuthError.signInRequired
         } catch {
             throw AuthError.describing(error)
         }
@@ -194,9 +202,9 @@ actor MSALTokenProvider: TokenProvider {
     /// consent. The app never renders a credential field.
     @MainActor
     private func presentationAnchor() -> UIViewController? {
-        let scene = UIApplication.shared.connectedScenes
-            .compactMap { $0 as? UIWindowScene }
-            .first { $0.activationState == .foregroundActive }
+        let scenes = UIApplication.shared.connectedScenes.compactMap { $0 as? UIWindowScene }
+        let scene = scenes.first { $0.activationState == .foregroundActive }
+            ?? scenes.first { $0.activationState == .foregroundInactive }
         guard var anchor = scene?.keyWindow?.rootViewController else { return nil }
 
         // Sign-in is reached from inside the Add-account sheet, so the root
