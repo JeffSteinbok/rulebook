@@ -39,7 +39,7 @@ if [[ "${SKIP_TESTS:-}" != "1" ]]; then
   echo "==> App unit and UI tests"
   (cd App && xcodegen generate --quiet)
   SIMULATOR_ID="$(xcrun simctl list devices available -j |
-    jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid')"
+    jq -r '.devices | to_entries | map(select(.key | test("iOS-[0-9]"))) | sort_by(.key | capture("iOS-(?<v>[0-9-]+)$").v | split("-") | map(tonumber)) | last.value | map(select(.isAvailable and (.name | startswith("iPhone")))) | .[0].udid')"
   if [[ -z "$SIMULATOR_ID" || "$SIMULATOR_ID" == "null" ]]; then
     echo "No available iPhone simulator was found." >&2
     exit 1

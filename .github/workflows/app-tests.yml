@@ -44,12 +44,14 @@ jobs:
         run: |
           simulator_id="$(
             xcrun simctl list devices available -j |
-              jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid'
+              # An iPhone on the newest installed iOS: the one people run.
+              jq -r '.devices | to_entries | map(select(.key | test("iOS-[0-9]"))) | sort_by(.key | capture("iOS-(?<v>[0-9-]+)$").v | split("-") | map(tonumber)) | last.value | map(select(.isAvailable and (.name | startswith("iPhone")))) | .[0].udid'
           )"
           if [[ -z "$simulator_id" || "$simulator_id" == "null" ]]; then
             echo "No available iPhone simulator was found." >&2
             exit 1
           fi
+          echo "Testing on: $(xcrun simctl list devices | grep "$simulator_id")"
           echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
 
       # One `xcodebuild test` for both targets, so the simulator boots once.
