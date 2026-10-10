@@ -2,8 +2,12 @@
 #
 # Archive Rulebook, export it, and upload the build to TestFlight.
 #
-#   ./Scripts/testflight.sh            # archive, export, upload
-#   ./Scripts/testflight.sh --dry-run  # archive and export only
+#   ./Scripts/testflight.sh            # test, archive, export, upload
+#   ./Scripts/testflight.sh --dry-run  # test, archive and export only
+#
+# The same test gate as the Publish TestFlight workflow runs first: the
+# library suite, then the app's unit and UI tests on a simulator. A build that
+# fails them is never uploaded. SKIP_TESTS=1 bypasses it, for emergencies only.
 #
 # The App Store Connect app record must already exist: Apple does not allow it
 # to be created through the API ("The resource 'apps' does not allow 'CREATE'"),
@@ -27,6 +31,31 @@ SIGN_IDENTITY="${SIGN_IDENTITY:-Apple Distribution}"
 
 DRY_RUN=false
 [[ "${1:-}" == "--dry-run" ]] && DRY_RUN=true
+
+if [[ "${SKIP_TESTS:-}" != "1" ]]; then
+  echo "==> Library tests"
+  swift test --quiet
+
+  echo "==> App unit and UI tests"
+  (cd App && xcodegen generate --quiet)
+  SIMULATOR_ID="$(xcrun simctl list devices available -j |
+    jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid')"
+  if [[ -z "$SIMULATOR_ID" || "$SIMULATOR_ID" == "null" ]]; then
+    echo "No available iPhone simulator was found." >&2
+    exit 1
+  fi
+  xcodebuild test \
+    -project "$PROJECT" \
+    -scheme "$SCHEME" \
+    -destination "platform=iOS Simulator,id=$SIMULATOR_ID" \
+    CODE_SIGNING_ALLOWED=NO \
+    -quiet
+  # Xcode writes the app's MSAL pin into the root Package.resolved, which
+  # belongs to Package.swift alone.
+  git checkout --quiet -- Package.resolved 2>/dev/null || true
+else
+  echo "==> SKIP_TESTS=1: uploading without the test gate"
+fi
 
 BUILD_DIR="$(mktemp -d -t rulebook-archive)"
 ARCHIVE="$BUILD_DIR/Rulebook.xcarchive"
