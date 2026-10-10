@@ -1,0 +1,1880 @@
+{
+  "exchanges" : [
+    {
+      "label" : "sequences before",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$select=displayName,sequence",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules(displayName,sequence)",
+        "value" : [
+          {
+            "displayName" : "Existing rule 1",
+            "id" : "AQAAAAAABVg=",
+            "sequence" : 1
+          },
+          {
+            "displayName" : "Existing rule 2",
+            "id" : "AQAAAAAABVo=",
+            "sequence" : 2
+          },
+          {
+            "displayName" : "Existing rule 3",
+            "id" : "AQAAAAA1fo4=",
+            "sequence" : 3
+          },
+          {
+            "displayName" : "Existing rule 4",
+            "id" : "AQAAAAA1fo8=",
+            "sequence" : 4
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "id" : "AQAAABSCf3Y=",
+            "sequence" : 5
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "id" : "AQAAABSCf3c=",
+            "sequence" : 6
+          },
+          {
+            "displayName" : "RuleBook probe – predicate categories",
+            "id" : "AQAAABSCf3g=",
+            "sequence" : 7
+          },
+          {
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "id" : "AQAAABSCf3k=",
+            "sequence" : 8
+          },
+          {
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "id" : "AQAAABSCf3o=",
+            "sequence" : 9
+          },
+          {
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "id" : "AQAAABSCf3s=",
+            "sequence" : 10
+          },
+          {
+            "displayName" : "RuleBook probe – predicate importance",
+            "id" : "AQAAABSCf3w=",
+            "sequence" : 11
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "id" : "AQAAABSCf30=",
+            "sequence" : 12
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "id" : "AQAAABSCf34=",
+            "sequence" : 13
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "id" : "AQAAABSCf38=",
+            "sequence" : 14
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "id" : "AQAAABSCf4A=",
+            "sequence" : 15
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "id" : "AQAAABSCf4E=",
+            "sequence" : 16
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "id" : "AQAAABSCf4I=",
+            "sequence" : 17
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "id" : "AQAAABSCf4M=",
+            "sequence" : 18
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "id" : "AQAAABSCf4Q=",
+            "sequence" : 19
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "id" : "AQAAABSCf4U=",
+            "sequence" : 20
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "id" : "AQAAABSCf4Y=",
+            "sequence" : 21
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "id" : "AQAAABSCf4c=",
+            "sequence" : 22
+          },
+          {
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "id" : "AQAAABSCf4g=",
+            "sequence" : 23
+          },
+          {
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "id" : "AQAAABSCf4k=",
+            "sequence" : 24
+          },
+          {
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "id" : "AQAAABSCf4o=",
+            "sequence" : 25
+          },
+          {
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "id" : "AQAAABSCf4s=",
+            "sequence" : 26
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "id" : "AQAAABSCf4w=",
+            "sequence" : 27
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "id" : "AQAAABSCf40=",
+            "sequence" : 28
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "id" : "AQAAABSCf44=",
+            "sequence" : 29
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "id" : "AQAAABSCf48=",
+            "sequence" : 30
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "id" : "AQAAABSCf5A=",
+            "sequence" : 31
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "id" : "AQAAABSCf5E=",
+            "sequence" : 32
+          },
+          {
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "id" : "AQAAABSCf5I=",
+            "sequence" : 33
+          },
+          {
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "id" : "AQAAABSCf5M=",
+            "sequence" : 34
+          },
+          {
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "id" : "AQAAABSCf5Q=",
+            "sequence" : 35
+          },
+          {
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "id" : "AQAAABSCf5U=",
+            "sequence" : 36
+          },
+          {
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "id" : "AQAAABSCf5Y=",
+            "sequence" : 37
+          },
+          {
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "id" : "AQAAABSCf5c=",
+            "sequence" : 38
+          },
+          {
+            "displayName" : "RuleBook probe – combined",
+            "id" : "AQAAABSCf5g=",
+            "sequence" : 39
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories",
+            "id" : "AQAAABSCf5k=",
+            "sequence" : 40
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "id" : "AQAAABSCf5o=",
+            "sequence" : 41
+          },
+          {
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "id" : "AQAAABSCf5s=",
+            "sequence" : 42
+          },
+          {
+            "displayName" : "RuleBook probe – action delete",
+            "id" : "AQAAABSCf5w=",
+            "sequence" : 43
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "id" : "AQAAABSCf50=",
+            "sequence" : 44
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardTo",
+            "id" : "AQAAABSCf54=",
+            "sequence" : 45
+          },
+          {
+            "displayName" : "RuleBook probe – action markAsRead",
+            "id" : "AQAAABSCf58=",
+            "sequence" : 46
+          },
+          {
+            "displayName" : "RuleBook probe – action markImportance",
+            "id" : "AQAAABSCf6A=",
+            "sequence" : 47
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "id" : "AQAAABSCf6E=",
+            "sequence" : 48
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "id" : "AQAAABSCf6I=",
+            "sequence" : 49
+          },
+          {
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "id" : "AQAAABSCf6M=",
+            "sequence" : 50
+          },
+          {
+            "displayName" : "RuleBook probe – action redirectTo",
+            "id" : "AQAAABSCf6Q=",
+            "sequence" : 51
+          },
+          {
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "id" : "AQAAABSCf6U=",
+            "sequence" : 52
+          },
+          {
+            "displayName" : "RuleBook probe – two moves",
+            "id" : "AQAAABSCf6Y=",
+            "sequence" : 53
+          },
+          {
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "id" : "AQAAABSCf6c=",
+            "sequence" : 54
+          },
+          {
+            "displayName" : "RuleBook probe – patch conditions",
+            "id" : "AQAAABSCf6g=",
+            "sequence" : 55
+          },
+          {
+            "displayName" : "RuleBook probe – patch actions full",
+            "id" : "AQAAABSCf6k=",
+            "sequence" : 56
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "label" : "no sequence",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – no sequence",
+        "isEnabled" : false
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'The value isn't valid.', Field: 'Sequence', Value: '0'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "sequence 0",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence 0",
+        "isEnabled" : false,
+        "sequence" : 0
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'The value isn't valid.', Field: 'Sequence', Value: '0'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "sequence -1",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence -1",
+        "isEnabled" : false,
+        "sequence" : -1
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'The value isn't valid.', Field: 'Sequence', Value: '-1'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "dup a 901",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup a",
+        "isEnabled" : false,
+        "sequence" : 901
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup a",
+        "hasError" : false,
+        "id" : "AQAAABSCf6o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 57
+      },
+      "status" : 201
+    },
+    {
+      "label" : "dup a 901 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup a",
+        "hasError" : false,
+        "id" : "AQAAABSCf6o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 57
+      },
+      "status" : 200
+    },
+    {
+      "label" : "dup b 901",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup b",
+        "isEnabled" : false,
+        "sequence" : 901
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup b",
+        "hasError" : false,
+        "id" : "AQAAABSCf6s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 58
+      },
+      "status" : 201
+    },
+    {
+      "label" : "dup b 901 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6s=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup b",
+        "hasError" : false,
+        "id" : "AQAAABSCf6s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 58
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequences after duplicates",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$select=displayName,sequence",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules(displayName,sequence)",
+        "value" : [
+          {
+            "displayName" : "Existing rule 1",
+            "id" : "AQAAAAAABVg=",
+            "sequence" : 1
+          },
+          {
+            "displayName" : "Existing rule 2",
+            "id" : "AQAAAAAABVo=",
+            "sequence" : 2
+          },
+          {
+            "displayName" : "Existing rule 3",
+            "id" : "AQAAAAA1fo4=",
+            "sequence" : 3
+          },
+          {
+            "displayName" : "Existing rule 4",
+            "id" : "AQAAAAA1fo8=",
+            "sequence" : 4
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "id" : "AQAAABSCf3Y=",
+            "sequence" : 5
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "id" : "AQAAABSCf3c=",
+            "sequence" : 6
+          },
+          {
+            "displayName" : "RuleBook probe – predicate categories",
+            "id" : "AQAAABSCf3g=",
+            "sequence" : 7
+          },
+          {
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "id" : "AQAAABSCf3k=",
+            "sequence" : 8
+          },
+          {
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "id" : "AQAAABSCf3o=",
+            "sequence" : 9
+          },
+          {
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "id" : "AQAAABSCf3s=",
+            "sequence" : 10
+          },
+          {
+            "displayName" : "RuleBook probe – predicate importance",
+            "id" : "AQAAABSCf3w=",
+            "sequence" : 11
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "id" : "AQAAABSCf30=",
+            "sequence" : 12
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "id" : "AQAAABSCf34=",
+            "sequence" : 13
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "id" : "AQAAABSCf38=",
+            "sequence" : 14
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "id" : "AQAAABSCf4A=",
+            "sequence" : 15
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "id" : "AQAAABSCf4E=",
+            "sequence" : 16
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "id" : "AQAAABSCf4I=",
+            "sequence" : 17
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "id" : "AQAAABSCf4M=",
+            "sequence" : 18
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "id" : "AQAAABSCf4Q=",
+            "sequence" : 19
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "id" : "AQAAABSCf4U=",
+            "sequence" : 20
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "id" : "AQAAABSCf4Y=",
+            "sequence" : 21
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "id" : "AQAAABSCf4c=",
+            "sequence" : 22
+          },
+          {
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "id" : "AQAAABSCf4g=",
+            "sequence" : 23
+          },
+          {
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "id" : "AQAAABSCf4k=",
+            "sequence" : 24
+          },
+          {
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "id" : "AQAAABSCf4o=",
+            "sequence" : 25
+          },
+          {
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "id" : "AQAAABSCf4s=",
+            "sequence" : 26
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "id" : "AQAAABSCf4w=",
+            "sequence" : 27
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "id" : "AQAAABSCf40=",
+            "sequence" : 28
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "id" : "AQAAABSCf44=",
+            "sequence" : 29
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "id" : "AQAAABSCf48=",
+            "sequence" : 30
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "id" : "AQAAABSCf5A=",
+            "sequence" : 31
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "id" : "AQAAABSCf5E=",
+            "sequence" : 32
+          },
+          {
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "id" : "AQAAABSCf5I=",
+            "sequence" : 33
+          },
+          {
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "id" : "AQAAABSCf5M=",
+            "sequence" : 34
+          },
+          {
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "id" : "AQAAABSCf5Q=",
+            "sequence" : 35
+          },
+          {
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "id" : "AQAAABSCf5U=",
+            "sequence" : 36
+          },
+          {
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "id" : "AQAAABSCf5Y=",
+            "sequence" : 37
+          },
+          {
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "id" : "AQAAABSCf5c=",
+            "sequence" : 38
+          },
+          {
+            "displayName" : "RuleBook probe – combined",
+            "id" : "AQAAABSCf5g=",
+            "sequence" : 39
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories",
+            "id" : "AQAAABSCf5k=",
+            "sequence" : 40
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "id" : "AQAAABSCf5o=",
+            "sequence" : 41
+          },
+          {
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "id" : "AQAAABSCf5s=",
+            "sequence" : 42
+          },
+          {
+            "displayName" : "RuleBook probe – action delete",
+            "id" : "AQAAABSCf5w=",
+            "sequence" : 43
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "id" : "AQAAABSCf50=",
+            "sequence" : 44
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardTo",
+            "id" : "AQAAABSCf54=",
+            "sequence" : 45
+          },
+          {
+            "displayName" : "RuleBook probe – action markAsRead",
+            "id" : "AQAAABSCf58=",
+            "sequence" : 46
+          },
+          {
+            "displayName" : "RuleBook probe – action markImportance",
+            "id" : "AQAAABSCf6A=",
+            "sequence" : 47
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "id" : "AQAAABSCf6E=",
+            "sequence" : 48
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "id" : "AQAAABSCf6I=",
+            "sequence" : 49
+          },
+          {
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "id" : "AQAAABSCf6M=",
+            "sequence" : 50
+          },
+          {
+            "displayName" : "RuleBook probe – action redirectTo",
+            "id" : "AQAAABSCf6Q=",
+            "sequence" : 51
+          },
+          {
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "id" : "AQAAABSCf6U=",
+            "sequence" : 52
+          },
+          {
+            "displayName" : "RuleBook probe – two moves",
+            "id" : "AQAAABSCf6Y=",
+            "sequence" : 53
+          },
+          {
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "id" : "AQAAABSCf6c=",
+            "sequence" : 54
+          },
+          {
+            "displayName" : "RuleBook probe – patch conditions",
+            "id" : "AQAAABSCf6g=",
+            "sequence" : 55
+          },
+          {
+            "displayName" : "RuleBook probe – patch actions full",
+            "id" : "AQAAABSCf6k=",
+            "sequence" : 56
+          },
+          {
+            "displayName" : "RuleBook probe – dup a",
+            "id" : "AQAAABSCf6o=",
+            "sequence" : 57
+          },
+          {
+            "displayName" : "RuleBook probe – dup b",
+            "id" : "AQAAABSCf6s=",
+            "sequence" : 58
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequence 1",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence 1",
+        "isEnabled" : false,
+        "sequence" : 1
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence 1",
+        "hasError" : false,
+        "id" : "AQAAABSCf6w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 1
+      },
+      "status" : 201
+    },
+    {
+      "label" : "sequence 1 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6w=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence 1",
+        "hasError" : false,
+        "id" : "AQAAABSCf6w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 1
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequences after inserting at 1",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$select=displayName,sequence",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules(displayName,sequence)",
+        "value" : [
+          {
+            "displayName" : "RuleBook probe – sequence 1",
+            "id" : "AQAAABSCf6w=",
+            "sequence" : 1
+          },
+          {
+            "displayName" : "Existing rule 1",
+            "id" : "AQAAAAAABVg=",
+            "sequence" : 2
+          },
+          {
+            "displayName" : "Existing rule 2",
+            "id" : "AQAAAAAABVo=",
+            "sequence" : 3
+          },
+          {
+            "displayName" : "Existing rule 3",
+            "id" : "AQAAAAA1fo4=",
+            "sequence" : 4
+          },
+          {
+            "displayName" : "Existing rule 4",
+            "id" : "AQAAAAA1fo8=",
+            "sequence" : 5
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "id" : "AQAAABSCf3Y=",
+            "sequence" : 6
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "id" : "AQAAABSCf3c=",
+            "sequence" : 7
+          },
+          {
+            "displayName" : "RuleBook probe – predicate categories",
+            "id" : "AQAAABSCf3g=",
+            "sequence" : 8
+          },
+          {
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "id" : "AQAAABSCf3k=",
+            "sequence" : 9
+          },
+          {
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "id" : "AQAAABSCf3o=",
+            "sequence" : 10
+          },
+          {
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "id" : "AQAAABSCf3s=",
+            "sequence" : 11
+          },
+          {
+            "displayName" : "RuleBook probe – predicate importance",
+            "id" : "AQAAABSCf3w=",
+            "sequence" : 12
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "id" : "AQAAABSCf30=",
+            "sequence" : 13
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "id" : "AQAAABSCf34=",
+            "sequence" : 14
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "id" : "AQAAABSCf38=",
+            "sequence" : 15
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "id" : "AQAAABSCf4A=",
+            "sequence" : 16
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "id" : "AQAAABSCf4E=",
+            "sequence" : 17
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "id" : "AQAAABSCf4I=",
+            "sequence" : 18
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "id" : "AQAAABSCf4M=",
+            "sequence" : 19
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "id" : "AQAAABSCf4Q=",
+            "sequence" : 20
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "id" : "AQAAABSCf4U=",
+            "sequence" : 21
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "id" : "AQAAABSCf4Y=",
+            "sequence" : 22
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "id" : "AQAAABSCf4c=",
+            "sequence" : 23
+          },
+          {
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "id" : "AQAAABSCf4g=",
+            "sequence" : 24
+          },
+          {
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "id" : "AQAAABSCf4k=",
+            "sequence" : 25
+          },
+          {
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "id" : "AQAAABSCf4o=",
+            "sequence" : 26
+          },
+          {
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "id" : "AQAAABSCf4s=",
+            "sequence" : 27
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "id" : "AQAAABSCf4w=",
+            "sequence" : 28
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "id" : "AQAAABSCf40=",
+            "sequence" : 29
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "id" : "AQAAABSCf44=",
+            "sequence" : 30
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "id" : "AQAAABSCf48=",
+            "sequence" : 31
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "id" : "AQAAABSCf5A=",
+            "sequence" : 32
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "id" : "AQAAABSCf5E=",
+            "sequence" : 33
+          },
+          {
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "id" : "AQAAABSCf5I=",
+            "sequence" : 34
+          },
+          {
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "id" : "AQAAABSCf5M=",
+            "sequence" : 35
+          },
+          {
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "id" : "AQAAABSCf5Q=",
+            "sequence" : 36
+          },
+          {
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "id" : "AQAAABSCf5U=",
+            "sequence" : 37
+          },
+          {
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "id" : "AQAAABSCf5Y=",
+            "sequence" : 38
+          },
+          {
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "id" : "AQAAABSCf5c=",
+            "sequence" : 39
+          },
+          {
+            "displayName" : "RuleBook probe – combined",
+            "id" : "AQAAABSCf5g=",
+            "sequence" : 40
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories",
+            "id" : "AQAAABSCf5k=",
+            "sequence" : 41
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "id" : "AQAAABSCf5o=",
+            "sequence" : 42
+          },
+          {
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "id" : "AQAAABSCf5s=",
+            "sequence" : 43
+          },
+          {
+            "displayName" : "RuleBook probe – action delete",
+            "id" : "AQAAABSCf5w=",
+            "sequence" : 44
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "id" : "AQAAABSCf50=",
+            "sequence" : 45
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardTo",
+            "id" : "AQAAABSCf54=",
+            "sequence" : 46
+          },
+          {
+            "displayName" : "RuleBook probe – action markAsRead",
+            "id" : "AQAAABSCf58=",
+            "sequence" : 47
+          },
+          {
+            "displayName" : "RuleBook probe – action markImportance",
+            "id" : "AQAAABSCf6A=",
+            "sequence" : 48
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "id" : "AQAAABSCf6E=",
+            "sequence" : 49
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "id" : "AQAAABSCf6I=",
+            "sequence" : 50
+          },
+          {
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "id" : "AQAAABSCf6M=",
+            "sequence" : 51
+          },
+          {
+            "displayName" : "RuleBook probe – action redirectTo",
+            "id" : "AQAAABSCf6Q=",
+            "sequence" : 52
+          },
+          {
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "id" : "AQAAABSCf6U=",
+            "sequence" : 53
+          },
+          {
+            "displayName" : "RuleBook probe – two moves",
+            "id" : "AQAAABSCf6Y=",
+            "sequence" : 54
+          },
+          {
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "id" : "AQAAABSCf6c=",
+            "sequence" : 55
+          },
+          {
+            "displayName" : "RuleBook probe – patch conditions",
+            "id" : "AQAAABSCf6g=",
+            "sequence" : 56
+          },
+          {
+            "displayName" : "RuleBook probe – patch actions full",
+            "id" : "AQAAABSCf6k=",
+            "sequence" : 57
+          },
+          {
+            "displayName" : "RuleBook probe – dup a",
+            "id" : "AQAAABSCf6o=",
+            "sequence" : 58
+          },
+          {
+            "displayName" : "RuleBook probe – dup b",
+            "id" : "AQAAABSCf6s=",
+            "sequence" : 59
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "label" : "move a to 1",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6o=",
+      "requestBody" : {
+        "sequence" : 1
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup a",
+        "hasError" : false,
+        "id" : "AQAAABSCf6o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 1
+      },
+      "status" : 200
+    },
+    {
+      "label" : "move a to 1 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup a",
+        "hasError" : false,
+        "id" : "AQAAABSCf6o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 1
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequences after moving a to 1",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$select=displayName,sequence",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules(displayName,sequence)",
+        "value" : [
+          {
+            "displayName" : "RuleBook probe – dup a",
+            "id" : "AQAAABSCf6o=",
+            "sequence" : 1
+          },
+          {
+            "displayName" : "RuleBook probe – sequence 1",
+            "id" : "AQAAABSCf6w=",
+            "sequence" : 2
+          },
+          {
+            "displayName" : "Existing rule 1",
+            "id" : "AQAAAAAABVg=",
+            "sequence" : 3
+          },
+          {
+            "displayName" : "Existing rule 2",
+            "id" : "AQAAAAAABVo=",
+            "sequence" : 4
+          },
+          {
+            "displayName" : "Existing rule 3",
+            "id" : "AQAAAAA1fo4=",
+            "sequence" : 5
+          },
+          {
+            "displayName" : "Existing rule 4",
+            "id" : "AQAAAAA1fo8=",
+            "sequence" : 6
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "id" : "AQAAABSCf3Y=",
+            "sequence" : 7
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "id" : "AQAAABSCf3c=",
+            "sequence" : 8
+          },
+          {
+            "displayName" : "RuleBook probe – predicate categories",
+            "id" : "AQAAABSCf3g=",
+            "sequence" : 9
+          },
+          {
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "id" : "AQAAABSCf3k=",
+            "sequence" : 10
+          },
+          {
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "id" : "AQAAABSCf3o=",
+            "sequence" : 11
+          },
+          {
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "id" : "AQAAABSCf3s=",
+            "sequence" : 12
+          },
+          {
+            "displayName" : "RuleBook probe – predicate importance",
+            "id" : "AQAAABSCf3w=",
+            "sequence" : 13
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "id" : "AQAAABSCf30=",
+            "sequence" : 14
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "id" : "AQAAABSCf34=",
+            "sequence" : 15
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "id" : "AQAAABSCf38=",
+            "sequence" : 16
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "id" : "AQAAABSCf4A=",
+            "sequence" : 17
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "id" : "AQAAABSCf4E=",
+            "sequence" : 18
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "id" : "AQAAABSCf4I=",
+            "sequence" : 19
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "id" : "AQAAABSCf4M=",
+            "sequence" : 20
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "id" : "AQAAABSCf4Q=",
+            "sequence" : 21
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "id" : "AQAAABSCf4U=",
+            "sequence" : 22
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "id" : "AQAAABSCf4Y=",
+            "sequence" : 23
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "id" : "AQAAABSCf4c=",
+            "sequence" : 24
+          },
+          {
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "id" : "AQAAABSCf4g=",
+            "sequence" : 25
+          },
+          {
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "id" : "AQAAABSCf4k=",
+            "sequence" : 26
+          },
+          {
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "id" : "AQAAABSCf4o=",
+            "sequence" : 27
+          },
+          {
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "id" : "AQAAABSCf4s=",
+            "sequence" : 28
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "id" : "AQAAABSCf4w=",
+            "sequence" : 29
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "id" : "AQAAABSCf40=",
+            "sequence" : 30
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "id" : "AQAAABSCf44=",
+            "sequence" : 31
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "id" : "AQAAABSCf48=",
+            "sequence" : 32
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "id" : "AQAAABSCf5A=",
+            "sequence" : 33
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "id" : "AQAAABSCf5E=",
+            "sequence" : 34
+          },
+          {
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "id" : "AQAAABSCf5I=",
+            "sequence" : 35
+          },
+          {
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "id" : "AQAAABSCf5M=",
+            "sequence" : 36
+          },
+          {
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "id" : "AQAAABSCf5Q=",
+            "sequence" : 37
+          },
+          {
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "id" : "AQAAABSCf5U=",
+            "sequence" : 38
+          },
+          {
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "id" : "AQAAABSCf5Y=",
+            "sequence" : 39
+          },
+          {
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "id" : "AQAAABSCf5c=",
+            "sequence" : 40
+          },
+          {
+            "displayName" : "RuleBook probe – combined",
+            "id" : "AQAAABSCf5g=",
+            "sequence" : 41
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories",
+            "id" : "AQAAABSCf5k=",
+            "sequence" : 42
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "id" : "AQAAABSCf5o=",
+            "sequence" : 43
+          },
+          {
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "id" : "AQAAABSCf5s=",
+            "sequence" : 44
+          },
+          {
+            "displayName" : "RuleBook probe – action delete",
+            "id" : "AQAAABSCf5w=",
+            "sequence" : 45
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "id" : "AQAAABSCf50=",
+            "sequence" : 46
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardTo",
+            "id" : "AQAAABSCf54=",
+            "sequence" : 47
+          },
+          {
+            "displayName" : "RuleBook probe – action markAsRead",
+            "id" : "AQAAABSCf58=",
+            "sequence" : 48
+          },
+          {
+            "displayName" : "RuleBook probe – action markImportance",
+            "id" : "AQAAABSCf6A=",
+            "sequence" : 49
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "id" : "AQAAABSCf6E=",
+            "sequence" : 50
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "id" : "AQAAABSCf6I=",
+            "sequence" : 51
+          },
+          {
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "id" : "AQAAABSCf6M=",
+            "sequence" : 52
+          },
+          {
+            "displayName" : "RuleBook probe – action redirectTo",
+            "id" : "AQAAABSCf6Q=",
+            "sequence" : 53
+          },
+          {
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "id" : "AQAAABSCf6U=",
+            "sequence" : 54
+          },
+          {
+            "displayName" : "RuleBook probe – two moves",
+            "id" : "AQAAABSCf6Y=",
+            "sequence" : 55
+          },
+          {
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "id" : "AQAAABSCf6c=",
+            "sequence" : 56
+          },
+          {
+            "displayName" : "RuleBook probe – patch conditions",
+            "id" : "AQAAABSCf6g=",
+            "sequence" : 57
+          },
+          {
+            "displayName" : "RuleBook probe – patch actions full",
+            "id" : "AQAAABSCf6k=",
+            "sequence" : 58
+          },
+          {
+            "displayName" : "RuleBook probe – dup b",
+            "id" : "AQAAABSCf6s=",
+            "sequence" : 59
+          }
+        ]
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequence huge",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence huge",
+        "isEnabled" : false,
+        "sequence" : 2000000000
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence huge",
+        "hasError" : false,
+        "id" : "AQAAABSCf60=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 60
+      },
+      "status" : 201
+    },
+    {
+      "label" : "sequence huge (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf60=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – sequence huge",
+        "hasError" : false,
+        "id" : "AQAAABSCf60=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 60
+      },
+      "status" : 200
+    },
+    {
+      "label" : "sequences after huge",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules?$select=displayName,sequence",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules(displayName,sequence)",
+        "value" : [
+          {
+            "displayName" : "RuleBook probe – dup a",
+            "id" : "AQAAABSCf6o=",
+            "sequence" : 1
+          },
+          {
+            "displayName" : "RuleBook probe – sequence 1",
+            "id" : "AQAAABSCf6w=",
+            "sequence" : 2
+          },
+          {
+            "displayName" : "Existing rule 1",
+            "id" : "AQAAAAAABVg=",
+            "sequence" : 3
+          },
+          {
+            "displayName" : "Existing rule 2",
+            "id" : "AQAAAAAABVo=",
+            "sequence" : 4
+          },
+          {
+            "displayName" : "Existing rule 3",
+            "id" : "AQAAAAA1fo4=",
+            "sequence" : 5
+          },
+          {
+            "displayName" : "Existing rule 4",
+            "id" : "AQAAAAA1fo8=",
+            "sequence" : 6
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyContains",
+            "id" : "AQAAABSCf3Y=",
+            "sequence" : 7
+          },
+          {
+            "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+            "id" : "AQAAABSCf3c=",
+            "sequence" : 8
+          },
+          {
+            "displayName" : "RuleBook probe – predicate categories",
+            "id" : "AQAAABSCf3g=",
+            "sequence" : 9
+          },
+          {
+            "displayName" : "RuleBook probe – predicate fromAddresses",
+            "id" : "AQAAABSCf3k=",
+            "sequence" : 10
+          },
+          {
+            "displayName" : "RuleBook probe – predicate hasAttachments",
+            "id" : "AQAAABSCf3o=",
+            "sequence" : 11
+          },
+          {
+            "displayName" : "RuleBook probe – predicate headerContains",
+            "id" : "AQAAABSCf3s=",
+            "sequence" : 12
+          },
+          {
+            "displayName" : "RuleBook probe – predicate importance",
+            "id" : "AQAAABSCf3w=",
+            "sequence" : 13
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isApprovalRequest",
+            "id" : "AQAAABSCf30=",
+            "sequence" : 14
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticForward",
+            "id" : "AQAAABSCf34=",
+            "sequence" : 15
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isAutomaticReply",
+            "id" : "AQAAABSCf38=",
+            "sequence" : 16
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isEncrypted",
+            "id" : "AQAAABSCf4A=",
+            "sequence" : 17
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingRequest",
+            "id" : "AQAAABSCf4E=",
+            "sequence" : 18
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isMeetingResponse",
+            "id" : "AQAAABSCf4I=",
+            "sequence" : 19
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+            "id" : "AQAAABSCf4M=",
+            "sequence" : 20
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isPermissionControlled",
+            "id" : "AQAAABSCf4Q=",
+            "sequence" : 21
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isReadReceipt",
+            "id" : "AQAAABSCf4U=",
+            "sequence" : 22
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isSigned",
+            "id" : "AQAAABSCf4Y=",
+            "sequence" : 23
+          },
+          {
+            "displayName" : "RuleBook probe – predicate isVoicemail",
+            "id" : "AQAAABSCf4c=",
+            "sequence" : 24
+          },
+          {
+            "displayName" : "RuleBook probe – predicate messageActionFlag",
+            "id" : "AQAAABSCf4g=",
+            "sequence" : 25
+          },
+          {
+            "displayName" : "RuleBook probe – predicate notSentToMe",
+            "id" : "AQAAABSCf4k=",
+            "sequence" : 26
+          },
+          {
+            "displayName" : "RuleBook probe – predicate recipientContains",
+            "id" : "AQAAABSCf4o=",
+            "sequence" : 27
+          },
+          {
+            "displayName" : "RuleBook probe – predicate senderContains",
+            "id" : "AQAAABSCf4s=",
+            "sequence" : 28
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sensitivity",
+            "id" : "AQAAABSCf4w=",
+            "sequence" : 29
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentCcMe",
+            "id" : "AQAAABSCf40=",
+            "sequence" : 30
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+            "id" : "AQAAABSCf44=",
+            "sequence" : 31
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToAddresses",
+            "id" : "AQAAABSCf48=",
+            "sequence" : 32
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToMe",
+            "id" : "AQAAABSCf5A=",
+            "sequence" : 33
+          },
+          {
+            "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+            "id" : "AQAAABSCf5E=",
+            "sequence" : 34
+          },
+          {
+            "displayName" : "RuleBook probe – predicate subjectContains",
+            "id" : "AQAAABSCf5I=",
+            "sequence" : 35
+          },
+          {
+            "displayName" : "RuleBook probe – predicate withinSizeRange",
+            "id" : "AQAAABSCf5M=",
+            "sequence" : 36
+          },
+          {
+            "displayName" : "RuleBook probe – negated isMeetingRequest",
+            "id" : "AQAAABSCf5Q=",
+            "sequence" : 37
+          },
+          {
+            "displayName" : "RuleBook probe – negated hasAttachments",
+            "id" : "AQAAABSCf5U=",
+            "sequence" : 38
+          },
+          {
+            "displayName" : "RuleBook probe – negated isEncrypted",
+            "id" : "AQAAABSCf5Y=",
+            "sequence" : 39
+          },
+          {
+            "displayName" : "RuleBook probe – negated sentToMe",
+            "id" : "AQAAABSCf5c=",
+            "sequence" : 40
+          },
+          {
+            "displayName" : "RuleBook probe – combined",
+            "id" : "AQAAABSCf5g=",
+            "sequence" : 41
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories",
+            "id" : "AQAAABSCf5k=",
+            "sequence" : 42
+          },
+          {
+            "displayName" : "RuleBook probe – action assignCategories-unknown",
+            "id" : "AQAAABSCf5o=",
+            "sequence" : 43
+          },
+          {
+            "displayName" : "RuleBook probe – action copyToFolder",
+            "id" : "AQAAABSCf5s=",
+            "sequence" : 44
+          },
+          {
+            "displayName" : "RuleBook probe – action delete",
+            "id" : "AQAAABSCf5w=",
+            "sequence" : 45
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+            "id" : "AQAAABSCf50=",
+            "sequence" : 46
+          },
+          {
+            "displayName" : "RuleBook probe – action forwardTo",
+            "id" : "AQAAABSCf54=",
+            "sequence" : 47
+          },
+          {
+            "displayName" : "RuleBook probe – action markAsRead",
+            "id" : "AQAAABSCf58=",
+            "sequence" : 48
+          },
+          {
+            "displayName" : "RuleBook probe – action markImportance",
+            "id" : "AQAAABSCf6A=",
+            "sequence" : 49
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder",
+            "id" : "AQAAABSCf6E=",
+            "sequence" : 50
+          },
+          {
+            "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+            "id" : "AQAAABSCf6I=",
+            "sequence" : 51
+          },
+          {
+            "displayName" : "RuleBook probe – action permanentDelete",
+            "id" : "AQAAABSCf6M=",
+            "sequence" : 52
+          },
+          {
+            "displayName" : "RuleBook probe – action redirectTo",
+            "id" : "AQAAABSCf6Q=",
+            "sequence" : 53
+          },
+          {
+            "displayName" : "RuleBook probe – action stopProcessingRules",
+            "id" : "AQAAABSCf6U=",
+            "sequence" : 54
+          },
+          {
+            "displayName" : "RuleBook probe – two moves",
+            "id" : "AQAAABSCf6Y=",
+            "sequence" : 55
+          },
+          {
+            "displayName" : "RuleBook probe – patch exceptions renamed",
+            "id" : "AQAAABSCf6c=",
+            "sequence" : 56
+          },
+          {
+            "displayName" : "RuleBook probe – patch conditions",
+            "id" : "AQAAABSCf6g=",
+            "sequence" : 57
+          },
+          {
+            "displayName" : "RuleBook probe – patch actions full",
+            "id" : "AQAAABSCf6k=",
+            "sequence" : 58
+          },
+          {
+            "displayName" : "RuleBook probe – dup b",
+            "id" : "AQAAABSCf6s=",
+            "sequence" : 59
+          },
+          {
+            "displayName" : "RuleBook probe – sequence huge",
+            "id" : "AQAAABSCf60=",
+            "sequence" : 60
+          }
+        ]
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "How Graph numbers rules: defaults, 0, negatives, duplicates, shifting.",
+  "scenario" : "sequence"
+}

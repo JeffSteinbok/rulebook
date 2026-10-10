@@ -1,0 +1,155 @@
+{
+  "exchanges" : [
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAAAAAAAA=",
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    },
+    {
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAAAAAAAA=",
+      "requestBody" : {
+        "isEnabled" : false
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    },
+    {
+      "method" : "DELETE",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAAAAAAAA=",
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/not-base64",
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAA%2FAAA",
+      "responseBody" : {
+        "error" : {
+          "code" : "BadRequest",
+          "innerError" : {
+            "client-request-id" : "<redacted>",
+            "date" : "<redacted>",
+            "request-id" : "<redacted>"
+          },
+          "message" : "Resource not found for the segment 'AAA'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "create then double delete",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – double delete",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – double delete",
+        "hasError" : false,
+        "id" : "AQAAABSCf7Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 67
+      },
+      "status" : 201
+    },
+    {
+      "label" : "create then double delete (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf7Q=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – double delete",
+        "hasError" : false,
+        "id" : "AQAAABSCf7Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 67
+      },
+      "status" : 200
+    },
+    {
+      "method" : "DELETE",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf7Q=",
+      "status" : 204
+    },
+    {
+      "method" : "DELETE",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf7Q=",
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    },
+    {
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf7Q=",
+      "responseBody" : {
+        "error" : {
+          "code" : "ErrorMessageRuleNotFound",
+          "message" : "The specified object was not found in the store."
+        }
+      },
+      "status" : 404
+    }
+  ],
+  "question" : "404s and malformed ids, for GET, PATCH and DELETE.",
+  "scenario" : "not-found"
+}

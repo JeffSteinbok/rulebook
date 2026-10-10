@@ -33,6 +33,17 @@ struct ConditionEditor: View {
         .padding(.horizontal, DS.Metric.gutter)
     }
 
+    /// Where "is not" lives on a provider that can't negate a test.
+    private var negationHint: some View {
+        // Exceptions are the rows joined by "SKIP IF" / "OR IF".
+        Text(joiner == "SKIP IF" || joiner == "OR IF"
+             ? "To match messages that aren't this, add it as a condition instead."
+             : "To match messages that aren't this, add it as an exception instead.")
+            .font(DS.Font.caption)
+            .foregroundStyle(DS.Palette.ink60)
+            .fixedSize(horizontal: false, vertical: true)
+    }
+
     // MARK: - Field
 
     private var fieldPicker: some View {
@@ -76,12 +87,19 @@ struct ConditionEditor: View {
             textMatchEditor
 
         case .hasAttachment(let value):
-            Toggle("Has an attachment", isOn: Binding(
-                get: { value },
-                set: { condition = .hasAttachment($0) }
-            ))
-            .font(DS.Font.body)
-            .tint(DS.Palette.accent)
+            if model.profile.capabilities.supportsNegatedTests {
+                Toggle("Has an attachment", isOn: Binding(
+                    get: { value },
+                    set: { condition = .hasAttachment($0) }
+                ))
+                .font(DS.Font.body)
+                .tint(DS.Palette.accent)
+            } else {
+                // No "off" here: Outlook stores a false test as no test, so
+                // "has no attachment" would have matched every message.
+                Text("Has an attachment").font(DS.Font.body).foregroundStyle(DS.Palette.ink)
+                negationHint
+            }
 
         case .size(let constraint):
             SizeEditor(constraint: constraint) { condition = .size($0) }
@@ -96,15 +114,19 @@ struct ConditionEditor: View {
             enumPicker("Addressed", AddressedScope.allCases, scope) { condition = .addressed($0) }
 
         case .messageKind(let kind, let expected):
-            enumPicker("Message type", MessageKind.allCases, kind) {
+            enumPicker("Message type", MessageKind.allCases.filter { model.profile.capabilities.provider != .microsoft || $0 != .chat }, kind) {
                 condition = .messageKind($0, expected)
             }
-            Toggle("Must be this type", isOn: Binding(
-                get: { expected },
-                set: { condition = .messageKind(kind, $0) }
-            ))
-            .font(DS.Font.body)
-            .tint(DS.Palette.accent)
+            if model.profile.capabilities.supportsNegatedTests {
+                Toggle("Must be this type", isOn: Binding(
+                    get: { expected },
+                    set: { condition = .messageKind(kind, $0) }
+                ))
+                .font(DS.Font.body)
+                .tint(DS.Palette.accent)
+            } else {
+                negationHint
+            }
 
         case .actionFlag(let flag):
             enumPicker("Flagged for", ActionFlag.allCases, flag) { condition = .actionFlag($0) }
@@ -170,7 +192,7 @@ struct ConditionEditor: View {
                             removeMatchValue(at: index, from: match)
                         } label: {
                             Image(systemName: "minus.circle.fill")
-                                .font(.system(size: 20))
+                                .font(.title3)
                                 .foregroundStyle(DS.Palette.ink40)
                         }
                         .buttonStyle(.plain)

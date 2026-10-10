@@ -12,7 +12,7 @@ struct InMemoryStoreTests {
         #expect(try await store.rule(id: id).name == "Alpha")
     }
 
-    @Test("Listing is ordered, with unordered rules last")
+    @Test("Listing is ordered, and a rule created with no order goes last")
     func listIsOrdered() async throws {
         let store = InMemoryRuleStore()
         _ = try await store.createRule(.stub(name: "Third", order: 30))
@@ -22,19 +22,45 @@ struct InMemoryStoreTests {
         #expect(try await store.listRules().map(\.name) == ["First", "Third", "Unordered"])
     }
 
-    @Test("Update merges: absent collections leave what is stored alone")
-    func updateIsAMerge() async throws {
+    @Test("Update replaces, as Graph does: an empty list clears what was stored")
+    func updateReplaces() async throws {
         let store = InMemoryRuleStore()
-        let id = try #require(try await store.createRule(.stub(name: "Alpha")).id)
+        var rule = MailRule.stub(name: "Alpha")
+        rule.exceptions = [.subject(StringMatch("keep"))]
+        let id = try #require(try await store.createRule(rule).id)
 
-        // Rename only — no conditions or actions in the patch.
-        let updated = try await store.updateRule(
-            id: id, with: MailRule(name: "Alpha renamed", order: 1)
-        )
+        var edited = try await store.rule(id: id)
+        edited.name = "Alpha renamed"
+        edited.exceptions = []
+        edited.order = nil
+        let updated = try await store.updateRule(id: id, with: edited)
 
         #expect(updated.name == "Alpha renamed")
+        #expect(updated.exceptions.isEmpty)
         #expect(updated.conditions == [.subject(StringMatch("x"))])
-        #expect(updated.actions == [.markAsRead(true)])
+        #expect(updated.order == 1, "A nil order keeps the stored position.")
+    }
+
+    @Test("Moving a rule renumbers 1…N, displacing the rest down")
+    func moveIsDense() async throws {
+        let store = InMemoryRuleStore()
+        for name in ["A", "B", "C", "D"] { _ = try await store.createRule(.stub(name: name, order: nil)) }
+        let d = try #require(try await store.listRules().last?.id)
+
+        try await store.moveRule(id: d, toPosition: 2)
+        let rules = try await store.listRules()
+        #expect(rules.map(\.name) == ["A", "D", "B", "C"])
+        #expect(rules.map(\.order) == [1, 2, 3, 4])
+    }
+
+    @Test("Ids are never reused, even for a store seeded from a file")
+    func idsDoNotCollideWithSeeds() async throws {
+        let seeded = InMemoryRuleStore(seed: [
+            MailRule(id: "rule-1", name: "From file", order: 1, actions: [.markAsRead(true)]),
+        ])
+        let created = try await seeded.createRule(.stub(name: "New"))
+        #expect(created.id != "rule-1")
+        #expect(try await seeded.listRules().count == 2)
     }
 
     @Test("Delete removes it; deleting again reports notFound")
@@ -356,5 +382,32 @@ struct ProviderErrorTextTests {
         #expect(text.contains("SomethingNew"))
         #expect(text.contains("A brand new failure."))
         #expect(text.contains("500"))
+    }
+
+    @Test("Every error real Graph returned reads as a sentence, not Graph's syntax")
+    func recordedErrorsAreReadable() throws {
+        var checked = 0
+        for name in GraphConformanceTests.scenarios {
+            for exchange in try Recording.load(name).exchanges where exchange.status >= 400 {
+                let error = (exchange.responseBody as? [String: Any])?["error"] as? [String: Any]
+                let failure = RuleStoreError.provider(
+                    .microsoft, status: exchange.status,
+                    code: error?["code"] as? String, message: error?["message"] as? String
+                )
+                let text = try #require(failure.errorDescription)
+                #expect(!text.contains("ErrorCode:"), "\(exchange.label ?? exchange.path): \(text)")
+                #expect(!text.contains("Field:"), "\(exchange.label ?? exchange.path): \(text)")
+                #expect(text.count < 160, "\(exchange.label ?? exchange.path): \(text)")
+                checked += 1
+            }
+        }
+        #expect(checked > 20)
+    }
+
+    @Test("A folder Outlook can't find is named as the destination folder")
+    func folderErrorWording() {
+        let text = RuleStoreError.provider(.microsoft, status: 400, code: "MessageRuleValidationError",
+            message: "ErrorCode: 'InvalidValue', Message: 'Id is malformed.', Field: 'Action.MoveToFolder', Value: 'Deleted Items'.").errorDescription
+        #expect(text == "Outlook rejected the destination folder: \u{201C}Deleted Items\u{201D} isn\u{2019}t allowed.")
     }
 }

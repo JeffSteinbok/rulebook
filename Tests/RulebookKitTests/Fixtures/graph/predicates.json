@@ -1,0 +1,1689 @@
+{
+  "exchanges" : [
+    {
+      "label" : "predicate bodyContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "rbprobe-body"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "rbprobe-body"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 5
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate bodyContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3Y=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "rbprobe-body"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 5
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate bodyOrSubjectContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyOrSubjectContains" : [
+            "rbprobe-either"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyOrSubjectContains" : [
+            "rbprobe-either"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 6
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate bodyOrSubjectContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyOrSubjectContains" : [
+            "rbprobe-either"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate bodyOrSubjectContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 6
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate categories",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "categories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate categories",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "categories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate categories",
+        "hasError" : false,
+        "id" : "AQAAABSCf3g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 7
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate categories (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "categories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate categories",
+        "hasError" : false,
+        "id" : "AQAAABSCf3g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 7
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate fromAddresses",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "fromAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Sender"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate fromAddresses",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "fromAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Sender"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate fromAddresses",
+        "hasError" : false,
+        "id" : "AQAAABSCf3k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 8
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate fromAddresses (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3k=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "fromAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Sender"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate fromAddresses",
+        "hasError" : false,
+        "id" : "AQAAABSCf3k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 8
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate hasAttachments",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true
+        },
+        "displayName" : "RuleBook probe – predicate hasAttachments",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true
+        },
+        "displayName" : "RuleBook probe – predicate hasAttachments",
+        "hasError" : false,
+        "id" : "AQAAABSCf3o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 9
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate hasAttachments (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true
+        },
+        "displayName" : "RuleBook probe – predicate hasAttachments",
+        "hasError" : false,
+        "id" : "AQAAABSCf3o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 9
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate headerContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "headerContains" : [
+            "X-RuleBook-Probe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate headerContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "headerContains" : [
+            "X-RuleBook-Probe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate headerContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 10
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate headerContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3s=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "headerContains" : [
+            "X-RuleBook-Probe"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate headerContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf3s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 10
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate importance",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "importance" : "high"
+        },
+        "displayName" : "RuleBook probe – predicate importance",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "importance" : "high"
+        },
+        "displayName" : "RuleBook probe – predicate importance",
+        "hasError" : false,
+        "id" : "AQAAABSCf3w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 11
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate importance (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf3w=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "importance" : "high"
+        },
+        "displayName" : "RuleBook probe – predicate importance",
+        "hasError" : false,
+        "id" : "AQAAABSCf3w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 11
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isApprovalRequest",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isApprovalRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isApprovalRequest",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isApprovalRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isApprovalRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf30=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 12
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isApprovalRequest (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf30=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isApprovalRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isApprovalRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf30=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 12
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isAutomaticForward",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticForward" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticForward",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticForward" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticForward",
+        "hasError" : false,
+        "id" : "AQAAABSCf34=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 13
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isAutomaticForward (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf34=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticForward" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticForward",
+        "hasError" : false,
+        "id" : "AQAAABSCf34=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 13
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isAutomaticReply",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticReply" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticReply",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticReply" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticReply",
+        "hasError" : false,
+        "id" : "AQAAABSCf38=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 14
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isAutomaticReply (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf38=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isAutomaticReply" : true
+        },
+        "displayName" : "RuleBook probe – predicate isAutomaticReply",
+        "hasError" : false,
+        "id" : "AQAAABSCf38=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 14
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isEncrypted",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isEncrypted" : true
+        },
+        "displayName" : "RuleBook probe – predicate isEncrypted",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isEncrypted" : true
+        },
+        "displayName" : "RuleBook probe – predicate isEncrypted",
+        "hasError" : false,
+        "id" : "AQAAABSCf4A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 15
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isEncrypted (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4A=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isEncrypted" : true
+        },
+        "displayName" : "RuleBook probe – predicate isEncrypted",
+        "hasError" : false,
+        "id" : "AQAAABSCf4A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 15
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isMeetingRequest",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingRequest",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf4E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 16
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isMeetingRequest (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4E=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingRequest" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingRequest",
+        "hasError" : false,
+        "id" : "AQAAABSCf4E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 16
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isMeetingResponse",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingResponse" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingResponse",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingResponse" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingResponse",
+        "hasError" : false,
+        "id" : "AQAAABSCf4I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 17
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isMeetingResponse (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4I=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isMeetingResponse" : true
+        },
+        "displayName" : "RuleBook probe – predicate isMeetingResponse",
+        "hasError" : false,
+        "id" : "AQAAABSCf4I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 17
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isNonDeliveryReport",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isNonDeliveryReport" : true
+        },
+        "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isNonDeliveryReport" : true
+        },
+        "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+        "hasError" : false,
+        "id" : "AQAAABSCf4M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 18
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isNonDeliveryReport (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4M=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isNonDeliveryReport" : true
+        },
+        "displayName" : "RuleBook probe – predicate isNonDeliveryReport",
+        "hasError" : false,
+        "id" : "AQAAABSCf4M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 18
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isPermissionControlled",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isPermissionControlled" : true
+        },
+        "displayName" : "RuleBook probe – predicate isPermissionControlled",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isPermissionControlled" : true
+        },
+        "displayName" : "RuleBook probe – predicate isPermissionControlled",
+        "hasError" : false,
+        "id" : "AQAAABSCf4Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 19
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isPermissionControlled (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4Q=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isPermissionControlled" : true
+        },
+        "displayName" : "RuleBook probe – predicate isPermissionControlled",
+        "hasError" : false,
+        "id" : "AQAAABSCf4Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 19
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isReadReceipt",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isReadReceipt" : true
+        },
+        "displayName" : "RuleBook probe – predicate isReadReceipt",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isReadReceipt" : true
+        },
+        "displayName" : "RuleBook probe – predicate isReadReceipt",
+        "hasError" : false,
+        "id" : "AQAAABSCf4U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 20
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isReadReceipt (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4U=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isReadReceipt" : true
+        },
+        "displayName" : "RuleBook probe – predicate isReadReceipt",
+        "hasError" : false,
+        "id" : "AQAAABSCf4U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 20
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isSigned",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isSigned" : true
+        },
+        "displayName" : "RuleBook probe – predicate isSigned",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isSigned" : true
+        },
+        "displayName" : "RuleBook probe – predicate isSigned",
+        "hasError" : false,
+        "id" : "AQAAABSCf4Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 21
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isSigned (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4Y=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isSigned" : true
+        },
+        "displayName" : "RuleBook probe – predicate isSigned",
+        "hasError" : false,
+        "id" : "AQAAABSCf4Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 21
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate isVoicemail",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isVoicemail" : true
+        },
+        "displayName" : "RuleBook probe – predicate isVoicemail",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isVoicemail" : true
+        },
+        "displayName" : "RuleBook probe – predicate isVoicemail",
+        "hasError" : false,
+        "id" : "AQAAABSCf4c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 22
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate isVoicemail (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "isVoicemail" : true
+        },
+        "displayName" : "RuleBook probe – predicate isVoicemail",
+        "hasError" : false,
+        "id" : "AQAAABSCf4c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 22
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate messageActionFlag",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "messageActionFlag" : "followUp"
+        },
+        "displayName" : "RuleBook probe – predicate messageActionFlag",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "messageActionFlag" : "followUp"
+        },
+        "displayName" : "RuleBook probe – predicate messageActionFlag",
+        "hasError" : false,
+        "id" : "AQAAABSCf4g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 23
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate messageActionFlag (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "messageActionFlag" : "followUp"
+        },
+        "displayName" : "RuleBook probe – predicate messageActionFlag",
+        "hasError" : false,
+        "id" : "AQAAABSCf4g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 23
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate notSentToMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "notSentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate notSentToMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "notSentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate notSentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf4k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 24
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate notSentToMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4k=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "notSentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate notSentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf4k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 24
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate recipientContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "recipientContains" : [
+            "rbprobe-recipient"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate recipientContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "recipientContains" : [
+            "RBPROBE-RECIPIENT"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate recipientContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf4o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 25
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate recipientContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "recipientContains" : [
+            "RBPROBE-RECIPIENT"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate recipientContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf4o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 25
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate senderContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate senderContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate senderContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf4s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 26
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate senderContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4s=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate senderContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf4s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 26
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sensitivity",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sensitivity" : "confidential"
+        },
+        "displayName" : "RuleBook probe – predicate sensitivity",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sensitivity" : "confidential"
+        },
+        "displayName" : "RuleBook probe – predicate sensitivity",
+        "hasError" : false,
+        "id" : "AQAAABSCf4w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 27
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sensitivity (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf4w=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sensitivity" : "confidential"
+        },
+        "displayName" : "RuleBook probe – predicate sensitivity",
+        "hasError" : false,
+        "id" : "AQAAABSCf4w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 27
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sentCcMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentCcMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentCcMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf40=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 28
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sentCcMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf40=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentCcMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf40=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 28
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sentOnlyToMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentOnlyToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentOnlyToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf44=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 29
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sentOnlyToMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf44=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentOnlyToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentOnlyToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf44=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 29
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sentToAddresses",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate sentToAddresses",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate sentToAddresses",
+        "hasError" : false,
+        "id" : "AQAAABSCf48=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 30
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sentToAddresses (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf48=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToAddresses" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate sentToAddresses",
+        "hasError" : false,
+        "id" : "AQAAABSCf48=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 30
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sentToMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 31
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sentToMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5A=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 31
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate sentToOrCcMe",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToOrCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToOrCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 32
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate sentToOrCcMe (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5E=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "sentToOrCcMe" : true
+        },
+        "displayName" : "RuleBook probe – predicate sentToOrCcMe",
+        "hasError" : false,
+        "id" : "AQAAABSCf5E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 32
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate subjectContains",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "subjectContains" : [
+            "rbprobe-subject"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate subjectContains",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "subjectContains" : [
+            "rbprobe-subject"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate subjectContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf5I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 33
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate subjectContains (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5I=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "subjectContains" : [
+            "rbprobe-subject"
+          ]
+        },
+        "displayName" : "RuleBook probe – predicate subjectContains",
+        "hasError" : false,
+        "id" : "AQAAABSCf5I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 33
+      },
+      "status" : 200
+    },
+    {
+      "label" : "predicate withinSizeRange",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 200,
+            "minimumSize" : 10
+          }
+        },
+        "displayName" : "RuleBook probe – predicate withinSizeRange",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 200,
+            "minimumSize" : 10
+          }
+        },
+        "displayName" : "RuleBook probe – predicate withinSizeRange",
+        "hasError" : false,
+        "id" : "AQAAABSCf5M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 34
+      },
+      "status" : 201
+    },
+    {
+      "label" : "predicate withinSizeRange (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5M=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 200,
+            "minimumSize" : 10
+          }
+        },
+        "displayName" : "RuleBook probe – predicate withinSizeRange",
+        "hasError" : false,
+        "id" : "AQAAABSCf5M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 34
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Each predicate alone: accepted? echoed back as sent?",
+  "scenario" : "predicates"
+}

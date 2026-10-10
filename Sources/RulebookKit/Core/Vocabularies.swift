@@ -136,7 +136,7 @@ public struct NeutralVocabulary: ProviderVocabulary {
 
 // MARK: - String shaping
 
-private extension String {
+extension String {
     /// "subjectOrBody" -> "Subject or body"
     var humanised: String {
         var words = ""

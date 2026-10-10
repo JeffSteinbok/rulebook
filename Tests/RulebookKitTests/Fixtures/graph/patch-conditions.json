@@ -1,0 +1,260 @@
+{
+  "exchanges" : [
+    {
+      "label" : "create",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ],
+          "subjectContains" : [
+            "one"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "one"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 201
+    },
+    {
+      "label" : "create (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "one"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "different predicate",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "requestBody" : {
+        "conditions" : {
+          "bodyContains" : [
+            "two"
+          ]
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "two"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "different predicate (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "two"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "same predicate new value",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "requestBody" : {
+        "conditions" : {
+          "bodyContains" : [
+            "three"
+          ]
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "three"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "same predicate new value (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "bodyContains" : [
+            "three"
+          ]
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "conditions {}",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "requestBody" : {
+        "conditions" : {
+
+        }
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "conditions {} (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "conditions null",
+      "method" : "PATCH",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "requestBody" : {
+        "conditions" : null
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    },
+    {
+      "label" : "conditions null (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – patch conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf6g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 55
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Does a PATCH replace the conditions object or merge into it?",
+  "scenario" : "patch-conditions"
+}

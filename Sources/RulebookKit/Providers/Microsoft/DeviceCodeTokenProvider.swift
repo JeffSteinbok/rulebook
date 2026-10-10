@@ -64,8 +64,14 @@ public actor DeviceCodeTokenProvider: TokenProvider {
     private let configuration: Configuration
     private let session: URLSession
     private let prompt: @Sendable (DeviceCodePrompt) -> Void
+    /// One second in production; tests shrink it so polling is instant.
+    private let pollingUnit: Duration
 
     private var cached: CachedToken?
+    /// The refresh in flight, so concurrent callers share one redemption.
+    /// The actor is re-entrant across `await`; without this, two callers can
+    /// each redeem the same refresh token.
+    private var refreshing: Task<CachedToken, any Error>?
 
     /// - Parameter prompt: called once with the user code when interactive
     ///   sign-in is needed. Defaults to writing to standard error, which is
@@ -78,9 +84,19 @@ public actor DeviceCodeTokenProvider: TokenProvider {
             FileHandle.standardError.write(Data(($0.message + "\n").utf8))
         }
     ) {
+        self.init(configuration: configuration, session: session, prompt: prompt, pollingUnit: .seconds(1))
+    }
+
+    init(
+        configuration: Configuration,
+        session: URLSession,
+        prompt: @escaping @Sendable (DeviceCodePrompt) -> Void,
+        pollingUnit: Duration
+    ) {
         self.configuration = configuration
         self.session = session
         self.prompt = prompt
+        self.pollingUnit = pollingUnit
     }
 
     // MARK: - TokenProvider
@@ -102,10 +118,29 @@ public actor DeviceCodeTokenProvider: TokenProvider {
         guard let refreshToken = token.refreshToken else {
             throw RuleStoreError.notAuthenticated
         }
-        let refreshed = try await redeem(refreshToken: refreshToken)
-        store(refreshed)
-        return refreshed.accessToken
+
+        if let refreshing { return try await refreshing.value.accessToken }
+        let task = Task { try await self.redeem(refreshToken: refreshToken) }
+        refreshing = task
+        defer { refreshing = nil }
+
+        do {
+            var refreshed = try await task.value
+            // Entra may omit a new refresh token; the old one is still good.
+            if refreshed.refreshToken == nil { refreshed.refreshToken = refreshToken }
+            store(refreshed)
+            return refreshed.accessToken
+        } catch AuthError.oauth(let code, _) where Self.needsSignIn.contains(code) {
+            // Revoked, expired, or consent withdrawn: the cached token will
+            // never work again, so drop it rather than failing the same way
+            // on every call.
+            signOut()
+            throw RuleStoreError.notAuthenticated
+        }
     }
+
+    /// OAuth errors that only a fresh interactive sign-in can fix.
+    static let needsSignIn: Set<String> = ["invalid_grant", "interaction_required", "consent_required", "login_required"]
 
     /// Forces a fresh interactive sign-in, ignoring any cached token.
     public func signIn() async throws {
@@ -124,12 +159,18 @@ public actor DeviceCodeTokenProvider: TokenProvider {
     // MARK: - Device code flow
 
     private var authorityURL: URL {
-        URL(string: "https://login.microsoftonline.com/\(configuration.tenantID)/oauth2/v2.0")!
+        get throws {
+            let tenant = configuration.tenantID.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed.subtracting(["/"]))
+            guard let tenant, !tenant.isEmpty,
+                  let url = URL(string: "https://login.microsoftonline.com/\(tenant)/oauth2/v2.0")
+            else { throw AuthError.invalidTenant(configuration.tenantID) }
+            return url
+        }
     }
 
     private func signInWithDeviceCode() async throws -> CachedToken {
         let start: DeviceCodeResponse = try await form(
-            url: authorityURL.appendingPathComponent("devicecode"),
+            url: try authorityURL.appendingPathComponent("devicecode"),
             fields: [
                 "client_id": configuration.clientID,
                 "scope": configuration.scopes.joined(separator: " "),
@@ -143,13 +184,13 @@ public actor DeviceCodeTokenProvider: TokenProvider {
         ))
 
         let deadline = Date().addingTimeInterval(TimeInterval(start.expiresIn))
-        var interval = UInt64(max(start.interval, 1))
+        var interval = max(start.interval, 1)
 
         while Date() < deadline {
-            try await Task.sleep(nanoseconds: interval * 1_000_000_000)
+            try await Task.sleep(for: pollingUnit * interval)
 
             let (data, response) = try await postForm(
-                url: authorityURL.appendingPathComponent("token"),
+                url: try authorityURL.appendingPathComponent("token"),
                 fields: [
                     "grant_type": "urn:ietf:params:oauth:grant-type:device_code",
                     "client_id": configuration.clientID,
@@ -180,7 +221,7 @@ public actor DeviceCodeTokenProvider: TokenProvider {
 
     private func redeem(refreshToken: String) async throws -> CachedToken {
         let (data, response) = try await postForm(
-            url: authorityURL.appendingPathComponent("token"),
+            url: try authorityURL.appendingPathComponent("token"),
             fields: [
                 "grant_type": "refresh_token",
                 "client_id": configuration.clientID,
@@ -315,6 +356,7 @@ public actor DeviceCodeTokenProvider: TokenProvider {
         case oauth(code: String, description: String?)
         case timedOut
         case badResponse
+        case invalidTenant(String)
 
         public var errorDescription: String? {
             switch self {
@@ -324,6 +366,8 @@ public actor DeviceCodeTokenProvider: TokenProvider {
                 return "Sign-in timed out before the code was entered."
             case .badResponse:
                 return "Unexpected response from the sign-in endpoint."
+            case .invalidTenant(let tenant):
+                return "\u{201C}\(tenant)\u{201D} isn't a tenant: use common, organizations, consumers, a tenant GUID, or a domain."
             }
         }
     }

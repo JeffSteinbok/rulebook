@@ -191,6 +191,13 @@ struct RulesListView: View {
             guard model.mode == .normal else { return }
             model.beginSelection(with: rule)
         }
+        // Long-press is the only way into multi-select; VoiceOver needs a named route.
+        .accessibilityAction(named: "Select multiple rules") {
+            guard model.mode == .normal else { return }
+            model.beginSelection(with: rule)
+        }
+        // Admin-managed rules keep their place; Outlook won't move them.
+        .moveDisabled(rule.status.isReadOnly)
         // Swipe-to-delete is withheld entirely on admin-managed rules rather
         // than offered and refused.
         .swipeActions(edge: .trailing, allowsFullSwipe: !rule.status.isReadOnly) {
@@ -343,10 +350,18 @@ struct RulesListView: View {
     /// Runs from the alert's button, so the scene is active and Microsoft's
     /// page has a window to present on.
     private func signInAgain() async {
-        guard let tokens else { return }
+        guard let tokens, let mailbox = accounts?.active else { return }
         model.errorMessage = nil
         do {
-            try await tokens.signIn()
+            let signedIn = try await tokens.signInAgain(accountID: mailbox.id)
+            if signedIn.identifier != mailbox.id {
+                // MSAL had lost this mailbox and someone signed in as another:
+                // add that one (which switches to it) rather than show its rules
+                // under this mailbox's name.
+                accounts?.add(Account(id: signedIn.identifier, address: signedIn.address,
+                                      displayName: Account.displayName(for: signedIn.address)))
+                return
+            }
             await model.load()
         } catch MSALTokenProvider.AuthError.cancelled {
             // The person closed Microsoft's page; leave the list as it was.
@@ -373,7 +388,7 @@ private struct RuleRow: View {
         HStack(alignment: .center, spacing: 12) {
             if mode == .select {
                 Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 22))
+                    .font(.title2)
                     .foregroundStyle(isSelected ? DS.Palette.accent : DS.Palette.ink40)
                     .frame(width: 26)
             } else {
@@ -425,7 +440,7 @@ private struct RuleRow: View {
                 HStack(spacing: 8) {
                     StateDot(isEnabled: rule.isEnabled)
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .semibold))
+                        .font(.subheadline.weight(.semibold))
                         .foregroundStyle(DS.Palette.ink40)
                 }
             }
@@ -481,7 +496,7 @@ private struct AttentionBanner: View {
         Button(action: action) {
             HStack(spacing: 12) {
                 Image(systemName: "exclamationmark.circle.fill")
-                    .font(.system(size: 20))
+                    .font(.title3)
                     .foregroundStyle(tint)
 
                 VStack(alignment: .leading, spacing: 2) {
@@ -526,11 +541,11 @@ private struct PendingBanner: View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(alignment: .top, spacing: 12) {
                 Image(systemName: "arrow.triangle.2.circlepath")
-                    .font(.system(size: 18))
+                    .font(.body)
                     .foregroundStyle(DS.Palette.warning)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title).font(DS.Font.secondary).foregroundStyle(DS.Palette.ink)
-                    Text("Kept on this phone. Your change is safe — it just hasn't reached the server yet.")
+                    Text("Outlook doesn\u{2019}t have this change yet. It\u{2019}s kept here until you retry, discard it, or close Rulebook.")
                         .font(DS.Font.caption)
                         .foregroundStyle(DS.Palette.ink80)
                         .fixedSize(horizontal: false, vertical: true)
@@ -542,7 +557,7 @@ private struct PendingBanner: View {
                     .font(DS.Font.secondary)
                     .foregroundStyle(DS.Palette.onWarning)
                     .padding(.horizontal, 14)
-                    .frame(height: 36)
+                    .frame(minHeight: 36)
                     .background(DS.Palette.warning, in: .rect(cornerRadius: 10))
                     .disabled(isRetrying)
 
@@ -550,7 +565,7 @@ private struct PendingBanner: View {
                     .font(DS.Font.secondary)
                     .foregroundStyle(DS.Palette.ink)
                     .padding(.horizontal, 14)
-                    .frame(height: 36)
+                    .frame(minHeight: 36)
                     .overlay { RoundedRectangle(cornerRadius: 10).strokeBorder(DS.Palette.hairline, lineWidth: 1) }
             }
         }
@@ -570,7 +585,8 @@ private struct BulkButtonStyle: ButtonStyle {
             .font(DS.Font.secondary)
             .foregroundStyle(destructive ? DS.Palette.onDestructive : DS.Palette.ink)
             .frame(maxWidth: .infinity)
-            .frame(height: 48)
+            .frame(minHeight: 48)
+            .multilineTextAlignment(.center)
             .background(destructive ? DS.Palette.destructive : DS.Palette.surface,
                         in: .rect(cornerRadius: DS.Metric.controlRadius))
             .overlay {
@@ -620,6 +636,7 @@ private struct SlowRuleStore: RuleStore {
     func rule(id: String) async throws -> MailRule { throw RuleStoreError.notFound(id: id) }
     func createRule(_ rule: MailRule) async throws -> MailRule { rule }
     func updateRule(id: String, with rule: MailRule) async throws -> MailRule { rule }
+    func moveRule(id: String, toPosition position: Int) async throws {}
     func deleteRule(id: String) async throws {}
 }
 

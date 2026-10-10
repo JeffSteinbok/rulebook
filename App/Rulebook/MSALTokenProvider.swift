@@ -11,7 +11,12 @@ import RulebookKit
 /// Authority is `common`, not the registration's tenant GUID:
 /// `Scripts/register-app.sh` prints the sign-in authority for this reason, and
 /// pinning a tenant locks out personal Microsoft accounts.
-actor MSALTokenProvider: TokenProvider {
+///
+/// There is no "current account" here. Each mailbox's store gets its own
+/// ``AccountTokenProvider`` from ``tokenProvider(for:)``, pinned to one MSAL
+/// account. That way switching mailboxes, signing one out, or a re-sign-in
+/// prompt can never point one mailbox's store at another's tokens.
+actor MSALTokenProvider {
 
     enum AuthError: LocalizedError {
         case noAccount
@@ -58,7 +63,6 @@ actor MSALTokenProvider: TokenProvider {
 
     private let application: MSALPublicClientApplication
     private let scopes: [String]
-    private var account: MSALAccount?
 
     /// MSAL reports almost everything as MSALErrorInternal (-50000), whose
     /// `localizedDescription` says nothing. Its own logger is the only place
@@ -136,45 +140,53 @@ actor MSALTokenProvider: TokenProvider {
 
         self.application = try MSALPublicClientApplication(configuration: config)
         self.scopes = scopes.filter { !Self.reservedScopes.contains($0.lowercased()) }
-        self.account = Self.cachedAccount(in: application)
     }
 
+    /// Who signed in: MSAL's stable key (the `Account.id`) and the address.
+    struct SignedIn: Sendable {
+        let identifier: String
+        let address: String
+    }
+
+    /// A token source for one mailbox and only that mailbox.
+    nonisolated func tokenProvider(for accountID: String) -> AccountTokenProvider {
+        AccountTokenProvider(source: self, accountID: accountID)
+    }
+
+    /// The MSAL account behind a mailbox's `Account.id`. 1.0 stored the
+    /// address as the id when MSAL gave no identifier, so an address matches too.
+    ///
     /// Logged rather than swallowed: an unreadable cache and an empty one both
     /// end in a sign-in prompt, but only the log says which it was.
-    private static func cachedAccount(in application: MSALPublicClientApplication) -> MSALAccount? {
+    private func msalAccount(_ accountID: String) -> MSALAccount? {
+        if let account = try? application.account(forIdentifier: accountID) { return account }
         do {
-            return try application.allAccounts().first
+            return try application.allAccounts().first {
+                $0.username?.caseInsensitiveCompare(accountID) == .orderedSame
+            }
         } catch {
             DiagnosticsLog.shared.append("token cache unreadable: \((error as NSError).domain) \((error as NSError).code)")
             return nil
         }
     }
 
-    var isSignedIn: Bool { account != nil }
+    // MARK: - Tokens
 
-    var signedInAddress: String? { account?.username }
-
-    /// MSAL's stable per-account key, used as the `Account.id`.
-    var accountIdentifier: String? { account?.identifier }
-
-    // MARK: - TokenProvider
-
-    /// Silent first, interactive only when the refresh token is gone. The app
-    /// should never see a login screen on a warm launch.
-    func accessToken() async throws -> String {
-        // The app's mailbox list and MSAL's token cache are stored apart, and
-        // can disagree: a new phone restored from backup brings the list back
-        // without the keychain tokens, and a prewarmed launch can run before
-        // first unlock, when the keychain can't be read. Look again, and if
-        // there's still nothing, say sign-in is needed — "No mailbox is
-        // connected" next to a mailbox in the list is a dead end.
-        //
-        // Not signIn() from here: the first call comes from the rules list
-        // loading at launch, before the scene is active, so there's no window
-        // to present on and it failed as "Sign-in was cancelled". The list
-        // offers a Sign in button instead, which only runs from a tap.
-        if account == nil { account = Self.cachedAccount(in: application) }
-        guard let account else {
+    /// Silent only. The app should never see a login screen on a warm launch.
+    ///
+    /// The app's mailbox list and MSAL's token cache are stored apart, and can
+    /// disagree: a new phone restored from backup brings the list back without
+    /// the keychain tokens, and a prewarmed launch can run before first unlock,
+    /// when the keychain can't be read. The cache is read fresh on every call,
+    /// and when it has nothing for this mailbox the answer is "sign-in needed".
+    ///
+    /// Never interactive from here: the first call comes from the rules list
+    /// loading at launch, before the scene is active, so there's no window to
+    /// present on and it failed as "Sign-in was cancelled". The list offers a
+    /// Sign in button instead (``signInAgain(accountID:)``), which only runs
+    /// from a tap.
+    func accessToken(for accountID: String) async throws -> String {
+        guard let account = msalAccount(accountID) else {
             DiagnosticsLog.shared.append("no cached account; sign-in required")
             throw AuthError.signInRequired
         }
@@ -216,8 +228,30 @@ actor MSALTokenProvider: TokenProvider {
         return anchor
     }
 
-    @discardableResult
-    func signIn() async throws -> String {
+    /// Signs a mailbox back in, from a tap. Pinned to that mailbox when MSAL
+    /// still knows it, so Microsoft's page can't hand back a different one.
+    /// When MSAL has lost it entirely (a restored phone), the page asks, and
+    /// the caller decides what to do if someone else signs in.
+    func signInAgain(accountID: String) async throws -> SignedIn {
+        let result = try await interactive(account: msalAccount(accountID))
+        guard let identifier = result.account.identifier else {
+            throw AuthError.failed(domain: "MSAL", code: -1)
+        }
+        return SignedIn(identifier: identifier, address: result.account.username ?? "")
+    }
+
+    /// Adds a mailbox: Microsoft's page asks which account.
+    func signIn() async throws -> SignedIn {
+        let result = try await interactive(account: nil)
+        guard let identifier = result.account.identifier else {
+            throw AuthError.failed(domain: "MSAL", code: -1)
+        }
+        return SignedIn(identifier: identifier, address: result.account.username ?? "")
+    }
+
+    private func interactive(account: MSALAccount?) async throws -> MSALResult {
+        // No window to present over (the app is in the background): this is
+        // not the person cancelling, it's "sign in again when you're back".
         guard let anchor = await presentationAnchor() else { throw AuthError.cancelled }
 
         let webParams = MSALWebviewParameters(authPresentationViewController: anchor)
@@ -226,9 +260,15 @@ actor MSALTokenProvider: TokenProvider {
         webParams.webviewType = .default
 
         let params = MSALInteractiveTokenParameters(scopes: scopes, webviewParameters: webParams)
-        // No loginHint: .selectAccount makes Microsoft's own page ask which
-        // mailbox, so the app never has to collect an address up front.
-        params.promptType = .selectAccount
+        if let account {
+            // Re-sign-in: pinned to the mailbox that needs it.
+            params.account = account
+            params.promptType = .default
+        } else {
+            // No loginHint: .selectAccount makes Microsoft's own page ask which
+            // mailbox, so the app never has to collect an address up front.
+            params.promptType = .selectAccount
+        }
 
         let result: MSALResult = try await withCheckedThrowingContinuation { continuation in
             application.acquireToken(with: params) { result, error in
@@ -242,16 +282,23 @@ actor MSALTokenProvider: TokenProvider {
             }
         }
 
-        account = result.account
-        return result.accessToken
+        return result
     }
 
-    func signOut() throws {
-        guard let account else { return }
-        let params = MSALSignoutParameters()
-        // Clears the token cache; the rules stay on the server and keep running.
+    /// Forgets one mailbox's tokens; the others are untouched. The rules stay
+    /// on the server and keep running.
+    func signOut(accountID: String) throws {
+        guard let account = msalAccount(accountID) else { return }
         try application.remove(account)
-        _ = params
-        self.account = nil
+    }
+}
+
+/// One mailbox's tokens. What a `GraphRuleStore` is built on.
+struct AccountTokenProvider: TokenProvider {
+    let source: MSALTokenProvider
+    let accountID: String
+
+    func accessToken() async throws -> String {
+        try await source.accessToken(for: accountID)
     }
 }

@@ -69,3 +69,66 @@ targets:
         TARGETED_DEVICE_FAMILY: "1"
         ENABLE_PREVIEWS: YES
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        # The simulator can't resolve the keychain-sharing entitlement under
+        # its ad-hoc signature, so it gets its own. This used to live only in
+        # the committed .pbxproj, and regenerating the project dropped it.
+        "CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]": Rulebook/RulebookSimulator.entitlements
+
+  # View models and app logic, against RulebookKit's in-memory store and the
+  # FakeGraph from RulebookTesting. Hosted in the app; no network, no MSAL calls.
+  RulebookTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: RulebookTests
+    dependencies:
+      - target: Rulebook
+      - package: RulebookKit
+        product: RulebookTesting
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.steinbok.RulebookTests
+        DEVELOPMENT_TEAM: Y7KVX7666P
+        SWIFT_VERSION: "6.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+
+  # Drives the real UI in `-demo` (in-memory mailbox, no sign-in) and
+  # `-locked` (free tier), with StoreKit served from Rulebook.storekit.
+  RulebookUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - path: RulebookUITests
+    dependencies:
+      - target: Rulebook
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: net.steinbok.RulebookUITests
+        DEVELOPMENT_TEAM: Y7KVX7666P
+        SWIFT_VERSION: "6.0"
+        TARGETED_DEVICE_FAMILY: "1"
+        GENERATE_INFOPLIST_FILE: YES
+        TEST_TARGET_NAME: Rulebook
+
+schemes:
+  Rulebook:
+    build:
+      targets:
+        Rulebook: all
+        RulebookTests: [test]
+        RulebookUITests: [test]
+    run:
+      config: Debug
+      storeKitConfiguration: Rulebook.storekit
+    test:
+      config: Debug
+      gatherCoverageData: true
+      coverageTargets:
+        - Rulebook
+      targets:
+        - RulebookTests
+        - RulebookUITests
+      storeKitConfiguration: Rulebook.storekit
+    archive:
+      config: Release

@@ -1,0 +1,98 @@
+{
+  "exchanges" : [
+    {
+      "label" : "combined",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true,
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ],
+          "subjectContains" : [
+            "a",
+            "b"
+          ]
+        },
+        "displayName" : "RuleBook probe – combined",
+        "exceptions" : {
+          "bodyContains" : [
+            "unsubscribe"
+          ],
+          "importance" : "low"
+        },
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true,
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "a",
+            "b"
+          ]
+        },
+        "displayName" : "RuleBook probe – combined",
+        "exceptions" : {
+          "bodyContains" : [
+            "unsubscribe"
+          ],
+          "importance" : "low"
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf5g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 39
+      },
+      "status" : 201
+    },
+    {
+      "label" : "combined (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "hasAttachments" : true,
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ],
+          "subjectContains" : [
+            "a",
+            "b"
+          ]
+        },
+        "displayName" : "RuleBook probe – combined",
+        "exceptions" : {
+          "bodyContains" : [
+            "unsubscribe"
+          ],
+          "importance" : "low"
+        },
+        "hasError" : false,
+        "id" : "AQAAABSCf5g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 39
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Several predicates plus exceptions in one rule.",
+  "scenario" : "predicates-combined"
+}

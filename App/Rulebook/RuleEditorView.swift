@@ -8,6 +8,7 @@ struct RuleEditorView: View {
     let list: RulesListViewModel
 
     @Environment(\.dismiss) private var dismiss
+    @State private var isConfirmingDiscard = false
 
     init(editing rule: MailRule? = nil, list: RulesListViewModel, preset: RulePreset? = nil) {
         self.list = list
@@ -36,13 +37,20 @@ struct RuleEditorView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(backLabel) {
-                        if model.back() { dismiss() }
+                        guard model.back() else { return }
+                        if model.hasUnsavedChanges { isConfirmingDiscard = true } else { dismiss() }
                     }
                     .font(DS.Font.secondary)
                 }
             }
+            .confirmationDialog("Discard this rule\u{2019}s changes?", isPresented: $isConfirmingDiscard, titleVisibility: .visible) {
+                Button("Discard changes", role: .destructive) { dismiss() }
+                Button("Keep editing", role: .cancel) {}
+            }
             .safeAreaInset(edge: .bottom) { footer }
             .task { await model.loadFolders() }
+            // A swipe down would throw the draft away without asking.
+            .interactiveDismissDisabled(model.hasUnsavedChanges)
             .alert("Couldn't save", isPresented: errorBinding) {
                 Button("OK") { model.errorMessage = nil }
             } message: {
@@ -194,7 +202,7 @@ struct RuleEditorView: View {
                 } label: {
                     HStack(spacing: 14) {
                         Image(systemName: model.isPicked(kind) ? "checkmark.circle.fill" : "circle")
-                            .font(.system(size: 22))
+                            .font(.title2)
                             .foregroundStyle(model.isPicked(kind) ? DS.Palette.accent : DS.Palette.ink40)
                         Text(model.label(for: kind))
                             .font(DS.Font.rowTitle)
@@ -283,7 +291,8 @@ struct RuleEditorView: View {
 
     private func advance() async {
         if model.isEditing || model.step == .actions {
-            if await model.save() != nil {
+            if let saved = await model.save() {
+                list.noteSaved(saved)
                 await list.load()
                 dismiss()
             }
@@ -352,12 +361,19 @@ private struct ActionValueEditor: View {
                 ))
                 .textFieldStyle(RuleFieldStyle())
             } else {
+                // Shows what the draft holds, never a stand-in: a picker that
+                // displayed the first folder while the rule had none is how a
+                // move to nowhere got saved.
                 Picker("", selection: Binding(
-                    get: { folder.id ?? folders.first?.id ?? "" },
+                    get: { folder.id ?? folders.first { $0.name == folder.name && folder.name != nil }?.id ?? "" },
                     set: { id in
+                        guard !id.isEmpty else { return }
                         set(folders.first { $0.id == id } ?? .id(id))
                     }
                 )) {
+                    if folder.id == nil {
+                        Text("Choose a folder").tag("")
+                    }
                     ForEach(folders, id: \.id) { candidate in
                         Text(candidate.label).tag(candidate.id ?? "")
                     }

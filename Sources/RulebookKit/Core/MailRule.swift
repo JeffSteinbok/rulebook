@@ -83,6 +83,29 @@ public struct MailRule: Codable, Hashable, Sendable, Identifiable {
     }
 }
 
+extension MailRule {
+    private enum CodingKeys: String, CodingKey {
+        case id, name, order, isEnabled, match, conditions, exceptions, actions, status
+    }
+
+    /// Only `name` is required, so a hand-written rule file can leave out
+    /// everything with an obvious default.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        self.init(
+            id: try c.decodeIfPresent(String.self, forKey: .id),
+            name: try c.decode(String.self, forKey: .name),
+            order: try c.decodeIfPresent(Int.self, forKey: .order),
+            isEnabled: try c.decodeIfPresent(Bool.self, forKey: .isEnabled) ?? true,
+            match: try c.decodeIfPresent(MatchStrategy.self, forKey: .match) ?? .all,
+            conditions: try c.decodeIfPresent([RuleCondition].self, forKey: .conditions) ?? [],
+            exceptions: try c.decodeIfPresent([RuleCondition].self, forKey: .exceptions) ?? [],
+            actions: try c.decodeIfPresent([RuleAction].self, forKey: .actions) ?? [],
+            status: try c.decodeIfPresent(RuleStatus.self, forKey: .status) ?? RuleStatus()
+        )
+    }
+}
+
 /// Provider-reported state. Read-only everywhere.
 public struct RuleStatus: Codable, Hashable, Sendable {
     public var hasError: Bool

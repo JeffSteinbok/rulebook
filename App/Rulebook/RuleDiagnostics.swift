@@ -17,6 +17,10 @@ struct RuleIssue: Identifiable, Hashable {
         case serverError
         case missingFolder(named: String)
         case neverRuns(blockedBy: String)
+        /// No conditions, so it acts on every incoming message. Usually a
+        /// mistake, and exactly what a "has no attachment" rule saved before
+        /// 1.1 became: Outlook stored the false test as no test.
+        case appliesToEverything(destructive: Bool)
     }
 
     let ruleID: String
@@ -27,6 +31,7 @@ struct RuleIssue: Identifiable, Hashable {
     var level: Level {
         switch kind {
         case .serverError, .missingFolder: .error
+        case .appliesToEverything(let destructive): destructive ? .error : .warning
         case .neverRuns: .warning
         }
     }
@@ -36,6 +41,7 @@ struct RuleIssue: Identifiable, Hashable {
         case .serverError: "Rule is in error"
         case .missingFolder: "Folder is missing"
         case .neverRuns: "Never runs"
+        case .appliesToEverything: "Runs on every message"
         }
     }
 
@@ -47,6 +53,8 @@ struct RuleIssue: Identifiable, Hashable {
             "The folder “\(name)” is no longer in this mailbox, so matching mail silently stays in the inbox. Exchange still reports this rule as healthy. Pick a new folder."
         case .neverRuns(let blocker):
             "“\(blocker)” stops processing before this rule is reached. Move it above that rule to make it run."
+        case .appliesToEverything:
+            "This rule has no conditions, so it acts on every message that arrives. If it was meant for only some messages — say, ones without an attachment — add a condition, or add the opposite as an exception."
         }
     }
 
@@ -55,6 +63,7 @@ struct RuleIssue: Identifiable, Hashable {
         case .serverError: "Save to the server again"
         case .missingFolder: "Choose a folder"
         case .neverRuns: "Move this rule up"
+        case .appliesToEverything: "Add a condition"
         }
     }
 }
@@ -63,12 +72,14 @@ enum RuleDiagnostics {
 
     /// - Parameters:
     ///   - rules: in evaluation order, as `listRules()` returns them.
-    ///   - folders: the mailbox's real folders, from `FolderDirectory.folders()`.
-    static func check(_ rules: [MailRule], folders: [MailboxFolder]) -> [RuleIssue] {
+    ///   - folders: the mailbox's real folders, from `FolderDirectory.folders()`,
+    ///     or nil when they couldn't be fetched. Unknown is not empty: with no
+    ///     folder list, every filing rule would otherwise be reported missing.
+    static func check(_ rules: [MailRule], folders: [MailboxFolder]?) -> [RuleIssue] {
         var issues: [RuleIssue] = []
 
-        let knownIDs = Set(folders.compactMap(\.id))
-        let knownNames = Set(folders.compactMap { $0.name?.lowercased() })
+        let knownIDs = Set((folders ?? []).compactMap(\.id))
+        let knownNames = Set((folders ?? []).compactMap { $0.name?.lowercased() })
 
         /// A referenced folder counts as present if either half resolves —
         /// rules store an id, but a locally-authored rule may only have a name.
@@ -88,7 +99,7 @@ enum RuleDiagnostics {
                 issues.append(.init(ruleID: id, kind: .serverError))
             }
 
-            for action in rule.actions {
+            for action in rule.actions where folders != nil {
                 switch action {
                 case .moveTo(let folder), .copyTo(let folder):
                     if !exists(folder) {
@@ -97,6 +108,16 @@ enum RuleDiagnostics {
                 default:
                     break
                 }
+            }
+
+            // A bare "stop processing" with no conditions is a deliberate
+            // backstop, handled as a blocker below, not a mistake.
+            if rule.isEnabled, rule.conditions.isEmpty,
+               rule.actions.contains(where: { $0.kind != .stopProcessing }) {
+                let destructive = rule.actions.contains {
+                    [.delete, .forward, .forwardAsAttachment, .redirect, .moveTo].contains($0.kind)
+                }
+                issues.append(.init(ruleID: id, kind: .appliesToEverything(destructive: destructive)))
             }
 
             if let blocker, rule.isEnabled {

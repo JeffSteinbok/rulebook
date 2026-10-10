@@ -26,6 +26,12 @@ final class RulesListViewModel {
     private(set) var rules: [MailRule] = []
     private(set) var issues: [RuleIssue] = []
     private(set) var isLoading = false
+    /// The folder tree from the last load, so issues can be recomputed after
+    /// a local change without another fetch.
+    private var folderTree: [MailboxFolder]?
+    /// Bumped by every load; a response that finishes after a newer one
+    /// started is dropped instead of overwriting it.
+    private var loadGeneration = 0
     private(set) var lastSync: Date?
     var errorMessage: String? {
         didSet { if errorMessage == nil { needsSignIn = false } }
@@ -49,7 +55,8 @@ final class RulesListViewModel {
     /// There is no offline mode — but a network blip must not silently undo
     /// someone's edit, which is what rolling back on failure does. The local
     /// value is kept and the rule is flagged; a refresh won't clobber it, and
-    /// the user can retry or discard.
+    /// the user can retry or discard. Held in memory only: it lasts while the
+    /// app is open, which is what the banner says.
     private(set) var pending: [String: MailRule] = [:]
     private(set) var isRetrying = false
 
@@ -201,24 +208,48 @@ final class RulesListViewModel {
     // MARK: - Loading
 
     func load() async {
+        loadGeneration += 1
+        let generation = loadGeneration
         isLoading = true
-        defer { isLoading = false }
+        defer { if generation == loadGeneration { isLoading = false } }
         do {
             let loaded = try await store.listRules()
             // Fetching the folder tree is what makes the missing-folder check
             // possible; a failure there must not hide the rules themselves.
-            let tree = (try? await folders.folders()) ?? []
+            let tree = try? await folders.folders()
+            guard generation == loadGeneration else { return }
+
+            // A rule deleted elsewhere can't take a pending change any more.
+            let ids = Set(loaded.compactMap(\.id))
+            pending = pending.filter { ids.contains($0.key) }
             // A refresh must not overwrite an edit that hasn't been pushed yet.
             rules = loaded.map { server in
                 server.id.flatMap { pending[$0] } ?? server
             }
-            issues = RuleDiagnostics.check(rules, folders: tree)
+            folderTree = tree
+            recomputeIssues()
             lastSync = .now
         } catch {
+            guard generation == loadGeneration else { return }
             // Keep whatever is on screen: stale rules are still the last known
             // truth, and they're still running on the server.
             report(error)
         }
+    }
+
+    private func recomputeIssues() {
+        issues = RuleDiagnostics.check(rules, folders: folderTree)
+    }
+
+    /// The editor saved `rule`: it is now the server's truth, and any older
+    /// unsent copy of it must not be retried over the top.
+    func noteSaved(_ rule: MailRule) {
+        guard let id = rule.id else { return }
+        pending[id] = nil
+        if let index = rules.firstIndex(where: { $0.id == id }) {
+            rules[index] = rule
+        }
+        recomputeIssues()
     }
 
     // MARK: - Mutation
@@ -229,6 +260,7 @@ final class RulesListViewModel {
         var patch = rule
         patch.isEnabled = isEnabled
         await write(id: id, patch: patch)
+        recomputeIssues()
     }
 
     /// Deletes are the one write that is NOT kept locally on failure: a rule
@@ -240,12 +272,17 @@ final class RulesListViewModel {
         rules.removeAll { $0.id == id }
         do {
             try await store.deleteRule(id: id)
-            issues.removeAll { $0.ruleID == id }
-            pending[id] = nil
+        } catch RuleStoreError.notFound {
+            // Already gone (deleted in Outlook, or a retried request that had
+            // in fact landed). Gone is what was asked for.
         } catch {
             rules = previous
             errorMessage = "That rule couldn't be deleted. It's still on the server and still running."
+            return
         }
+        pending[id] = nil
+        selection.remove(id)
+        recomputeIssues()
     }
 
     func duplicate(_ rule: MailRule) async -> MailRule? {
@@ -304,46 +341,63 @@ final class RulesListViewModel {
 
     // MARK: - Reorder
     //
-    // `RuleStore` has no reorder operation, so this rewrites `order` on every
-    // rule whose position changed. `sequence` must be unique on Graph, so the
-    // whole affected range is renumbered, not just the moved rule.
-    //
-    // A `reorder(_ ids:)` on the protocol would let GraphRuleStore batch this
-    // — see "Gaps" in the spec.
+    // Outlook keeps positions dense, 1…N: putting a rule at position k shifts
+    // the ones below it down. So a drag is one `moveRule` for the rule that
+    // moved, not a renumbering of every rule in between.
 
+    /// `source` and `destination` are offsets into ``visibleRules``, which is
+    /// what the list shows; with a search or filter on, that is not ``rules``.
     func move(from source: IndexSet, to destination: Int) async {
         guard requirePro(.reorder) else { return }
-        let previous = rules
-        rules.move(fromOffsets: source, toOffset: destination)
+        let visible = visibleRules
+        let moved = source.compactMap { visible.indices.contains($0) ? visible[$0] : nil }
+        guard !moved.isEmpty, !moved.contains(where: \.status.isReadOnly) else { return }
 
-        var failed = false
-        for (index, rule) in rules.enumerated() where rule.order != index {
-            guard let id = rule.id, !rule.status.isReadOnly else { continue }
-            var patch = rule
-            patch.order = index
-            do {
-                _ = try await store.updateRule(id: id, with: patch)
-            } catch {
-                failed = true
-                report(error)
-                break
-            }
-        }
-
-        if failed {
-            // Partial renumbering is worse than none: re-read the server's truth.
-            rules = previous
-            await load()
+        // Where the drop lands in the full list: before the visible row it was
+        // dropped on, or just after the last visible row.
+        let movedIDs = Set(moved.compactMap(\.id))
+        var reordered = rules.filter { !movedIDs.contains($0.id ?? "") }
+        let anchor = visible[destination...].first { !movedIDs.contains($0.id ?? "") }
+        let insertAt: Int
+        if let anchor, let index = reordered.firstIndex(where: { $0.id == anchor.id }) {
+            insertAt = index
+        } else if let last = visible.last(where: { !movedIDs.contains($0.id ?? "") }),
+                  let index = reordered.firstIndex(where: { $0.id == last.id }) {
+            insertAt = index + 1
         } else {
-            await load()
+            insertAt = reordered.count
         }
+        reordered.insert(contentsOf: moved, at: insertAt)
+        guard reordered.map(\.id) != rules.map(\.id) else { return }
+
+        // Show the result immediately; the server catches up.
+        rules = reordered
+        do {
+            // Top-down, so each move lands where the final order says.
+            for (index, rule) in reordered.enumerated() where movedIDs.contains(rule.id ?? "") {
+                try await store.moveRule(id: rule.id!, toPosition: index + 1)
+            }
+        } catch {
+            report(error)
+        }
+        // Either way, take the server's numbering as the truth.
+        await load()
     }
 
-    /// The fix for a "never runs" warning: hoist the rule above its blocker.
+    /// The fix for a "never runs" warning: hoist the rule to the top, above
+    /// whatever stopped it.
     func hoist(_ rule: MailRule) async {
         guard requirePro(.reorder) else { return }
-        guard let index = rules.firstIndex(where: { $0.id == rule.id }), index > 0 else { return }
-        await move(from: IndexSet(integer: index), to: 0)
+        guard let id = rule.id, let index = rules.firstIndex(where: { $0.id == id }), index > 0 else { return }
+        var reordered = rules
+        reordered.move(fromOffsets: IndexSet(integer: index), toOffset: 0)
+        rules = reordered
+        do {
+            try await store.moveRule(id: id, toPosition: 1)
+        } catch {
+            report(error)
+        }
+        await load()
     }
 
     // MARK: - Private
@@ -354,6 +408,10 @@ final class RulesListViewModel {
         if let index = rules.firstIndex(where: { $0.id == id }) {
             rules[index] = patch
         }
+        // Leave the position out: the copy's order may be stale, and on Graph
+        // writing it would move the rule.
+        var patch = patch
+        patch.order = nil
         do {
             let updated = try await store.updateRule(id: id, with: patch)
             if let index = rules.firstIndex(where: { $0.id == id }) {
@@ -373,17 +431,25 @@ final class RulesListViewModel {
         defer { isRetrying = false }
 
         for (id, patch) in pending {
+            var patch = patch
+            patch.order = nil
             do {
                 let updated = try await store.updateRule(id: id, with: patch)
                 if let index = rules.firstIndex(where: { $0.id == id }) {
                     rules[index] = updated
                 }
                 pending[id] = nil
+            } catch RuleStoreError.notFound {
+                // Deleted elsewhere: nothing left to save it to. Dropping it
+                // keeps one dead entry from blocking the rest.
+                pending[id] = nil
+                rules.removeAll { $0.id == id }
             } catch {
                 // Leave it pending and stop hammering a server that's down.
                 break
             }
         }
+        recomputeIssues()
         if pending.isEmpty { lastSync = .now }
     }
 

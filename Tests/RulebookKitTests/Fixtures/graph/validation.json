@@ -1,0 +1,366 @@
+{
+  "exchanges" : [
+    {
+      "label" : "empty name",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'EmptyValueFound', Message: 'The value must not be empty.', Field: 'Name', Value: ''."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "missing name",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 1,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max only",
+        "hasError" : false,
+        "id" : "AQAAABSCf68=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 62
+      },
+      "status" : 201
+    },
+    {
+      "label" : "no actions",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – no actions",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'MissingAction', Message: 'Please choose at least one action.', Field: 'Actions', Value: ''."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "empty actions",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – empty actions",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'MissingAction', Message: 'Please choose at least one action.', Field: 'Actions', Value: ''."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "no conditions",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – no conditions",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "displayName" : "RuleBook probe – no conditions",
+        "hasError" : false,
+        "id" : "AQAAABSCf7A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 63
+      },
+      "status" : 201
+    },
+    {
+      "label" : "long name",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – long xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'StringValueTooBig', Message: 'The string is too long. The maximum allowed length is 256 characters.', Field: 'Name', Value: 'RuleBook probe – long xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "bad address",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "not an address",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – bad address",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidAddress', Message: 'The address isn't valid.', Field: 'Action.ForwardTo', Value: ':not an address'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "unknown field",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "notARealPredicate" : true
+        },
+        "displayName" : "RuleBook probe – unknown field",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "UnableToDeserializePostBody",
+          "message" : "were unable to deserialize "
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "bad enum",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "importance" : "urgent"
+        },
+        "displayName" : "RuleBook probe – bad enum",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "RequestBodyRead",
+          "message" : "Requested value 'urgent' was not found."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "wrong type",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "subjectContains" : "not-an-array"
+        },
+        "displayName" : "RuleBook probe – wrong type",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "UnableToDeserializePostBody",
+          "message" : "were unable to deserialize "
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "dup name 1",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup name",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup name",
+        "hasError" : false,
+        "id" : "AQAAABSCf7E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 64
+      },
+      "status" : 201
+    },
+    {
+      "label" : "dup name 2",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup name",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – dup name",
+        "hasError" : false,
+        "id" : "AQAAABSCf7I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 65
+      },
+      "status" : 201
+    },
+    {
+      "label" : "read-only fields",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – read-only fields",
+        "hasError" : true,
+        "isEnabled" : false,
+        "isReadOnly" : true,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – read-only fields",
+        "hasError" : false,
+        "id" : "AQAAABSCf7M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 66
+      },
+      "status" : 201
+    }
+  ],
+  "question" : "The error payloads Graph returns for bad rules.",
+  "scenario" : "validation"
+}

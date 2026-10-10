@@ -1,0 +1,1011 @@
+{
+  "exchanges" : [
+    {
+      "label" : "resolve junkemail",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/junkemail?$select=id,displayName",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders(id,displayName)\/$entity",
+        "displayName" : "Junk Email",
+        "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+      },
+      "status" : 200
+    },
+    {
+      "label" : "resolve deleteditems",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/deleteditems?$select=id,displayName",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders(id,displayName)\/$entity",
+        "displayName" : "Deleted Items",
+        "id" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA"
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action assignCategories",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "assignCategories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "assignCategories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories",
+        "hasError" : false,
+        "id" : "AQAAABSCf5k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 40
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action assignCategories (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5k=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "assignCategories" : [
+            "RuleBookProbe"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories",
+        "hasError" : false,
+        "id" : "AQAAABSCf5k=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 40
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action assignCategories-unknown",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "assignCategories" : [
+            "RuleBook category that does not exist"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories-unknown",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "assignCategories" : [
+            "RuleBook category that does not exist"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories-unknown",
+        "hasError" : false,
+        "id" : "AQAAABSCf5o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 41
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action assignCategories-unknown (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5o=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "assignCategories" : [
+            "RuleBook category that does not exist"
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action assignCategories-unknown",
+        "hasError" : false,
+        "id" : "AQAAABSCf5o=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 41
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action copyToFolder",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action copyToFolder",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action copyToFolder",
+        "hasError" : false,
+        "id" : "AQAAABSCf5s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 42
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action copyToFolder (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5s=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action copyToFolder",
+        "hasError" : false,
+        "id" : "AQAAABSCf5s=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 42
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action delete",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action delete",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true,
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action delete",
+        "hasError" : false,
+        "id" : "AQAAABSCf5w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 43
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action delete (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf5w=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true,
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action delete",
+        "hasError" : false,
+        "id" : "AQAAABSCf5w=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 43
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action forwardAsAttachmentTo",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "forwardAsAttachmentTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardAsAttachmentTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf50=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 44
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action forwardAsAttachmentTo (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf50=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardAsAttachmentTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardAsAttachmentTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf50=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 44
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action forwardTo",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardTo",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf54=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 45
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action forwardTo (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf54=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "forwardTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action forwardTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf54=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 45
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action markAsRead",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markAsRead",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markAsRead",
+        "hasError" : false,
+        "id" : "AQAAABSCf58=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 46
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action markAsRead (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf58=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markAsRead",
+        "hasError" : false,
+        "id" : "AQAAABSCf58=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 46
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action markAsRead-false",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : false
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markAsRead-false",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'MissingAction', Message: 'Please choose at least one action.', Field: 'Actions', Value: ''."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "action markImportance",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markImportance" : "low"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markImportance",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markImportance" : "low"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markImportance",
+        "hasError" : false,
+        "id" : "AQAAABSCf6A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 47
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action markImportance (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6A=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markImportance" : "low"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action markImportance",
+        "hasError" : false,
+        "id" : "AQAAABSCf6A=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 47
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action moveToFolder",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder",
+        "hasError" : false,
+        "id" : "AQAAABSCf6E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 48
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action moveToFolder (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6E=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder",
+        "hasError" : false,
+        "id" : "AQAAABSCf6E=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 48
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action moveToFolder-wellknown",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "moveToFolder" : "deleteditems"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+        "hasError" : false,
+        "id" : "AQAAABSCf6I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 49
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action moveToFolder-wellknown (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6I=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder-wellknown",
+        "hasError" : false,
+        "id" : "AQAAABSCf6I=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 49
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action moveToFolder-displayname",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "moveToFolder" : "Deleted Items"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder-displayname",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'Id is malformed.', Field: 'Action.MoveToFolder', Value: 'Deleted Items'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "action moveToFolder-bogus",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "moveToFolder" : "AAMkAGI2THIS-IS-NOT-A-FOLDER"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action moveToFolder-bogus",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidValue', Message: 'Id is malformed.', Field: 'Action.MoveToFolder', Value: 'AAMkAGI2THIS\/IS\/NOT\/A\/FOLDER'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "action permanentDelete",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "permanentDelete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action permanentDelete",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "permanentDelete" : true,
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action permanentDelete",
+        "hasError" : false,
+        "id" : "AQAAABSCf6M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 50
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action permanentDelete (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6M=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "permanentDelete" : true,
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action permanentDelete",
+        "hasError" : false,
+        "id" : "AQAAABSCf6M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 50
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action redirectTo",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "redirectTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action redirectTo",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "redirectTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action redirectTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf6Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 51
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action redirectTo (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6Q=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "redirectTo" : [
+            {
+              "emailAddress" : {
+                "address" : "rulebook-probe@example.invalid",
+                "name" : "Probe Recipient"
+              }
+            }
+          ]
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action redirectTo",
+        "hasError" : false,
+        "id" : "AQAAABSCf6Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 51
+      },
+      "status" : 200
+    },
+    {
+      "label" : "action stopProcessingRules",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – action stopProcessingRules",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action stopProcessingRules",
+        "hasError" : false,
+        "id" : "AQAAABSCf6U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 52
+      },
+      "status" : 201
+    },
+    {
+      "label" : "action stopProcessingRules (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6U=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "stopProcessingRules" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – action stopProcessingRules",
+        "hasError" : false,
+        "id" : "AQAAABSCf6U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 52
+      },
+      "status" : 200
+    },
+    {
+      "label" : "actions two moves",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+          "moveToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgEKAAAA"
+        },
+        "conditions" : {
+          "senderContains" : [
+            "rulebook-probe@example.invalid"
+          ]
+        },
+        "displayName" : "RuleBook probe – two moves",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – two moves",
+        "hasError" : false,
+        "id" : "AQAAABSCf6Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 53
+      },
+      "status" : 201
+    },
+    {
+      "label" : "actions two moves (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf6Y=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "copyToFolder" : "AQMkADAwATM3ZmYBLWI5NjAtZDA2NgAtMDACLTAwCgAuAAADv5NrRuuDW0SPvQiXSrSAGgEAA8pLGlf7ckuKeo6BnKjAuQAAAgETAAAA",
+          "delete" : true
+        },
+        "conditions" : {
+          "senderContains" : [
+            "RULEBOOK-PROBE@EXAMPLE.INVALID"
+          ]
+        },
+        "displayName" : "RuleBook probe – two moves",
+        "hasError" : false,
+        "id" : "AQAAABSCf6Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 53
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "Each action alone, including folders given by id, well-known name, and display name.",
+  "scenario" : "actions"
+}

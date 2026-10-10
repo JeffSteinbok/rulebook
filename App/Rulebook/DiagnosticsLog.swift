@@ -26,13 +26,25 @@ final class DiagnosticsLog: @unchecked Sendable {
     private let limit = 500
 
     func append(_ message: String) {
-        let line = "\(Date.now.formatted(.iso8601)) \(message)"
+        let line = "\(Date.now.formatted(.iso8601)) \(Self.redacted(message))"
         queue.async {
             self.entries.append(line)
             if self.entries.count > self.limit {
                 self.entries.removeFirst(self.entries.count - self.limit)
             }
         }
+    }
+
+    /// The log is shared by the person who owns it, but it is still the one
+    /// path off the device. Microsoft's error text often carries the sign-in
+    /// address (and MSAL's own masking misses it there), so addresses are
+    /// replaced before anything is stored.
+    static func redacted(_ message: String) -> String {
+        message.replacingOccurrences(
+            of: #"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"#,
+            with: "<address>",
+            options: .regularExpression
+        )
     }
 
     func clear() {

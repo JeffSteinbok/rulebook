@@ -16,7 +16,7 @@ struct NeutralModelTests {
         #expect(first.match == .all)
         #expect(first.conditions.count == 2)
         #expect(first.exceptions.count == 1)
-        #expect(first.action(.moveTo) == .moveTo(.named("Reading")))
+        #expect(first.action(.moveTo) == .moveTo(MailboxFolder(id: "folder-reading", name: "Reading")))
         #expect(first.actions.contains(.stopProcessing))
     }
 
@@ -83,5 +83,15 @@ struct NeutralModelTests {
         let payload = rule.writablePayload()
         #expect(payload.id == nil)
         #expect(payload.status.isClean)
+    }
+
+    @Test("A hand-written rule needs only a name; the rest has defaults")
+    func minimalRuleDecodes() throws {
+        let rule = try JSONDecoder().decode(MailRule.self, from: Data(#"{"name":"Tiny","actions":[{"kind":"markAsRead"}]}"#.utf8))
+        #expect(rule.name == "Tiny")
+        #expect(rule.isEnabled)
+        #expect(rule.match == .all)
+        #expect(rule.conditions.isEmpty)
+        #expect(rule.actions == [.markAsRead(true)])
     }
 }

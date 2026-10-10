@@ -1,0 +1,398 @@
+{
+  "exchanges" : [
+    {
+      "label" : "size min 50 only",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "minimumSize" : 50
+          }
+        },
+        "displayName" : "RuleBook probe – size min 50 only",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "error" : {
+          "code" : "MessageRuleValidationError",
+          "message" : "ErrorCode: 'InvalidSizeRange', Message: 'The size range is invalid. The minimum size 50 is greater than the maximum size 0.', Field: 'Condition.WithinSizeRange', Value: '50,0'."
+        }
+      },
+      "status" : 400
+    },
+    {
+      "label" : "size max 50 only",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 50
+          }
+        },
+        "displayName" : "RuleBook probe – size max 50 only",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 50,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 50 only",
+        "hasError" : false,
+        "id" : "AQAAABSCf8M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 81
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max 50 only (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8M=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 50,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 50 only",
+        "hasError" : false,
+        "id" : "AQAAABSCf8M=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 81
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size min 0 max 0",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 0,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min 0 max 0",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 0,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min 0 max 0",
+        "hasError" : false,
+        "id" : "AQAAABSCf8Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 82
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size min 0 max 0 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8Q=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 0,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size min 0 max 0",
+        "hasError" : false,
+        "id" : "AQAAABSCf8Q=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 82
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size max 2097151",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 2097151
+          }
+        },
+        "displayName" : "RuleBook probe – size max 2097151",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 2097151,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 2097151",
+        "hasError" : false,
+        "id" : "AQAAABSCf8U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 83
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max 2097151 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8U=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 2097151,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 2097151",
+        "hasError" : false,
+        "id" : "AQAAABSCf8U=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 83
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size max 999999",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 999999
+          }
+        },
+        "displayName" : "RuleBook probe – size max 999999",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 999999,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 999999",
+        "hasError" : false,
+        "id" : "AQAAABSCf8Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 84
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max 999999 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8Y=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 999999,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 999999",
+        "hasError" : false,
+        "id" : "AQAAABSCf8Y=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 84
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size max 102400",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 102400
+          }
+        },
+        "displayName" : "RuleBook probe – size max 102400",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 102400,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 102400",
+        "hasError" : false,
+        "id" : "AQAAABSCf8c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 85
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max 102400 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8c=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 102400,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 102400",
+        "hasError" : false,
+        "id" : "AQAAABSCf8c=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 85
+      },
+      "status" : 200
+    },
+    {
+      "label" : "size max 20000",
+      "method" : "POST",
+      "path" : "me\/mailFolders\/inbox\/messageRules",
+      "requestBody" : {
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 20000
+          }
+        },
+        "displayName" : "RuleBook probe – size max 20000",
+        "isEnabled" : false,
+        "sequence" : 900
+      },
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 20000,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 20000",
+        "hasError" : false,
+        "id" : "AQAAABSCf8g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 86
+      },
+      "status" : 201
+    },
+    {
+      "label" : "size max 20000 (read back)",
+      "method" : "GET",
+      "path" : "me\/mailFolders\/inbox\/messageRules\/AQAAABSCf8g=",
+      "responseBody" : {
+        "@odata.context" : "https:\/\/graph.microsoft.com\/v1.0\/$metadata#users('me')\/mailFolders('inbox')\/messageRules\/$entity",
+        "actions" : {
+          "markAsRead" : true
+        },
+        "conditions" : {
+          "withinSizeRange" : {
+            "maximumSize" : 20000,
+            "minimumSize" : 0
+          }
+        },
+        "displayName" : "RuleBook probe – size max 20000",
+        "hasError" : false,
+        "id" : "AQAAABSCf8g=",
+        "isEnabled" : false,
+        "isReadOnly" : false,
+        "sequence" : 86
+      },
+      "status" : 200
+    }
+  ],
+  "question" : "What an open-ended size range reads back as, and the largest size Graph takes.",
+  "scenario" : "size-bounds"
+}

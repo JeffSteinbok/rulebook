@@ -74,8 +74,16 @@ struct AccountsView: View {
                     titleVisibility: .visible
                 ) {
                     Button("Sign out", role: .destructive) {
-                        try? tokens.signOut()
-                        accounts.remove(active)
+                        // This mailbox's tokens only, never whichever MSAL
+                        // touched last.
+                        Task {
+                            do {
+                                try await tokens.signOut(accountID: active.id)
+                            } catch {
+                                DiagnosticsLog.shared.append("sign-out failed: \((error as NSError).domain) \((error as NSError).code)")
+                            }
+                            accounts.remove(active)
+                        }
                     }
                 }
             }
@@ -102,7 +110,7 @@ struct AccountsView: View {
         } label: {
             HStack(spacing: 14) {
                 Image(systemName: "checkmark")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.callout.weight(.semibold))
                     .foregroundStyle(DS.Palette.accent)
                     .opacity(isActive ? 1 : 0)
                     .frame(width: 22)

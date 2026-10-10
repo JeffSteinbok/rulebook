@@ -163,21 +163,20 @@ struct AddAccountView: View {
             // Presents ASWebAuthenticationSession. Everything inside is
             // Microsoft's — the address prompt included, and Cancel, which
             // throws .cancelled. The address comes back on the account.
-            try await tokens.signIn()
-
-            guard let address = await tokens.signedInAddress else {
+            let signedIn = try await tokens.signIn()
+            guard !signedIn.address.isEmpty else {
                 errorMessage = "Signed in, but no account came back."
                 return
             }
 
             let account = Account(
-                id: await tokens.accountIdentifier ?? address,
-                address: address,
-                displayName: Account.displayName(for: address)
+                id: signedIn.identifier,
+                address: signedIn.address,
+                displayName: Account.displayName(for: signedIn.address)
             )
 
             // Read once before showing the summary, so "rules found" is real.
-            let store = GraphRuleStore(tokenProvider: tokens)
+            let store = GraphRuleStore(tokenProvider: tokens.tokenProvider(for: account.id))
             ruleCount = (try? await store.listRules().count)
 
             accounts.add(account)

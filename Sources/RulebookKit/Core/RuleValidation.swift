@@ -124,7 +124,7 @@ public enum RuleValidator {
             switch action {
             case .moveTo(let folder), .copyTo(let folder),
                  .addLabel(let folder), .removeLabel(let folder):
-                if folder.id == nil && folder.name == nil {
+                if (folder.id ?? "").isEmpty && (folder.name ?? "").isEmpty {
                     error("\(action.kind.rawValue) names neither a folder id nor a name.")
                 }
             case .forward(let to), .forwardAsAttachment(let to), .redirect(let to):

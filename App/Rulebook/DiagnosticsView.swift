@@ -15,7 +15,7 @@ struct DiagnosticsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("If something went wrong, copy this and paste it into your TestFlight feedback, or share it. It stays on your device until you send it.")
+                Text("If something went wrong, copy this into an email to support, or share it. Email addresses are left out, and nothing leaves your device until you send it.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)
