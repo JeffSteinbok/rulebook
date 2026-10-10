@@ -21,8 +21,14 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # The app's unit and UI tests gate the upload: a build that fails them never
+  # reaches TestFlight, the Monday freshness republish included.
+  app-tests:
+    uses: ./.github/workflows/app-tests.yml
+
   publish:
     name: Build and upload
+    needs: app-tests
     runs-on: macos-15
     environment: testflight
     timeout-minutes: 60
@@ -60,7 +66,7 @@ jobs:
         working-directory: App
         run: xcodegen generate
 
-      - name: Run tests
+      - name: Library tests
         run: swift test
 
       # YYYYMMDDHHmm, matching Scripts/testflight.sh. Build numbers must

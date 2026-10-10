@@ -1,0 +1,107 @@
+name: Ensure Fresh TestFlight Build
+
+# TestFlight builds expire after 90 days. Every Monday this asks App Store
+# Connect how old the newest Rulebook build is, and republishes through
+# Publish TestFlight (tests included) once it is 60 days old, so testers
+# never open an expired build. Same as jeffpardy-ios and jeffopolydeal-ios.
+on:
+  schedule:
+    - cron: "23 16 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    name: Check latest upload
+    runs-on: ubuntu-latest
+    outputs:
+      publish: ${{ steps.check.outputs.publish }}
+      release_notes: ${{ steps.check.outputs.release_notes }}
+
+    steps:
+      - name: Check newest App Store Connect build
+        id: check
+        env:
+          APPSTORE_APP_ID: ${{ vars.APPSTORE_APP_ID }}
+          APPSTORE_ISSUER_ID: ${{ vars.APPSTORE_ISSUER_ID }}
+          APPSTORE_API_KEY_ID: ${{ vars.APPSTORE_API_KEY_ID }}
+          APPSTORE_API_PRIVATE_KEY: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+        run: |
+          python3 -m pip install --quiet pyjwt cryptography
+          python3 <<'PY'
+          import datetime
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          import jwt
+
+          required = [
+              "APPSTORE_APP_ID",
+              "APPSTORE_ISSUER_ID",
+              "APPSTORE_API_KEY_ID",
+              "APPSTORE_API_PRIVATE_KEY",
+          ]
+          missing = [name for name in required if not os.environ.get(name)]
+          if missing:
+              raise SystemExit("Missing App Store Connect configuration: " + ", ".join(missing))
+
+          now = datetime.datetime.now(datetime.timezone.utc)
+          token = jwt.encode(
+              {
+                  "iss": os.environ["APPSTORE_ISSUER_ID"],
+                  "iat": now,
+                  "exp": now + datetime.timedelta(minutes=10),
+                  "aud": "appstoreconnect-v1",
+              },
+              os.environ["APPSTORE_API_PRIVATE_KEY"],
+              algorithm="ES256",
+              headers={"kid": os.environ["APPSTORE_API_KEY_ID"], "typ": "JWT"},
+          )
+
+          query = urllib.parse.urlencode(
+              {
+                  "filter[app]": os.environ["APPSTORE_APP_ID"],
+                  "sort": "-uploadedDate",
+                  "limit": "1",
+              }
+          )
+          request = urllib.request.Request(
+              "https://api.appstoreconnect.apple.com/v1/builds?" + query,
+              headers={"Authorization": "Bearer " + token},
+          )
+          with urllib.request.urlopen(request) as response:
+              payload = json.load(response)
+
+          builds = payload.get("data", [])
+          publish = not builds
+          notes = "Automated freshness release: no prior TestFlight build was found."
+          if builds:
+              uploaded = datetime.datetime.fromisoformat(
+                  builds[0]["attributes"]["uploadedDate"].replace("Z", "+00:00")
+              )
+              age = now - uploaded
+              publish = age >= datetime.timedelta(days=60)
+              notes = (
+                  "Automated freshness release: the previous TestFlight build "
+                  f"was uploaded {age.days} days ago."
+              )
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
+              output.write(f"publish={str(publish).lower()}\n")
+              output.write(f"release_notes={notes}\n")
+          print(notes)
+          print("Publish required:", publish)
+          PY
+
+  publish:
+    name: Publish stale build
+    needs: freshness
+    if: needs.freshness.outputs.publish == 'true'
+    uses: ./.github/workflows/testflight.yml
+    with:
+      release_notes: ${{ needs.freshness.outputs.release_notes }}
+    secrets: inherit
