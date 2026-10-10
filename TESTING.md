@@ -8,10 +8,15 @@ cheapest to most real.
 | --- | --- | --- | --- |
 | Library | `Tests/RulebookKitTests` | `swift test`, every PR | FakeGraph |
 | Fake ↔ Graph conformance | `GraphConformanceTests` | `swift test`, every PR | Recorded Graph traffic |
-| App logic | `App/RulebookTests` | Xcode / CI, every PR | FakeGraph through the real `GraphRuleStore` |
-| UI | `App/RulebookUITests` | Xcode / CI, every PR | `-demo` mailbox, `Rulebook.storekit` |
+| App logic | `App/RulebookTests` | Xcode; CI on main and on demand | FakeGraph through the real `GraphRuleStore` |
+| UI | `App/RulebookUITests` | Xcode; CI on main and on demand | `-demo` mailbox, `Rulebook.storekit` |
 | Live | `Tests/RulebookLiveTests` | By hand, before a release | The test mailbox |
 | Probe | `GraphProbe` | By hand, when Graph may have changed | The test mailbox |
+
+Pull requests run the library suite and an app build, the "Build and test"
+check that `main` requires, in a few minutes. The app's unit and UI tests run on
+every push to `main`. To run them on a branch first, start the CI workflow by
+hand: `gh workflow run CI --ref <branch>`.
 
 ## The fake, and why to trust it
 

@@ -5,6 +5,8 @@ on:
     branches: [main]
   push:
     branches: [main]
+  # The app's tests on demand, e.g. on a branch before opening a PR.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -16,12 +18,13 @@ concurrency:
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # The required check on pull requests: fast, a few minutes. The library
+  # suite includes GraphConformanceTests, so FakeGraph is checked against the
+  # recorded Graph traffic on every PR.
   build-and-test:
     name: Build and test
     runs-on: macos-15
-    timeout-minutes: 45
-    env:
-      SIMULATOR: iPhone 16
+    timeout-minutes: 30
 
     steps:
       - name: Check out repository
@@ -41,46 +44,55 @@ jobs:
       - name: Install XcodeGen
         run: brew install xcodegen
 
-      # App/project.yml is the source of truth and no scheme is committed,
-      # so the project has to be generated before xcodebuild can see one.
+      # App/project.yml is the source of truth, so the project is regenerated
+      # before xcodebuild sees it.
       - name: Generate Xcode project
         working-directory: App
         run: xcodegen generate
 
-      # A simulator destination and no signing: this proves the app compiles,
-      # which is all a pull request needs. Signing belongs to the TestFlight
-      # workflow, which is the only place the certificates exist.
-      - name: Build app and tests
+      # A generic simulator destination and no signing: this proves the app
+      # compiles. Signing belongs to the TestFlight workflow, which is the
+      # only place the certificates exist.
+      - name: Build app
         run: |
-          xcodebuild build-for-testing \
+          xcodebuild build \
             -project App/Rulebook.xcodeproj \
             -scheme Rulebook \
             -configuration Debug \
-            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
-            -derivedDataPath build \
+            -destination "generic/platform=iOS Simulator" \
             CODE_SIGNING_ALLOWED=NO
 
-      # View models and the editor against FakeGraph (RulebookTesting), whose
-      # behaviour `swift test` has just checked against the recorded Graph traffic.
-      - name: App unit tests
+  # The app's unit and UI tests. Most of their ~7 minutes is booting a
+  # simulator, so they run on main (and on demand) rather than gating every
+  # PR. One `xcodebuild test` runs both, so the simulator boots once.
+  app-tests:
+    name: App tests
+    if: github.event_name != 'pull_request'
+    runs-on: macos-15
+    timeout-minutes: 30
+    env:
+      SIMULATOR: iPhone 16
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Select latest stable Xcode
+        uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: latest-stable
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: App
+        run: xcodegen generate
+
+      - name: Unit and UI tests
         run: |
-          xcodebuild test-without-building \
+          xcodebuild test \
             -project App/Rulebook.xcodeproj \
             -scheme Rulebook \
             -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
-            -derivedDataPath build \
-            -only-testing:RulebookTests \
             CODE_SIGNING_ALLOWED=NO
-
-      # The real UI on the demo mailbox, free tier included. StoreKit answers
-      # from Rulebook.storekit via the scheme.
-      - name: UI tests
-        run: |
-          xcodebuild test-without-building \
-            -project App/Rulebook.xcodeproj \
-            -scheme Rulebook \
-            -destination "platform=iOS Simulator,name=${{ env.SIMULATOR }}" \
-            -derivedDataPath build \
-            -only-testing:RulebookUITests \
-            CODE_SIGNING_ALLOWED=NO
-
