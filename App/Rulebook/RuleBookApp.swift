@@ -8,7 +8,16 @@ struct RulebookApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     @State private var accounts = AccountStore()
-    @State private var pro = ProStore()
+    @State private var pro: ProStore = {
+        // Debug builds only: `-pro` unlocks against the real mailbox, so the
+        // paid paths can be tried and then locked again by relaunching
+        // without it. A release build ignores the flag.
+        #if DEBUG
+        ProStore(alwaysUnlocked: ProcessInfo.processInfo.arguments.contains("-pro"))
+        #else
+        ProStore()
+        #endif
+    }()
     @State private var tokens: MSALTokenProvider?
     @State private var bootError: String?
     @Environment(\.scenePhase) private var scenePhase
@@ -84,16 +93,21 @@ struct RootView: View {
 
     @Environment(ProStore.self) private var pro
 
-    @State private var model: RulesListViewModel?
+    /// The model and the mailbox it was built for, set together. Keying the
+    /// list's identity on `accounts.active?.id` instead let the switch land
+    /// one update before `rebuild()` ran: the list took its new identity with
+    /// the OLD model, captured it in @State, and kept showing — and writing
+    /// to, and picking folders from — the previous mailbox.
+    @State private var built: (accountID: String, model: RulesListViewModel)?
 
     var body: some View {
         Group {
-            if let model {
-                RulesListView(model: model, accounts: accounts, tokens: tokens)
+            if let built, built.accountID == accounts.active?.id {
+                RulesListView(model: built.model, accounts: accounts, tokens: tokens)
                     // RulesListView holds its model in @State, which SwiftUI
                     // keeps across updates. A new identity per mailbox is what
                     // makes a switch actually show, and write to, the new one.
-                    .id(accounts.active?.id)
+                    .id(built.accountID)
             } else {
                 ProgressView()
             }
@@ -102,7 +116,7 @@ struct RootView: View {
     }
 
     private func rebuild() {
-        guard let account = accounts.active else { model = nil; return }
+        guard let account = accounts.active else { built = nil; return }
         // Pinned to this mailbox's MSAL account, so nothing else can redirect it.
         let mailbox = tokens.tokenProvider(for: account.id)
         // Both stores are `any RuleStore`, so this is the only line that knows
@@ -110,13 +124,13 @@ struct RootView: View {
         // One folder directory for the store and the list, so the tree is
         // fetched once per mailbox rather than once each.
         let directory = GraphMailFolderDirectory(tokenProvider: mailbox)
-        let built = RulesListViewModel(
+        let model = RulesListViewModel(
             store: GraphRuleStore(client: GraphMessageRuleClient(tokenProvider: mailbox), folders: directory),
             folders: directory,
             profile: ProviderCatalog.outlook
         )
-        built.pro = pro
-        model = built
+        model.pro = pro
+        built = (account.id, model)
     }
 }
 

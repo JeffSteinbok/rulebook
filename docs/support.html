@@ -3,154 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rulebook — Support</title>
+<title>Rulebook · Support</title>
 <meta name="description" content="Help with Rulebook: signing in, permissions, broken rules, and how to report a problem.">
-<meta property="og:title" content="Rulebook — Support">
+<meta property="og:title" content="Rulebook · Support">
 <meta property="og:url" content="https://rulebook.steinbok.net/support.html">
+<meta name="theme-color" content="#1A4ED8">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="wordmark" href="./">RULEBOOK</a>
-    <div class="nav-links">
+<header class="band band-compact">
+  <div class="bar">
+    <a class="lockup" href="./"><svg class="glyph" viewBox="205 276 614 471" aria-hidden="true"><rect x="205" y="276" width="491" height="82" rx="41" fill="currentColor"/><rect x="205" y="470" width="491" height="82" rx="41" fill="currentColor"/><rect x="451" y="665" width="368" height="82" rx="41" fill="currentColor" fill-opacity="0.62"/></svg>Rulebook</a>
+    <nav class="bar-links">
       <a href="./">Home</a>
-      <a href="#report">Report a problem</a>
-      <a href="https://github.com/JeffSteinbok/Rulebook">GitHub</a>
-    </div>
+      <a href="privacy.html">Privacy</a>
+    </nav>
   </div>
-</nav>
+</header>
 
-<div class="container hero">
+<main class="container">
+
+<div class="page-head">
   <h1>Support</h1>
-  <div class="rule"></div>
   <p class="lede">
-    Rulebook is made by one person and developed in the open. The fastest way to
-    get something fixed is to open an issue.
+    Rulebook is developed in the open. The fastest way to get something fixed is
+    to open an issue on GitHub.
   </p>
-  <div class="hero-buttons">
+  <div class="btn-row">
     <a class="btn btn-primary" href="https://github.com/JeffSteinbok/Rulebook/issues/new">Open an issue</a>
-    <a class="btn btn-ghost" href="https://github.com/JeffSteinbok/Rulebook/issues">Browse existing issues</a>
+    <a class="btn btn-secondary" href="https://github.com/JeffSteinbok/Rulebook/issues">Browse existing issues</a>
   </div>
 </div>
 
-<section id="report" class="container">
-  <h2>Reporting a problem</h2>
-  <p>Include whatever of this you have — it usually decides how quickly something can be fixed:</p>
-  <ul>
-    <li>What you were doing, and what happened instead.</li>
-    <li>Whether the mailbox is a personal Microsoft account or a work/school one. They behave differently, and several bugs have only appeared on one of them.</li>
-    <li>The exact wording of any error. Rulebook deliberately shows the server's own message rather than hiding it behind "something went wrong".</li>
-    <li>The app version, from <strong>About Rulebook</strong> in the ••• menu.</li>
+<section id="report">
+  <div class="section-header">Reporting a problem</div>
+  <p>Include whatever of this you have. It usually decides how quickly something can be fixed.</p>
+  <ul class="rows">
+    <li><span class="row-title">What happened</span>
+      <span class="row-body">What you were doing, and what happened instead.</span></li>
+    <li><span class="row-title">Which kind of account</span>
+      <span class="row-body">A personal Microsoft account or a work or school one. They behave differently, and several bugs have only appeared on one of them.</span></li>
+    <li><span class="row-title">The exact error</span>
+      <span class="row-body">Rulebook deliberately shows the server's own message rather than hiding it behind "something went wrong".</span></li>
+    <li><span class="row-title">The app version</span>
+      <span class="row-body">From <strong>About Rulebook</strong> in the ••• menu.</span></li>
   </ul>
-  <div class="note">
-    <p>Please don't paste message contents or full email addresses into an issue.
-    A rule's name and the shape of what failed is nearly always enough.</p>
-  </div>
-</section>
-
-<section id="signin" class="container">
-  <h2>Signing in</h2>
-
-  <h3>The sign-in screen never appears, or fails immediately</h3>
-  <p>
-    Sign-in is presented by Microsoft, not by Rulebook. If it fails before the
-    Microsoft page appears, the app couldn't start the request at all — worth an
-    issue, with the message you saw.
-  </p>
-
-  <h3>My organisation blocks it</h3>
-  <p>
-    Some tenants require an administrator to approve an app before anyone can
-    use it. That approval is theirs to give, not something the app can work
-    around. The error names the app and the permissions, so it can be forwarded
-    to whoever administers your tenant.
-  </p>
-
-  <h3>Removing Rulebook's access</h3>
-  <p>
-    Sign out from <strong>Manage accounts</strong>, which removes the token from
-    the phone. To revoke the grant itself, use
-    <a href="https://account.live.com/consent/Manage">account.live.com/consent/Manage</a>
-    for a personal Microsoft account, or
-    <a href="https://myapps.microsoft.com">myapps.microsoft.com</a> for a work or
-    school account.
+  <p class="caption">
+    Please don't paste message contents or full email addresses into an issue.
+    A rule's name and the shape of what failed is nearly always enough.
   </p>
 </section>
 
-<section id="rules" class="container">
-  <h2>Rules</h2>
-
-  <h3>A rule is marked as not working</h3>
+<section id="signin">
+  <div class="section-header">Signing in</div>
   <p>
-    Three different things get reported that way. <strong>Rule is in error</strong>
-    comes from Exchange itself. <strong>Folder is missing</strong> means the rule
-    files into a folder that no longer exists — Exchange still reports that rule
-    as healthy, which is why Rulebook checks separately. <strong>Never runs</strong>
-    means an earlier rule stops processing before this one is reached; moving it
-    up fixes it.
+    Rulebook works with both kinds of Microsoft account: personal accounts
+    (Outlook.com, Hotmail, Live) and Microsoft&nbsp;365 work or school accounts.
   </p>
-
-  <h3>"Managed by your organisation"</h3>
-  <p>
-    Your administrator owns that rule. It can be read but not changed, disabled
-    or deleted, so those controls are shown inactive rather than failing when
-    tapped.
-  </p>
-
-  <h3>There's no "does not contain"</h3>
-  <p>
-    Outlook rules have no negative match. Exclusions are expressed as exceptions
-    instead: add the thing to the <strong>Unless</strong> section, and the rule is
-    skipped when it matches. This is a limitation of the mail service, not of the
-    app, and works out the same way.
-  </p>
-
-  <h3>Order matters</h3>
-  <p>
-    Rules run top to bottom, and one carrying "stop processing later rules" ends
-    evaluation for that message. If a rule seems to be ignored, check what sits
-    above it.
-  </p>
-
-  <h3>A change didn't save</h3>
-  <p>
-    Edits apply on the phone first and are then pushed to the server. If the push
-    fails, the change is kept and the rule is marked as not saved yet, with the
-    option to retry or discard — a dropped connection never silently undoes your
-    work. Deletes are the exception: a rule that looks deleted but is still
-    filing mail is worse than an error, so a failed delete puts the rule back.
-  </p>
+  <ul class="rows">
+    <li>
+      <span class="row-title">The sign-in screen never appears, or fails immediately</span>
+      <span class="row-body">Sign-in is presented by Microsoft, not by Rulebook. If it fails before the Microsoft page appears, the app couldn't start the request at all. That's worth an issue, with the message you saw.</span>
+    </li>
+    <li>
+      <span class="row-title">My organisation blocks it</span>
+      <span class="row-body">Some organisations require an administrator to approve an app before anyone can use it. That approval is theirs to give, not something the app can work around. The error names the app and the permissions, so it can be forwarded to whoever runs your organisation's Microsoft&nbsp;365.</span>
+    </li>
+    <li>
+      <span class="row-title">Removing Rulebook's access</span>
+      <span class="row-body">Open <strong>Manage accounts</strong>, tap the mailbox, and sign out. That removes the token from the phone. To revoke the grant itself, use <a href="https://account.live.com/consent/Manage">account.live.com/consent/Manage</a> for a personal Microsoft account, or <a href="https://myapps.microsoft.com">myapps.microsoft.com</a> for a work or school account.</span>
+    </li>
+  </ul>
 </section>
 
-<section id="privacy" class="container">
-  <h2>Privacy</h2>
+<section id="rules">
+  <div class="section-header">Rules</div>
+  <ul class="rows">
+    <li>
+      <span class="row-title">A rule is marked as not working</span>
+      <span class="row-body">Four different things get reported that way. <strong>Rule is in error</strong> comes from Outlook itself. <strong>Folder is missing</strong> means the rule files into a folder that no longer exists; Outlook still reports that rule as healthy, which is why Rulebook checks separately. <strong>Never runs</strong> means an earlier rule stops processing before this one is reached, and moving it up fixes it. <strong>Runs on every message</strong> means the rule has no conditions, so it acts on all incoming mail; add a condition, or add the opposite as an exception.</span>
+    </li>
+    <li>
+      <span class="row-title">"Managed by your organisation"</span>
+      <span class="row-body">Your administrator owns that rule. It can be read but not changed, disabled or deleted, so those controls are shown inactive rather than failing when tapped.</span>
+    </li>
+    <li>
+      <span class="row-title">There's no "does not contain"</span>
+      <span class="row-body">Outlook rules have no negative match. Exclusions are expressed as exceptions instead: add the thing to the <strong>Unless</strong> section, and the rule is skipped when it matches. This is a limitation of the mail service, not of the app, and works out the same way.</span>
+    </li>
+    <li>
+      <span class="row-title">Order matters</span>
+      <span class="row-body">Rules run top to bottom, and one carrying "stop processing later rules" ends evaluation for that message. If a rule seems to be ignored, check what sits above it.</span>
+    </li>
+    <li>
+      <span class="row-title">A change didn't save</span>
+      <span class="row-body">Edits apply on the phone first and are then pushed to the server. If the push fails, the change is kept and the rule is marked as not saved yet, with the option to retry or discard, so a dropped connection never silently undoes your work. Deletes are the exception: a rule that looks deleted but is still filing mail is worse than an error, so a failed delete puts the rule back.</span>
+    </li>
+    <li>
+      <span class="row-title">Changing rules needs Rulebook Pro</span>
+      <span class="row-body">Viewing your rules is free. Reordering, enabling or disabling, editing, creating, duplicating and deleting rules need Rulebook Pro, a one-time in-app purchase with no subscription. <strong>Restore purchase</strong> on the Rulebook Pro screen brings it back on a new phone.</span>
+    </li>
+  </ul>
+</section>
+
+<section id="privacy">
+  <div class="section-header">Privacy</div>
   <p>
     Rulebook stores no mail. It reads and writes rules on your mail server, and
     those rules keep running when the app is closed. There is no Rulebook
-    account, no analytics, and no server of its own — the app talks only to
-    Microsoft.
+    account, no analytics, and no server of its own. The app talks only to
+    Microsoft, plus Apple's App Store for the Rulebook Pro purchase.
   </p>
   <p>
     Reading your folder list requires a permission that also grants message
     senders, recipients and subjects. Rulebook does not read them, but the grant
     is broader than the app's use of it, and
-    <a href="./#permissions">why that is</a> is worth knowing.
+    <a href="./#permissions">why that is</a> is worth knowing. The full
+    <a href="privacy.html">privacy policy</a> has the details.
   </p>
 </section>
 
+</main>
+
 <footer>
   <div class="container">
-    <p>Made with ♥ by <a href="https://github.com/JeffSteinbok">Jeff Steinbok</a> ·
-       <a href="./">Home</a> ·
-       <a href="./privacy.html">Privacy</a> ·
-       <a href="https://github.com/JeffSteinbok/Rulebook">Source</a></p>
+    <span class="made">Made with ♥ by Jeff Steinbok</span>
+    <a href="./">Home</a>
+    <a href="privacy.html">Privacy</a>
   </div>
 </footer>
 

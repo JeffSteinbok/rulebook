@@ -2,11 +2,11 @@ Your mail rules run on the server, filing, forwarding, and flagging messages
 before you ever see them. On the desktop you can manage them. On your phone,
 until now, you couldn't.
 
-Rulebook puts your Microsoft 365 and Outlook.com rules on your iPhone — the
+Rulebook puts your Microsoft 365 and Outlook.com rules on your iPhone: the
 real, server-side rules, not a copy that only works while an app is running.
 Edit one here and it takes effect for every device you read mail on.
 
-FREE: SEE WHAT YOUR RULES ACTUALLY DO
+Free: see what your rules actually do
 
 • Every rule in plain language. "Any of 2 conditions → Move to 'Company'" reads
   the way you'd explain it out loud, so you can tell what a rule does without
@@ -15,34 +15,33 @@ FREE: SEE WHAT YOUR RULES ACTUALLY DO
   into it keeps reporting as healthy while the mail just stays in your inbox.
   Rulebook flags that and tells you why it matters.
 • See which rules are off, which your administrator manages, and what order
-  they run in — order decides everything.
-• Search across names, senders, and folders.
+  they run in. Order decides everything.
 
-All of that is free, against your own mailbox, with no trial period.
+All of that is free, against your own mailbox.
 
-RULEBOOK PRO: CHANGE THEM
+Rulebook Pro: change them
 
 A single one-time purchase. No subscription.
 
 • Create, edit, and delete rules
-• Turn a rule off for a week and back on
-• Reorder with a drag — a rule that stops processing hides everything under it
+• Turn a rule off and back on without deleting it
+• Reorder with a drag. A rule that stops processing can hide the rules under it
 • Fix the broken ones, including picking a new folder for a rule that lost its
   destination
 • An editor that only offers what Outlook can really do, and explains the
   awkward parts instead of letting you save something that silently fails
 
-BUILT FOR THE MAILBOX YOU HAVE
+Built for the mailbox you have
 
 Rules are read from and written to your mailbox through Microsoft Graph. There
 is no Rulebook account, no Rulebook server, and no copy of your rules anywhere
-but your mailbox and your phone. Sign in with Microsoft, and your organization's
+but your mailbox. Sign in with Microsoft, and your organization's
 existing security policies apply unchanged.
 
-Rules your administrator manages are shown, clearly marked, and left read-only —
+Rules your administrator manages are shown, clearly marked, and left read-only.
 Rulebook won't let you break something you can't fix.
 
-PRIVACY
+Privacy
 
 Rulebook reads and writes your rules, and reads your folder names and account
 name. It does not read your mail. Listing folders does require a Microsoft
@@ -51,5 +50,5 @@ says so plainly rather than leaving you to find out at the consent screen.
 Message bodies are never requested at all. There is no analytics SDK, no
 tracking, and no advertising.
 
-Requires a Microsoft 365, Office 365, or Outlook.com account. Not affiliated
-with Microsoft.
+Works with personal Microsoft accounts (Outlook.com, Hotmail, Live) and
+Microsoft 365 work or school accounts. Not affiliated with Microsoft.

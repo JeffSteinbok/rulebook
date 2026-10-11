@@ -78,7 +78,7 @@ struct ConditionEditor: View {
 
         case .header(let name, let match):
             if model.profile.capabilities.supportsNamedHeaders {
-                TextField("Header name — e.g. X-Mailer", text: Binding(
+                TextField("Header name, e.g. X-Mailer", text: Binding(
                     get: { name ?? "" },
                     set: { condition = .header(name: $0.isEmpty ? nil : $0, match: match) }
                 ))
@@ -179,7 +179,7 @@ struct ConditionEditor: View {
 
             ForEach(Array(displayedValues(for: match).indices), id: \.self) { index in
                 HStack(spacing: 8) {
-                    TextField("Value — e.g. accounts@", text: Binding(
+                    TextField("Value, e.g. accounts@", text: Binding(
                         get: { displayedValues(for: match)[index] },
                         set: { updateMatchValue($0, at: index, in: match) }
                     ))

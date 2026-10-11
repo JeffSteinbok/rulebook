@@ -74,6 +74,8 @@ enum DS {
     enum Font {
         static let screenTitle   = SwiftUI.Font.custom("Archivo-Bold", size: 34, relativeTo: .largeTitle)
         static let sectionTitle  = SwiftUI.Font.custom("Archivo-Bold", size: 30, relativeTo: .title)
+        /// The list's title, sharing the navigation bar's row with its buttons.
+        static let barTitle      = SwiftUI.Font.custom("Archivo-Bold", size: 28, relativeTo: .title2)
         static let display       = SwiftUI.Font.custom("Archivo-Black", size: 40, relativeTo: .largeTitle)
         static let rowTitle      = SwiftUI.Font.custom("Archivo-Bold", size: 17, relativeTo: .body)
         static let button        = SwiftUI.Font.custom("Archivo-SemiBold", size: 17, relativeTo: .body)
@@ -123,6 +125,10 @@ struct SectionHeader: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, DS.Metric.gutter)
             .padding(.bottom, 8)
+            // As a List section header the system adds its own inset on top
+            // of the gutter, which pushed headers in past the rows they head.
+            // The gutter alone lines them up; outside a List this is inert.
+            .listRowInsets(EdgeInsets())
     }
 }
 
@@ -209,6 +215,9 @@ struct StateDot: View {
 struct DetailRow: View {
     let key: String
     let value: String
+    /// Styles the value as a link — accent, underlined, with an outward
+    /// arrow — so a tappable row doesn't read like plain text.
+    var isLink = false
 
     @Environment(\.dynamicTypeSize) private var typeSize
 
@@ -217,17 +226,32 @@ struct DetailRow: View {
             HStack(alignment: .firstTextBaseline) {
                 label
                 Spacer(minLength: 12)
-                Text(value)
-                    .font(DS.Font.secondary)
+                valueText
                     .multilineTextAlignment(.trailing)
             }
             VStack(alignment: .leading, spacing: 4) {
                 label
-                Text(value).font(DS.Font.secondary)
+                valueText
             }
         }
         .padding(.vertical, 12)
         .accessibilityElement(children: .combine)
+    }
+
+    @ViewBuilder
+    private var valueText: some View {
+        if isLink {
+            HStack(spacing: 4) {
+                Text(value).underline()
+                Image(systemName: "arrow.up.right")
+                    .imageScale(.small)
+                    .accessibilityHidden(true)
+            }
+            .font(DS.Font.secondary)
+            .foregroundStyle(DS.Palette.accent700)
+        } else {
+            Text(value).font(DS.Font.secondary)
+        }
     }
 
     private var label: some View {

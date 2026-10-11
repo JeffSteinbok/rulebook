@@ -1,7 +1,7 @@
 First release.
 
 Read your Microsoft 365 or Outlook.com mail rules in plain language, see which
-ones are off, and find the ones that stopped working without telling you — free.
+ones are off, and find the ones that stopped working without telling you, free.
 
-Rulebook Pro, a one-time purchase, unlocks creating, editing, deleting and
-reordering them.
+Rulebook Pro, a one-time purchase with no subscription, unlocks creating,
+editing, deleting, reordering, and turning them on or off.

@@ -15,7 +15,7 @@ struct PaywallView: View {
     private let included = [
         "Edit, create, and delete rules",
         "Turn rules on and off",
-        "Reorder them — order decides what runs",
+        "Reorder them: order decides what runs",
         "Fix the rules that quietly stopped working",
     ]
 
@@ -138,12 +138,12 @@ struct PaywallView: View {
     private var pitch: String {
         let price = pro.product.map { " of \($0.displayPrice)" } ?? ""
         if pro.canStartTrial {
-            return "Reading your rules is free and always will be. Try Pro free for \(days) days — nothing is charged and nothing renews. After that, changing rules is a one-time purchase\(price)."
+            return "Reading your rules is free and always will be. Try Pro free for \(days) days. Nothing is charged and nothing renews. After that, changing rules is a one-time purchase\(price)."
         }
         if pro.hasTrialEnded {
-            return "Your \(days)-day free trial has ended. Reading your rules is still free; changing them is a one-time purchase\(price) — no subscription."
+            return "Your \(days)-day free trial has ended. Reading your rules is still free; changing them is a one-time purchase\(price), with no subscription."
         }
-        return "Reading your rules is free and always will be. Changing them is a one-time purchase — no subscription."
+        return "Reading your rules is free and always will be. Changing them is a one-time purchase, with no subscription."
     }
 
     private var trialTitle: String {
@@ -153,6 +153,36 @@ struct PaywallView: View {
     private var buyTitle: String {
         if pro.isWorking { return "Working…" }
         guard let product = pro.product else { return "Unavailable right now" }
-        return "Unlock Pro — \(product.displayPrice)"
+        return "Unlock Pro for \(product.displayPrice)"
+    }
+}
+
+// MARK: - Lock hint
+
+/// A paid control's title, with a padlock beside it while writes are gated.
+/// Every paid control uses this, so a free user sees which ones cost money
+/// before tapping rather than learning it from the paywall.
+///
+/// An explicit HStack, not Label: toolbars and some button styles impose an
+/// icon-only label style, which drops the word and leaves an unexplained
+/// padlock.
+struct LockableTitle: View {
+    let title: String
+    let isLocked: Bool
+
+    init(_ title: String, isLocked: Bool) {
+        self.title = title
+        self.isLocked = isLocked
+    }
+
+    var body: some View {
+        HStack(spacing: 4) {
+            Text(title)
+            if isLocked {
+                Image(systemName: "lock.fill")
+                    .imageScale(.small)
+                    .accessibilityLabel("Requires Pro")
+            }
+        }
     }
 }

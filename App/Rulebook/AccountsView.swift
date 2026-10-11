@@ -2,10 +2,13 @@ import SwiftUI
 import UIKit
 import RulebookKit
 
-/// Mailboxes — the iOS selection-list pattern.
+/// Mailboxes — a list to look at, not a switch.
 ///
-/// Tap a row to switch; a checkmark marks the active one. Sign-out is a single
-/// destructive row in its own section below, not a button paired on every row.
+/// Switching lives under the title on the rules list. Here a row opens that
+/// mailbox's details, and the active one is labelled rather than ticked, so
+/// looking around never changes what the rules list shows. Adding a mailbox,
+/// or signing out of the active one, does change it — and returns to the
+/// list, since the whole screen is rebuilt for the new mailbox.
 struct AccountsView: View {
     let accounts: AccountStore
     let tokens: MSALTokenProvider
@@ -15,76 +18,36 @@ struct AccountsView: View {
     let lastSync: Date?
 
     @State private var isAdding = false
-    @State private var confirmSignOut = false
-    @Environment(\.dynamicTypeSize) private var typeSize
 
     var body: some View {
         List {
-            Section {
-                if accounts.isEmpty {
-                    Text("No mailbox is connected. Add one and Rulebook will load the rules already running on its server.")
-                        .font(DS.Font.body)
-                        .foregroundStyle(DS.Palette.ink60)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, 20)
-                        .listRowBackground(DS.Palette.ground)
-                } else {
-                    ForEach(accounts.accounts) { account in
-                        accountRow(account)
-                    }
-                }
-            } header: {
-                SectionHeader(text: "Rules are shown for")
-            }
-
-            if let active = accounts.active {
-                Section {
-                    listRow { DetailRow(key: "Address", value: active.address) }
-                    listRow { DetailRow(key: "Server", value: "outlook.office365.com") }
-                    listRow { DetailRow(key: "Rules on server", value: String(ruleCount)) }
-                    listRow {
-                        DetailRow(
-                            key: "Last sync",
-                            value: lastSync?.formatted(date: .omitted, time: .shortened) ?? "Not synced"
+            if accounts.isEmpty {
+                Text("No mailbox is connected. Add one and Rulebook will load the rules already running on its server.")
+                    .font(DS.Font.body)
+                    .foregroundStyle(DS.Palette.ink60)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.vertical, 20)
+                    .listRowBackground(DS.Palette.ground)
+            } else {
+                ForEach(accounts.accounts) { account in
+                    let isActive = accounts.active?.id == account.id
+                    // A destination view, not a value plus
+                    // `.navigationDestination` — the latter is invisible to
+                    // the stack from inside a lazily built List.
+                    NavigationLink {
+                        AccountDetailView(
+                            account: account,
+                            isActive: isActive,
+                            accounts: accounts,
+                            tokens: tokens,
+                            ruleCount: isActive ? ruleCount : nil,
+                            lastSync: isActive ? lastSync : nil
                         )
+                    } label: {
+                        accountRow(account, isActive: isActive)
                     }
-                } header: {
-                    SectionHeader(text: "This mailbox").padding(.top, 12)
-                }
-
-                Section {
-                    Button("Sign out of this mailbox", role: .destructive) {
-                        confirmSignOut = true
-                    }
-                    .font(DS.Font.rowTitle)
-                    .frame(minHeight: 56)
                     .listRowBackground(DS.Palette.ground)
                     .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
-
-                    Text("Signing out removes Rulebook's access token. The rules stay on the server and keep running.")
-                        .font(DS.Font.caption)
-                        .foregroundStyle(DS.Palette.ink60)
-                        .fixedSize(horizontal: false, vertical: true)
-                        .padding(.vertical, 12)
-                        .listRowBackground(DS.Palette.ground)
-                }
-                .confirmationDialog(
-                    "Sign out of \(active.address)?",
-                    isPresented: $confirmSignOut,
-                    titleVisibility: .visible
-                ) {
-                    Button("Sign out", role: .destructive) {
-                        // This mailbox's tokens only, never whichever MSAL
-                        // touched last.
-                        Task {
-                            do {
-                                try await tokens.signOut(accountID: active.id)
-                            } catch {
-                                DiagnosticsLog.shared.append("sign-out failed: \((error as NSError).domain) \((error as NSError).code)")
-                            }
-                            accounts.remove(active)
-                        }
-                    }
                 }
             }
         }
@@ -102,39 +65,110 @@ struct AccountsView: View {
         }
     }
 
-    private func accountRow(_ account: Account) -> some View {
-        let isActive = accounts.active?.id == account.id
-
-        return Button {
-            accounts.activate(account)
-        } label: {
-            HStack(spacing: 14) {
-                Image(systemName: "checkmark")
-                    .font(.callout.weight(.semibold))
-                    .foregroundStyle(DS.Palette.accent)
-                    .opacity(isActive ? 1 : 0)
-                    .frame(width: 22)
-                    .accessibilityHidden(true)
-
-                VStack(alignment: .leading, spacing: 3) {
-                    Text(account.displayName)
-                        .font(DS.Font.rowTitle)
-                        .foregroundStyle(DS.Palette.ink)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text(account.address)
-                        .font(DS.Font.caption)
-                        .foregroundStyle(DS.Palette.ink60)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                Spacer(minLength: 0)
+    private func accountRow(_ account: Account, isActive: Bool) -> some View {
+        HStack(spacing: 12) {
+            VStack(alignment: .leading, spacing: 3) {
+                Text(account.displayName)
+                    .font(DS.Font.rowTitle)
+                    .foregroundStyle(DS.Palette.ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(account.address)
+                    .font(DS.Font.caption)
+                    .foregroundStyle(DS.Palette.ink60)
+                    .fixedSize(horizontal: false, vertical: true)
             }
-            .frame(minHeight: DS.Metric.rowMinHeight)
+            Spacer(minLength: 0)
+            if isActive {
+                Text("Active")
+                    .font(DS.Font.captionBold)
+                    .foregroundStyle(DS.Palette.accent700)
+            }
         }
-        .listRowBackground(DS.Palette.ground)
-        .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(account.displayName), \(account.address)")
-        .accessibilityAddTraits(isActive ? [.isButton, .isSelected] : .isButton)
+        .frame(minHeight: DS.Metric.rowMinHeight)
+        .accessibilityElement(children: .combine)
+    }
+}
+
+/// One mailbox's facts and its sign-out. Opening it doesn't switch to it.
+private struct AccountDetailView: View {
+    let account: Account
+    let isActive: Bool
+    let accounts: AccountStore
+    let tokens: MSALTokenProvider
+    /// Only known for the active mailbox — the one whose rules are loaded.
+    let ruleCount: Int?
+    let lastSync: Date?
+
+    @State private var confirmSignOut = false
+    @State private var signOutFailed = false
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        List {
+            Section {
+                listRow { DetailRow(key: "Address", value: account.address) }
+                listRow { DetailRow(key: "Server", value: "outlook.office365.com") }
+                listRow { DetailRow(key: "Status", value: isActive ? "Active, shown on the rules list" : "Not active") }
+                if let ruleCount {
+                    listRow { DetailRow(key: "Rules on server", value: String(ruleCount)) }
+                    listRow {
+                        DetailRow(
+                            key: "Last sync",
+                            value: lastSync?.formatted(date: .omitted, time: .shortened) ?? "Not synced"
+                        )
+                    }
+                }
+            }
+
+            Section {
+                Button("Sign out of this mailbox", role: .destructive) {
+                    confirmSignOut = true
+                }
+                .font(DS.Font.rowTitle)
+                .frame(minHeight: 56)
+                .listRowBackground(DS.Palette.ground)
+                .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
+
+                Text("Signing out removes Rulebook's access token. The rules stay on the server and keep running.")
+                    .font(DS.Font.caption)
+                    .foregroundStyle(DS.Palette.ink60)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .padding(.vertical, 12)
+                    .listRowBackground(DS.Palette.ground)
+            }
+        }
+        .listStyle(.plain)
+        .background(DS.Palette.ground)
+        .navigationTitle(account.displayName)
+        .navigationBarTitleDisplayMode(.inline)
+        .confirmationDialog(
+            "Sign out of \(account.address)?",
+            isPresented: $confirmSignOut,
+            titleVisibility: .visible
+        ) {
+            Button("Sign out", role: .destructive) {
+                // This mailbox's tokens only, never whichever MSAL touched last.
+                Task {
+                    do {
+                        try await tokens.signOut(accountID: account.id)
+                    } catch {
+                        // Keep the mailbox: removing it while its token stays
+                        // in the Keychain would claim a sign-out that didn't
+                        // happen, and re-adding it would skip the sign-in.
+                        DiagnosticsLog.shared.append("sign-out failed: \((error as NSError).domain) \((error as NSError).code)")
+                        signOutFailed = true
+                        return
+                    }
+                    accounts.remove(account)
+                    dismiss()
+                }
+            }
+        }
+        .alert("Couldn't sign out", isPresented: $signOutFailed) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Rulebook couldn't remove this mailbox's token from the phone, so it's still signed in. Try again, or restart the phone and try again.")
+        }
     }
 
     /// The list-row chrome every detail row shares.
@@ -149,6 +183,7 @@ struct AccountsView: View {
 
 /// App info only. Mailbox facts live on the Mailboxes screen.
 struct AboutView: View {
+    @Environment(\.dynamicTypeSize) private var typeSize
     private static let supportURL = URL(string: "https://rulebook.steinbok.net/support.html")!
 
     private var version: String {
@@ -167,12 +202,26 @@ struct AboutView: View {
     var body: some View {
         List {
             Section {
-                VStack(alignment: .leading, spacing: 14) {
-                    Text("Rulebook")
-                        .font(DS.Font.display)
-                    Text("Outlook mail rules — managed on mobile.")
-                        .font(DS.Font.body)
-                        .fixedSize(horizontal: false, vertical: true)
+                let header = typeSize >= .accessibility1
+                    ? AnyLayout(VStackLayout(alignment: .leading, spacing: 12))
+                    : AnyLayout(HStackLayout(alignment: .center, spacing: 16))
+                header {
+                    // The app icon — the one place inside the app it appears,
+                    // so About matches what's on the home screen.
+                    Image("AppLogo")
+                        .resizable()
+                        .frame(width: 72, height: 72)
+                        .clipShape(.rect(cornerRadius: 16, style: .continuous))
+                        .accessibilityHidden(true)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Rulebook")
+                            .font(DS.Font.display)
+                        // Two set lines, like the splash screen.
+                        Text("Outlook mail rules,\nmanaged on mobile.")
+                            .font(DS.Font.body)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
                 }
                 .padding(.bottom, 12)
                 .listRowBackground(DS.Palette.ground)
@@ -188,7 +237,7 @@ struct AboutView: View {
                     .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
 
                 Link(destination: Self.supportURL) {
-                    DetailRow(key: "Support", value: "rulebook.steinbok.net")
+                    DetailRow(key: "Support", value: "https://rulebook.steinbok.net/support.html", isLink: true)
                 }
                 .copyable(Self.supportURL.absoluteString, label: "Copy link")
                 .listRowBackground(DS.Palette.ground)
@@ -208,7 +257,7 @@ struct AboutView: View {
             }
 
             Section {
-                Text("Rulebook never stores your mail. It reads and writes the rules on your Exchange server, and those rules keep running when the app is closed.")
+                Text("Rulebook never stores your mail. It reads and writes the rules on your mail server, and those rules keep running when the app is closed.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)

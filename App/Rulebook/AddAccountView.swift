@@ -56,7 +56,7 @@ struct AddAccountView: View {
             VStack(alignment: .leading, spacing: 12) {
                 Text("Connect your Outlook mailbox")
                     .font(DS.Font.sectionTitle)
-                Text("Microsoft runs the whole sign-in — you'll enter the mailbox address and password on their page. Rulebook never sees your password; it receives a token you can revoke at any time.")
+                Text("Microsoft runs the whole sign-in. You'll enter the mailbox address and password on their page. Rulebook never sees your password; it receives a token you can revoke at any time.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)
@@ -123,7 +123,7 @@ struct AddAccountView: View {
             listRow { DetailRow(key: "Rules found", value: ruleCount.map(String.init) ?? "—") }
             listRow { DetailRow(key: "Access", value: "Revocable token") }
 
-            Text("These rules were already running on the server. Nothing has been changed — open the list to review them.")
+            Text("These rules were already running on the server. Nothing has been changed. Open the list to review them.")
                 .font(DS.Font.caption)
                 .foregroundStyle(DS.Palette.ink60)
                 .padding(.vertical, 16)
@@ -209,7 +209,7 @@ struct GateView: View {
         VStack(alignment: .leading, spacing: 20) {
             Spacer()
 
-            Text("RULEBOOK")
+            Text("Rulebook")
                 .font(.custom("Archivo-Black", size: 68, relativeTo: .largeTitle))
                 .foregroundStyle(.white)
                 .lineLimit(1)
@@ -220,7 +220,7 @@ struct GateView: View {
                 .fill(.white)
                 .frame(width: 56, height: 3)
 
-            Text("Outlook mail rules — managed on mobile.")
+            Text("Outlook mail rules,\nmanaged on mobile.")
                 .font(.custom("Archivo-Regular", size: 22, relativeTo: .title3))
                 .foregroundStyle(.white)
                 .fixedSize(horizontal: false, vertical: true)

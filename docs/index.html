@@ -3,146 +3,123 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rulebook — Outlook mail rules, managed on mobile</title>
-<meta name="description" content="Read, fix and write the mail rules already running on your Microsoft 365 mailbox, from your phone. Open source, iOS.">
-<meta property="og:title" content="Rulebook — Outlook mail rules, managed on mobile">
-<meta property="og:description" content="Read, fix and write the mail rules already running on your Microsoft 365 mailbox, from your phone.">
+<title>Rulebook · Outlook mail rules, managed on mobile</title>
+<meta name="description" content="Read, fix and write the mail rules already running on your Outlook.com, Hotmail, Live or Microsoft 365 mailbox, from your phone. For iPhone.">
+<meta property="og:title" content="Rulebook · Outlook mail rules, managed on mobile">
+<meta property="og:description" content="Read, fix and write the mail rules already running on your Outlook.com, Hotmail, Live or Microsoft 365 mailbox, from your phone.">
 <meta property="og:url" content="https://rulebook.steinbok.net/">
+<meta name="theme-color" content="#1A4ED8">
 <link rel="icon" type="image/png" href="icon.png">
 <link rel="apple-touch-icon" href="icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<nav>
-  <div class="nav-inner">
-    <a class="wordmark" href="./">RULEBOOK</a>
-    <div class="nav-links">
-      <a href="#what">What it does</a>
-      <a href="#permissions">Permissions</a>
+
+<header class="band">
+  <div class="bar">
+    <a class="lockup" href="./"><svg class="glyph" viewBox="205 276 614 471" aria-hidden="true"><rect x="205" y="276" width="491" height="82" rx="41" fill="currentColor"/><rect x="205" y="470" width="491" height="82" rx="41" fill="currentColor"/><rect x="451" y="665" width="368" height="82" rx="41" fill="currentColor" fill-opacity="0.62"/></svg>Rulebook</a>
+    <nav class="bar-links">
+      <a href="#what">Features</a>
+      <a href="#pricing">Pricing</a>
       <a href="support.html">Support</a>
-      <a href="https://github.com/JeffSteinbok/Rulebook">GitHub</a>
-    </div>
+    </nav>
   </div>
-</nav>
+  <div class="hero">
+    <h1>Outlook mail rules,<br>managed on mobile.</h1>
+    <p class="hero-accounts">
+      For personal Microsoft accounts (Outlook.com, Hotmail, Live) and
+      Microsoft&nbsp;365 work or school accounts.
+    </p>
+    <a class="btn btn-white" href="#what">See what it does</a>
+  </div>
+</header>
 
-<div class="container hero">
-  <h1>Mail rules,<br>managed on mobile.</h1>
-  <div class="rule"></div>
-  <p class="lede">
+<main class="container">
+
+<section id="what">
+  <div class="section-header">What it does</div>
+  <p class="intro">
     Your Outlook rules run on the server, filing and forwarding mail whether or
-    not anything is open. Rulebook lets you read them, spot the broken ones and
-    write new ones — from your phone.
+    not anything is open. Rulebook reads and writes those same rules from your
+    phone. It runs no filtering of its own, so nothing stops when you close it.
   </p>
-  <div class="hero-buttons">
-    <a class="btn btn-primary" href="https://github.com/JeffSteinbok/Rulebook">View on GitHub</a>
-    <a class="btn btn-ghost" href="support.html">Support</a>
-  </div>
-</div>
-
-<section id="what" class="container">
-  <h2>What it does</h2>
-  <p class="section-lede">
-    Rulebook talks to the rules already on your Microsoft&nbsp;365 mailbox. It
-    doesn't run its own filtering, and nothing stops working when you close it.
-  </p>
-
-  <div class="grid">
-    <div class="card">
-      <h3>Read what's actually running</h3>
-      <p>Every rule in evaluation order, in plain words, with folder names instead of opaque identifiers.</p>
-    </div>
-    <div class="card">
-      <h3>Find the broken ones</h3>
-      <p>Outlook reports a rule as healthy even when it files into a folder that no longer exists. Rulebook checks that itself.</p>
-    </div>
-    <div class="card">
-      <h3>Write new rules</h3>
-      <p>Conditions, exceptions and actions, offering only what your provider can actually express.</p>
-    </div>
-    <div class="card">
-      <h3>Reorder and disable</h3>
-      <p>Order decides which rule wins. Drag to change it, or switch a rule off without deleting it.</p>
-    </div>
-  </div>
+  <ul class="rows">
+    <li>
+      <span class="row-title">Read what's actually running</span>
+      <span class="row-body">Every rule in the order it runs, in plain words, with folder names instead of opaque identifiers.</span>
+    </li>
+    <li>
+      <span class="row-title">Find the broken ones</span>
+      <span class="row-body">Outlook reports a rule as healthy even when it files into a folder that no longer exists. Rulebook checks for that itself.</span>
+    </li>
+    <li>
+      <span class="row-title">Write new rules</span>
+      <span class="row-body">Conditions, exceptions and actions, offering only what Outlook can actually do.</span>
+    </li>
+    <li>
+      <span class="row-title">Reorder and switch off</span>
+      <span class="row-body">Order decides which rule wins. Drag to change it, or turn a rule off without deleting it.</span>
+    </li>
+  </ul>
 </section>
 
-<section id="broken" class="container">
-  <h2>The rule that looks fine and isn't</h2>
-  <p>
-    A rule pointing at a folder you deleted keeps its green light. Exchange
-    reports it as healthy; mail matching it quietly stops arriving where you
-    expect. The only symptom is mail you never see.
-  </p>
-  <p>
-    Rulebook resolves every destination against your real folder list, and flags
-    rules that can never run because an earlier rule already stopped processing.
-    Both checks happen on the phone, against what the server actually returns.
-  </p>
-  <div class="note warn">
-    <p>On the mailbox this was first tested against, two of six rules pointed at
-    deleted folders. Outlook had flagged only one of them.</p>
-  </div>
+<section id="pricing">
+  <div class="section-header">Pricing</div>
+  <h2>Free to look, Pro to change.</h2>
+  <ul class="rows">
+    <li>
+      <span class="row-title">Free</span>
+      <span class="row-body">Viewing your rules: every rule, in order, with the off and broken ones marked.</span>
+    </li>
+    <li>
+      <span class="row-title">Rulebook Pro</span>
+      <span class="row-meta">One-time in-app purchase. No subscription.</span>
+      <span class="row-body">Reordering, enabling or disabling, editing, creating, duplicating and deleting rules.</span>
+    </li>
+  </ul>
 </section>
 
-<section id="permissions" class="container">
-  <h2>What it asks for, and why</h2>
-  <p class="section-lede">
+<section id="permissions">
+  <div class="section-header">What it asks for, and why</div>
+  <p>
     Sign-in goes through Microsoft's own page. Rulebook never sees your password,
     and the access it gets can be revoked at any time from your account settings.
   </p>
-
-  <table>
-    <tr><th>Permission</th><th>Why</th></tr>
-    <tr>
-      <td><code>MailboxSettings.ReadWrite</code></td>
-      <td>Read and write the rules themselves. This is the app.</td>
-    </tr>
-    <tr>
-      <td><code>Mail.ReadBasic</code></td>
-      <td>List your folders, so a rule can file mail into one you already have.</td>
-    </tr>
-    <tr>
-      <td><code>offline_access</code></td>
-      <td>Stay signed in without asking again every time.</td>
-    </tr>
-  </table>
-
+  <ul class="rows">
+    <li>
+      <span class="row-code">MailboxSettings.ReadWrite</span>
+      <span class="row-body">Read and write the rules themselves. This is the app.</span>
+    </li>
+    <li>
+      <span class="row-code">Mail.ReadBasic</span>
+      <span class="row-body">List your folders, so a rule can file mail into one you already have.</span>
+    </li>
+    <li>
+      <span class="row-code">offline_access</span>
+      <span class="row-body">Stay signed in without asking again every time.</span>
+    </li>
+  </ul>
   <p>
     <code>Mail.ReadBasic</code> is broader than this app wants: it also grants the
     sender, recipients and subject of your messages. The precise permission for
-    reading folders alone — <code>MailboxFolder.Read</code> — exists, but only for
-    work and school accounts, so an app that also serves personal Microsoft
-    accounts cannot request it. That trade is spelled out here rather than buried.
+    reading folders alone, <code>MailboxFolder.Read</code>, exists only for work
+    and school accounts, so an app that also serves personal Microsoft accounts
+    cannot request it. That trade is spelled out here rather than buried.
   </p>
   <p>
     Rulebook does not read message bodies, does not send mail, and stores no mail
-    of its own.
+    of its own. <a href="privacy.html">Privacy policy</a>
   </p>
 </section>
 
-<section id="status" class="container">
-  <h2>Status</h2>
-  <p>
-    In development, and open source. Microsoft&nbsp;365 and Outlook.com
-    accounts are supported.
-  </p>
-  <p>
-    There is also a command-line tool in the repository that talks to the same
-    engine — useful for inspecting rules, checking which of them would survive a
-    move to another provider, and seeing exactly what gets sent.
-  </p>
-</section>
+</main>
 
 <footer>
   <div class="container">
-    <p>Made with ♥ by <a href="https://github.com/JeffSteinbok">Jeff Steinbok</a> ·
-       <a href="support.html">Support</a> ·
-       <a href="./privacy.html">Privacy</a> ·
-       <a href="https://github.com/JeffSteinbok/Rulebook">Source</a></p>
+    <span class="made">Made with ♥ by Jeff Steinbok</span>
+    <a href="support.html">Support</a>
+    <a href="privacy.html">Privacy</a>
   </div>
 </footer>
 
