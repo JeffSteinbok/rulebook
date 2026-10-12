@@ -2,9 +2,17 @@ Rulebook manages the server-side mail rules on a Microsoft 365 or Outlook.com
 mailbox. It needs a signed-in Microsoft account to show anything, so demo
 credentials are supplied in the fields above.
 
-Sign-in is presented by Microsoft (MSAL), not by Rulebook. After signing in,
-the rules list is the first screen; tap any rule for its detail, and Edit to
-open the editor.
+Sign-in is presented by Microsoft (MSAL), not by Rulebook. If Microsoft's page
+offers a passkey or security key first, go Back and choose another way to
+sign in, using the password. After signing in, the rules list is the first
+screen; tap any rule for its detail.
+
+Viewing rules is free. Changing them needs Rulebook Pro, a one-time,
+non-consumable in-app purchase (net.steinbok.Rulebook.pro): creating, editing,
+deleting, reordering, and turning rules on or off. Those controls show a lock
+and open the purchase screen, which also has Restore purchase and Redeem
+code. Buy Pro with a sandbox account to reach the editor (Edit on a rule's
+detail screen).
 
 Microsoft Graph scopes requested, and why:
  - MailboxSettings.ReadWrite: read and write the mail rules themselves
