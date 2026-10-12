@@ -20,6 +20,12 @@ before anything is uploaded (the Monday freshness republish included). It also
 runs on PRs that change the tests, and by hand from the Actions tab.
 `Scripts/testflight.sh` runs the same gate locally before it uploads.
 
+Running from Xcode builds Debug, which is a separate app: **Rulebook Dev**
+(`net.steinbok.Rulebook.dev`, orange icon). It installs beside the TestFlight
+or App Store build instead of replacing it, keeps its own sign-ins, and takes
+Pro from `Rulebook.storekit`. Release, which is what TestFlight and the App
+Store get, is still `net.steinbok.Rulebook`.
+
 ## The fake, and why to trust it
 
 `Sources/RulebookTesting/FakeGraph.swift` is a stateful stand-in for the Graph

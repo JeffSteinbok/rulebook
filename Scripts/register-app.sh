@@ -46,9 +46,11 @@ echo "Tenant: $TENANT_ID"
 # Redirect URIs:
 #   - nativeclient  : device code flow from the terminal
 #   - msauth.<id>   : MSAL on iOS
+#   - msauth.<id>.dev : the same, for local Debug builds (project.yml)
 REDIRECT_URIS=(
   "https://login.microsoftonline.com/common/oauth2/nativeclient"
   "msauth.${IOS_BUNDLE_ID}://auth"
+  "msauth.${IOS_BUNDLE_ID}.dev://auth"
 )
 
 EXISTING=$(az ad app list --display-name "$APP_NAME" --query "[0].appId" -o tsv 2>/dev/null || true)

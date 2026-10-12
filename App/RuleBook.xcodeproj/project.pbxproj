@@ -68,11 +68,11 @@
 		5F351CF7D02AB0537ADBB689 /* Pro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pro.swift; sourceTree = "<group>"; };
 		65D063BB8D7341C7338CD1AD /* AddAccountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAccountView.swift; sourceTree = "<group>"; };
 		6CA79287B8FF0DAB5B79C0C0 /* RulebookTests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RulebookTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		710D46C56609C04DA50B86F9 /* RuleBook */ = {isa = PBXFileReference; lastKnownFileType = folder; name = RuleBook; path = ..; sourceTree = SOURCE_ROOT; };
 		75EBFFCBB1851E430C038584 /* AccountStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountStore.swift; sourceTree = "<group>"; };
 		930B7A542CD59DD89DC4CA12 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		95386173CE38BC7DE9AA1CB8 /* RulebookUITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = RulebookUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		97D94761282964ED07949781 /* RuleDiagnostics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleDiagnostics.swift; sourceTree = "<group>"; };
+		9E7ABEDFDC8E5B5A671D8BC6 /* greenling */ = {isa = PBXFileReference; lastKnownFileType = folder; name = greenling; path = ..; sourceTree = SOURCE_ROOT; };
 		A1F60C0A8E75EE9242771716 /* RuleEditorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuleEditorView.swift; sourceTree = "<group>"; };
 		BAB651FE9D3FE83085EF2774 /* AccountsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountsView.swift; sourceTree = "<group>"; };
 		BCFFA801C6A0B88625247FBA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -142,7 +142,7 @@
 		8C23DC8C42096877B198C844 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				710D46C56609C04DA50B86F9 /* RuleBook */,
+				9E7ABEDFDC8E5B5A671D8BC6 /* greenling */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -509,7 +509,8 @@
 		9633D4C4B510FC0618BABE81 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				APP_DISPLAY_NAME = "Rulebook Dev";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-Dev";
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = Rulebook/RulebookSimulator.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				DEVELOPMENT_TEAM = Y7KVX7666P;
@@ -520,7 +521,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = net.steinbok.Rulebook;
+				PRODUCT_BUNDLE_IDENTIFIER = net.steinbok.Rulebook.dev;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 6.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -530,6 +531,7 @@
 		BBBA81EE9C1654C466DFB369 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				APP_DISPLAY_NAME = Rulebook;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				"CODE_SIGN_ENTITLEMENTS[sdk=iphonesimulator*]" = Rulebook/RulebookSimulator.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
