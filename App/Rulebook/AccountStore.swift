@@ -12,7 +12,7 @@ struct Account: Identifiable, Codable, Hashable {
     var address: String
     var displayName: String
 
-    /// "Dana Okonjo — Outlook" from "d.okonjo@company.com".
+    /// "Dana Okonjo · Outlook" from "d.okonjo@company.com".
     static func displayName(for address: String, provider: String = "Outlook") -> String {
         let local = address.split(separator: "@").first.map(String.init) ?? address
         let words = local
@@ -21,7 +21,7 @@ struct Account: Identifiable, Codable, Hashable {
             .split(separator: " ")
             .map { $0.prefix(1).uppercased() + $0.dropFirst() }
             .joined(separator: " ")
-        return "\(words) — \(provider)"
+        return "\(words) · \(provider)"
     }
 }
 

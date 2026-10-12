@@ -1,11 +1,13 @@
-# RuleBook
+# Rulebook
 
-An iOS app for managing mail rules — the filters that file, forward, flag, and
-delete your mail before you ever see it. Microsoft 365 and Outlook.com.
+Outlook mail rules, managed on mobile. An iOS app for the filters that file,
+forward, flag, and delete your mail before you ever see it, on personal
+Microsoft accounts (Outlook.com, Hotmail, Live) and Microsoft 365 work or
+school accounts.
 
-The app is not built yet. What exists is the engine it will run on: a
-provider-neutral rules model, a Microsoft 365 implementation that works
-end to end, and a command-line harness for driving all of it without an app.
+The iOS app lives in `App/`. It runs on a provider-neutral rules model, a
+Microsoft 365 implementation, and a command-line harness for driving all of
+it without an app.
 
 ## Repository layout
 

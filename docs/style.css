@@ -1,115 +1,179 @@
-/* Rulebook — web palette taken from the app's dark tokens, so the site and
-   the product look like the same thing. */
+/* Rulebook web styles. Every value here comes from the app's design tokens
+   (App/Rulebook/DesignTokens.swift) so the site reads as the same product:
+   the system font at regular weight, which is what the app renders, the light ground with hairline rows, small
+   tracked uppercase section headers, and an accent-blue header band. */
+
 :root {
-    --ground: #12151C;
-    --surface: #1C2027;
-    --surface-2: #232833;
-    --border: #2C3341;
-    --border-bright: #3A4354;
-    --ink: #F2F4F8;
-    --ink-dim: #AEB6C4;
-    --ink-muted: #79828F;
-    --accent: #3B6AE8;
-    --accent-ink: #9DB9FC;
-    --warning: #E0A44A;
-    --mono: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+    color-scheme: light dark;
+    --accent: #1A4ED8;
+    --accent-600: #1540C0;
+    --accent-700: #0F3196;
+    --accent-wash: #EFF3FF;
+    --ground: #F1F3F7;
+    --surface: #FFFFFF;
+    --ink: #1B1F28;
+    --ink-80: #414855;
+    --ink-60: #5B6371;
+    --ink-40: #969EAE;
+    --hairline: #D5DAE4;
+    --fill: #E9ECF2;
+    --bar: rgba(241, 243, 247, 0.86);
+
+    --gutter: 20px;
+    --radius: 12px;
+    --column: 720px;
+    --mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --accent: #3B6AE8;
+        --accent-600: #5C86F7;
+        --accent-700: #9DB9FC;
+        --accent-wash: #1A2340;
+        --ground: #12151C;
+        --surface: #1C2027;
+        --ink: #F2F4F8;
+        --ink-80: #C9CED7;
+        --ink-60: #A7ADB8;
+        --ink-40: #626A78;
+        --hairline: #2C313A;
+        --fill: #22262E;
+        --bar: rgba(18, 21, 28, 0.86);
+    }
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
-    font-family: 'Archivo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', system-ui, 'Segoe UI', Roboto, sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.55;
     background: var(--ground);
     color: var(--ink);
-    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
 }
 
-a { color: var(--accent-ink); text-decoration: none; }
-a:hover { text-decoration: underline; }
+a { color: var(--accent-700); text-decoration: underline; text-underline-offset: 2px; }
+a:hover { text-decoration-thickness: 2px; }
+strong { font-weight: 600; }
+code { font-family: var(--mono); font-size: 0.875em; }
 
-.container { max-width: 940px; margin: 0 auto; padding: 0 1.5rem; }
+.container { max-width: var(--column); margin: 0 auto; padding: 0 var(--gutter); }
 
-/* ── Nav ── */
-nav {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(18, 21, 28, 0.82);
-    backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
+/* ── Band: one accent-blue header, like the app's gate screen. The bar
+   (lockup + links) lives inside it, so there is one header, not two. ── */
+.band { background: var(--accent); color: #fff; }
+.bar {
+    max-width: var(--column); margin: 0 auto; padding: 18px var(--gutter);
+    display: flex; align-items: center; gap: 16px;
 }
-.nav-inner {
-    max-width: 940px; margin: 0 auto; padding: 0.9rem 1.5rem;
-    display: flex; align-items: center; gap: 1.5rem;
+.lockup {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-weight: 400; font-size: 19px; letter-spacing: -0.005em;
+    color: #fff; text-decoration: none;
 }
-.wordmark {
-    font-weight: 900; letter-spacing: -0.02em; font-size: 1.15rem;
-    color: var(--ink); text-decoration: none;
-}
-.wordmark:hover { text-decoration: none; }
-.nav-links { margin-left: auto; display: flex; gap: 1.5rem; font-size: 0.95rem; }
-.nav-links a { color: var(--ink-dim); }
-.nav-links a:hover { color: var(--ink); text-decoration: none; }
+.glyph { width: 22px; height: auto; flex: none; }
+.bar-links { margin-left: auto; display: flex; gap: 22px; font-size: 15px; font-weight: 400; }
+.bar-links a { color: rgba(255, 255, 255, 0.82); text-decoration: none; }
+.bar-links a:hover { color: #fff; }
 
-/* ── Hero ── */
-.hero { padding: 5.5rem 0 4rem; }
+.hero { max-width: var(--column); margin: 0 auto; padding: 40px var(--gutter) 56px; }
 .hero h1 {
-    font-size: clamp(2.6rem, 7vw, 4.2rem); font-weight: 900;
-    letter-spacing: -0.03em; line-height: 1.05; margin-bottom: 1.25rem;
+    font-weight: 400; font-size: clamp(32px, 6.4vw, 46px);
+    line-height: 1.12; letter-spacing: -0.015em;
 }
-.hero .rule { width: 56px; height: 3px; background: var(--accent); margin-bottom: 1.75rem; }
-.hero p.lede { font-size: 1.3rem; color: var(--ink-dim); max-width: 34rem; }
-.hero-buttons { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.25rem; }
+.hero-accounts {
+    margin-top: 18px; max-width: 32rem;
+    font-size: 16px; color: rgba(255, 255, 255, 0.82);
+}
+.hero .btn { margin-top: 32px; flex: none; min-width: 240px; }
 
+/* ── Buttons: PrimaryButton and the gate's white pair. ── */
 .btn {
-    display: inline-flex; align-items: center; gap: 0.5rem;
-    padding: 0.8rem 1.4rem; border-radius: 12px; font-weight: 600;
-    font-size: 1rem; border: 1px solid transparent; transition: all 0.15s ease;
+    display: inline-flex; align-items: center; justify-content: space-between; gap: 16px;
+    min-height: 48px; padding: 12px var(--gutter);
+    border-radius: var(--radius); border: 1px solid transparent;
+    font-weight: 400; font-size: 17px; text-decoration: none;
+    flex: 1 1 200px;
 }
+.btn::after { content: "›"; font-size: 22px; line-height: 1; }
+.btn-white::after, .btn-primary::after { content: "→"; font-size: 18px; }
 .btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: #4d78ee; text-decoration: none; }
-.btn-ghost { border-color: var(--border-bright); color: var(--ink); }
-.btn-ghost:hover { border-color: var(--ink-muted); text-decoration: none; }
+.btn-primary:hover { background: var(--accent-600); }
+.btn-secondary { border-color: var(--hairline); color: var(--ink); background: transparent; }
+.btn-secondary:hover { background: var(--fill); }
+.btn-white { background: #fff; color: #1A4ED8; }
+.btn-white:hover { background: rgba(255, 255, 255, 0.86); }
+.btn-outline { border-color: rgba(255, 255, 255, 0.6); color: #fff; }
+.btn-outline:hover { background: rgba(255, 255, 255, 0.14); }
+.btn-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
 
-/* ── Sections ── */
-section { padding: 3.5rem 0; border-top: 1px solid var(--border); }
+/* ── Page title, for the inner pages. ── */
+.page-head { padding: 48px 0 8px; }
+.page-head h1 { font-size: 34px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.15; }
+.page-head .lede { margin-top: 12px; font-size: 17px; color: var(--ink-60); max-width: 36rem; }
+
+/* ── Sections: a small tracked header, then rows. ── */
+section { padding: 40px 0 8px; }
+.section-header {
+    font-size: 11px; font-weight: 400; text-transform: uppercase;
+    letter-spacing: 0.18em; color: var(--ink-60);
+    padding-bottom: 8px;
+}
 section h2 {
-    font-size: 1.9rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.6rem;
+    font-size: 22px; font-weight: 400; letter-spacing: -0.01em; line-height: 1.25;
+    margin-bottom: 8px;
 }
-section h3 { font-size: 1.15rem; font-weight: 700; margin: 2rem 0 0.5rem; }
-section p { color: var(--ink-dim); max-width: 44rem; margin-bottom: 1rem; }
-.section-lede { font-size: 1.1rem; margin-bottom: 2rem; }
+section > p, .container > p { color: var(--ink-80); max-width: 40rem; margin-bottom: 14px; }
+.intro { font-size: 17px; }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; }
-.card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 14px; padding: 1.4rem;
+/* Rows: hairline above each, like a plain List. */
+.rows { list-style: none; margin: 8px 0 16px; border-bottom: 1px solid var(--hairline); }
+.rows > li, .rows > div {
+    padding: 16px 0; border-top: 1px solid var(--hairline);
 }
-.card h3 { margin: 0 0 0.4rem; font-size: 1.05rem; }
-.card p { font-size: 0.95rem; margin: 0; color: var(--ink-dim); }
-
-table { width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem; font-size: 0.95rem; }
-th, td { text-align: left; padding: 0.7rem 0.9rem; border-bottom: 1px solid var(--border); vertical-align: top; }
-th { color: var(--ink-muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.06em; }
-td code { font-family: var(--mono); font-size: 0.85rem; color: var(--accent-ink); }
-
-.note {
-    background: var(--surface); border-left: 3px solid var(--accent);
-    border-radius: 0 10px 10px 0; padding: 1rem 1.2rem; margin: 1.5rem 0;
+.row-title { display: block; font-size: 17px; font-weight: 400; line-height: 1.3; color: var(--ink); }
+.row-body { display: block; margin-top: 4px; font-size: 15px; color: var(--ink-60); }
+.row-body p + p { margin-top: 8px; }
+.row-meta {
+    display: inline-block; margin-top: 2px;
+    font-size: 13px; font-weight: 400; color: var(--ink-60);
 }
-.note p { margin: 0; }
-.note.warn { border-left-color: var(--warning); }
+.row-code { font-family: var(--mono); font-size: 14px; color: var(--accent-700); }
 
-ul { color: var(--ink-dim); margin: 0 0 1rem 1.2rem; }
-li { margin-bottom: 0.5rem; }
+/* Plain bulleted copy inside a row body. */
+.row-body ul { margin: 8px 0 0 18px; }
+.row-body li { margin-bottom: 6px; }
+
+/* The state pill, used to mark Pro. */
+.pill {
+    display: inline-block; vertical-align: 2px; margin-left: 8px;
+    padding: 3px 9px; border-radius: 999px;
+    font-size: 11px; font-weight: 400; letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--accent); color: #fff;
+}
+.pill-hollow { background: transparent; color: var(--ink-80); box-shadow: inset 0 0 0 1.5px var(--ink-40); }
+
+/* Footnote-sized aside, no box. */
+.caption { font-size: 13px; color: var(--ink-60); margin: 8px 0 16px; max-width: 40rem; }
 
 footer {
-    border-top: 1px solid var(--border); padding: 2.5rem 0 3.5rem;
-    color: var(--ink-muted); font-size: 0.9rem;
+    margin-top: 48px; border-top: 1px solid var(--hairline);
+    padding: 16px 0 40px;
+    font-size: 13px; font-weight: 400; color: var(--ink-80);
 }
-footer a { color: var(--ink-dim); }
+footer .container { display: flex; flex-wrap: wrap; gap: 8px 20px; }
+footer a { color: var(--ink-60); text-decoration: none; }
+footer a:hover { color: var(--ink); }
+footer .made { margin-right: auto; }
 
 @media (max-width: 560px) {
-    .nav-links { gap: 1rem; font-size: 0.9rem; }
-    .hero { padding: 3.5rem 0 2.5rem; }
+    .bar-links { gap: 16px; font-size: 14px; }
+    .hero { padding-top: 28px; padding-bottom: 44px; }
+    .hero .btn { width: 100%; }
+    .page-head { padding-top: 36px; }
+    .page-head h1 { font-size: 30px; }
 }

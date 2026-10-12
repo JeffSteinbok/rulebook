@@ -24,26 +24,38 @@ final class RulebookUITests: XCTestCase {
 
     func testFreeTierReorderAsksForPro() {
         let app = launch("-locked")
-        let reorder = app.buttons["Reorder"]
+        let reorder = app.buttons["reorder"]
         XCTAssertTrue(reorder.waitForExistence(timeout: 10))
         reorder.tap()
         XCTAssertTrue(app.staticTexts["Reordering rules needs Pro"].waitForExistence(timeout: 5))
     }
 
-    func testFreeTierSwipeDeleteAsksForPro() throws {
+    /// The free tier offers no swipe at all: a swipe that only opens a
+    /// paywall is a gesture that lies about what it does.
+    func testFreeTierHasNoSwipeDelete() {
         let app = launch("-locked")
-        XCTAssertTrue(app.collectionViews.cells.firstMatch.waitForExistence(timeout: 10))
-        // Some seed rules are read-only and offer no swipe; use the first that does.
-        for index in 0..<min(6, app.collectionViews.cells.count) {
-            app.collectionViews.cells.element(boundBy: index).swipeLeft()
-            let delete = app.buttons["Delete"]
-            if delete.waitForExistence(timeout: 2) {
-                delete.tap()
-                XCTAssertTrue(app.staticTexts["Deleting rules needs Pro"].waitForExistence(timeout: 5))
-                return
-            }
-        }
-        XCTFail("No row offered swipe-to-delete.")
+        let rule = ruleCell(app, named: "Vendor invoices")
+        XCTAssertTrue(rule.waitForExistence(timeout: 10))
+        rule.swipeLeft()
+        XCTAssertFalse(app.buttons["Delete"].waitForExistence(timeout: 2))
+    }
+
+    /// The control for the test above: the same swipe, unlocked, does offer
+    /// Delete, so the free-tier test is really swiping a rule.
+    func testUnlockedSwipeOffersDelete() {
+        let app = launch()
+        let rule = ruleCell(app, named: "Vendor invoices")
+        XCTAssertTrue(rule.waitForExistence(timeout: 10))
+        rule.swipeLeft()
+        XCTAssertTrue(app.buttons["Delete"].waitForExistence(timeout: 5))
+    }
+
+    /// A rule's row, by its name. The list's first cells are the banner,
+    /// sync line and filter tabs, so "the first few cells" aren't rules.
+    private func ruleCell(_ app: XCUIApplication, named name: String) -> XCUIElement {
+        app.collectionViews.cells
+            .containing(NSPredicate(format: "label CONTAINS %@", name))
+            .firstMatch
     }
 
     func testNewRuleCancelAsksBeforeDiscarding() {

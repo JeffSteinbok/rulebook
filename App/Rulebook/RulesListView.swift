@@ -17,12 +17,16 @@ struct RulesListView: View {
     @State private var isAddingAccount = false
     @State private var showingAccounts = false
     @State private var showingAbout = false
+    @State private var showingMailboxes = false
 
     var body: some View {
         NavigationStack {
             content
                 .background(DS.Palette.ground)
                 .navigationTitle(title)
+                // Inline: a large title is a whole row spent saying "Rulebook".
+                // The bar carries the title and mailbox instead.
+                .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbar }
                 .safeAreaInset(edge: .bottom) { bottomBar }
                 .task { await model.load() }
@@ -77,9 +81,10 @@ struct RulesListView: View {
 
     private var title: String {
         switch model.mode {
-        case .normal: "Rulebook"
+        // Reordering keeps the list's own title: the row handles and the lit
+        // button already say what's happening.
+        case .normal, .reorder: "Rulebook"
         case .select: model.selection.isEmpty ? "Select" : "\(model.selection.count) selected"
-        case .reorder: "Reorder"
         }
     }
 
@@ -87,7 +92,9 @@ struct RulesListView: View {
 
     private var content: some View {
         List {
-            if model.mode == .normal && !model.hasNoRulesAtAll {
+            // Kept while reordering, inert: removing it made the rules jump up
+            // the moment the reorder button was tapped.
+            if model.mode != .select && !model.hasNoRulesAtAll {
                 Section {
                     if model.hasPending {
                         PendingBanner(
@@ -103,18 +110,18 @@ struct RulesListView: View {
                             subtitle: model.attentionSubtitle,
                             level: model.attentionLevel
                         ) { model.issuesOnly.toggle() }
+                        .disabled(isReordering)
                     }
                     syncLine
                     filterTabs
+                        .disabled(isReordering)
                 }
                 .listRowInsets(.init(top: 6, leading: DS.Metric.gutter, bottom: 6, trailing: DS.Metric.gutter))
                 .listRowBackground(DS.Palette.ground)
                 .listRowSeparator(.hidden)
             }
 
-            if model.mode == .reorder {
-                hint("Rules run top to bottom. Drag a handle to change the order.")
-            } else if model.mode == .select {
+            if model.mode == .select {
                 hint(model.selection.isEmpty
                      ? "Tap the rules you want to change."
                      : "Tap to add or remove. Choose an action below.")
@@ -138,7 +145,7 @@ struct RulesListView: View {
                 }
 
                 if model.hasNoRulesAtAll {
-                    EmptyRulesView(profile: model.profile) { preset in
+                    EmptyRulesView(profile: model.profile, isLocked: model.isLocked) { preset in
                         guard model.requirePro(.editing) else { return }
                         seedPreset = preset
                         isCreating = true
@@ -156,14 +163,7 @@ struct RulesListView: View {
         }
         .listStyle(.plain)
         .environment(\.editMode, .constant(model.mode == .reorder ? .active : .inactive))
-        // iOS 26 anchors an unplaced `.searchable` to the bottom of the screen,
-        // below the New rule bar. The spec puts search directly under the
-        // attention banner, above the list, so the placement is explicit.
-        .searchable(
-            text: $model.query,
-            placement: .navigationBarDrawer(displayMode: .always),
-            prompt: "Search rules, senders, folders"
-        )
+        .modifier(RuleSearch(query: $model.query))
     }
 
     @ViewBuilder
@@ -180,46 +180,139 @@ struct RulesListView: View {
             mode: model.mode
         )
         .contentShape(.rect)
-        .onTapGesture {
+        // No tap or long-press while reordering: either one claims the touch
+        // the list needs to start a drag, and the drag never begins.
+        .modifier(RowGestures(isEnabled: model.mode != .reorder, onTap: {
             switch model.mode {
             case .select: model.toggleSelection(rule)
             case .reorder: break
             case .normal: editingRule = rule
             }
-        }
-        .onLongPressGesture(minimumDuration: 0.45) {
+        }, onLongPress: {
             guard model.mode == .normal else { return }
             model.beginSelection(with: rule)
-        }
+        }))
         // Long-press is the only way into multi-select; VoiceOver needs a named route.
         .accessibilityAction(named: "Select multiple rules") {
             guard model.mode == .normal else { return }
             model.beginSelection(with: rule)
         }
-        // Admin-managed rules keep their place; Outlook won't move them.
-        .moveDisabled(rule.status.isReadOnly)
-        // Swipe-to-delete is withheld entirely on admin-managed rules rather
-        // than offered and refused.
-        .swipeActions(edge: .trailing, allowsFullSwipe: !rule.status.isReadOnly) {
-            if !rule.status.isReadOnly {
+        // Only while reordering, and never admin-managed rules: Outlook won't
+        // move those.
+        .moveDisabled(model.mode != .reorder || rule.status.isReadOnly)
+        // Swipe-to-delete is withheld entirely on admin-managed rules, and on
+        // the free tier, rather than offered and refused: a swipe that opens
+        // a paywall is a gesture that lies about what it does.
+        .swipeActions(edge: .trailing, allowsFullSwipe: canSwipeDelete(rule)) {
+            if canSwipeDelete(rule) {
                 Button(role: .destructive) {
                     Task { await model.delete(rule) }
                 } label: {
                     Label("Delete", systemImage: "trash")
                 }
+                // The app-wide accent tint overrides the destructive role's
+                // red on swipe actions; put it back.
+                .tint(DS.Palette.destructive)
             }
         }
         .listRowBackground(DS.Palette.ground)
-        .listRowInsets(.init(top: 14, leading: 16, bottom: 14, trailing: 16))
+        // A tight leading inset: the order gutter reserves room for an issue
+        // dot ahead of the number, and at 16 that pushed the numbers well in
+        // from the gutter everything else lines up on.
+        .listRowInsets(.init(top: 14, leading: 8, bottom: 14, trailing: 16))
+    }
+
+    private func canSwipeDelete(_ rule: MailRule) -> Bool {
+        !rule.status.isReadOnly && !model.isLocked
     }
 
     // MARK: - Chrome
+
+    /// The mailbox named under the title. Kept while reordering so the bar
+    /// doesn't jump; only selection replaces it with a count.
+    private var activeMailbox: Account? {
+        model.mode == .select ? nil : accounts?.active
+    }
+
+    /// Switching mailbox, or anything in the ⋯ menu, would abandon a drag in
+    /// progress; both stay in place but inert until reordering ends.
+    private var isReordering: Bool { model.mode == .reorder }
+
+    /// The title, in the app's own face, on the same row as the bar's buttons
+    /// — a large title spends a whole row of the screen saying "Rulebook".
+    ///
+    /// Under it, which mailbox these rules belong to: with more than one
+    /// connected, the list alone can't say. It doubles as the switcher.
+    @ViewBuilder
+    private var barTitle: some View {
+        // Its own size: a toolbar item is offered almost nothing and
+        // truncates the title to "R…" otherwise — in every mode.
+        let heading = Text(title)
+            .font(DS.Font.barTitle)
+            .foregroundStyle(DS.Palette.ink)
+            .lineLimit(1)
+            .fixedSize()
+
+        if let accounts, let active = activeMailbox {
+            Button {
+                // Opens in place: no press fade, no grow-from-the-title.
+                var instant = Transaction()
+                instant.disablesAnimations = true
+                withTransaction(instant) { showingMailboxes = true }
+            } label: {
+                VStack(alignment: .leading, spacing: 0) {
+                    heading
+                    HStack(spacing: 3) {
+                        Text(active.address)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Image(systemName: "chevron.down")
+                            .imageScale(.small)
+                            .opacity(isReordering ? 0.3 : 1)
+                            .accessibilityHidden(true)
+                    }
+                    .font(DS.Font.captionBold)
+                    .foregroundStyle(DS.Palette.ink60)
+                    // A cap, so a long work address truncates in the middle
+                    // instead of running under the bar's buttons.
+                    .frame(maxWidth: 220, alignment: .leading)
+                }
+                // Its own size: a plain button in a toolbar is offered almost
+                // nothing and truncated the title to "R…". The address's cap
+                // above still bounds it, since an ideal size honours maxWidth.
+                .fixedSize()
+            }
+            // The bar is a fixed height; past this the two lines clip.
+            .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+            .buttonStyle(StillButtonStyle())
+            .disabled(isReordering)
+            .accessibilityLabel("Mailbox: \(active.address)")
+            .accessibilityHint("Switch mailbox or manage accounts")
+            // A popover, not a Menu: a system menu sets its own type size and
+            // wraps a full address mid-word ("out-look.com"). This keeps each
+            // mailbox to one line, in the app's face.
+            .popover(isPresented: $showingMailboxes, arrowEdge: .top) {
+                MailboxSwitcher(accounts: accounts, activeID: active.id) {
+                    showingMailboxes = false
+                    // Pushed once the popover has gone: on iOS 17 a push in
+                    // the same update as the dismissal can be dropped.
+                    Task {
+                        try? await Task.sleep(for: .milliseconds(350))
+                        showingAccounts = true
+                    }
+                }
+                .presentationCompactAdaptation(.popover)
+            }
+        } else {
+            heading
+        }
+    }
 
     private var syncLine: some View {
         HStack {
             Text("\(model.enabledCount) of \(model.rules.count) enabled")
             Spacer()
-            Text(model.isLoading ? "Syncing with Exchange…" : syncedLabel)
+            Text(model.isLoading ? "Syncing with Outlook…" : syncedLabel)
                 .foregroundStyle(model.isLoading ? DS.Palette.accent700 : DS.Palette.ink60)
         }
         .font(DS.Font.captionBold)
@@ -250,6 +343,17 @@ struct RulesListView: View {
 
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
+        if #available(iOS 26.0, *) {
+            ToolbarItem(placement: .topBarLeading) { barTitle }
+                // A title, not a button: no glass capsule around it.
+                .sharedBackgroundVisibility(.hidden)
+        } else {
+            ToolbarItem(placement: .topBarLeading) { barTitle }
+        }
+        // Takes the system's centred copy of the title out of the bar. The
+        // navigation title itself stays set: it still names the back button.
+        ToolbarItem(placement: .principal) { Color.clear.frame(width: 1) }
+
         ToolbarItem(placement: .topBarTrailing) {
             Button {
                 // Asked on the way in. Letting someone drag a row and only then
@@ -257,32 +361,48 @@ struct RulesListView: View {
                 if model.mode == .normal {
                     guard model.requirePro(.reorder) else { return }
                 }
+                // Reordering shows every rule: dragging within a filtered
+                // list silently jumps the hidden ones, and the filter can't
+                // be changed mid-reorder.
+                if model.mode == .normal { model.clearFilters() }
                 model.mode = model.mode == .normal ? .reorder : .normal
                 model.selection = []
             } label: {
-                if model.mode == .normal && model.isLocked {
-                    // Explicit HStack, not Label: a toolbar imposes its own
-                    // label style and renders icon-only, which drops the word
-                    // and leaves an unexplained padlock.
-                    HStack(spacing: 4) {
-                        Text("Reorder")
-                        Image(systemName: "lock.fill")
+                switch model.mode {
+                case .normal:
+                    // An icon, not "Edit": the only thing this mode does is
+                    // reorder, and a word that promises more misleads.
+                    HStack(spacing: 3) {
+                        Image(systemName: "arrow.up.arrow.down")
+                        if model.isLocked {
+                            Image(systemName: "lock.fill")
+                                .imageScale(.small)
+                        }
                     }
-                } else {
-                    Text(model.mode == .normal ? "Reorder" : "Done")
+                    .accessibilityElement(children: .ignore)
+                    .accessibilityLabel(model.isLocked ? "Reorder rules, requires Pro" : "Reorder rules")
+                case .reorder:
+                    // The same button, lit, as a check: tap it to finish. No
+                    // "Done" word, so the bar doesn't change shape mid-task.
+                    Image(systemName: "checkmark")
+                        .foregroundStyle(.white)
+                        .padding(6)
+                        .background(DS.Palette.accent, in: Circle())
+                        .accessibilityLabel("Finish reordering")
+                case .select:
+                    Text("Done")
                 }
             }
             .font(DS.Font.secondary)
+            .accessibilityIdentifier(model.mode == .select ? "endSelection" : "reorder")
         }
 
-        if model.mode == .normal {
+        if model.mode != .select {
             // Anchored menu, not a bottom sheet — these are utility actions,
             // not destinations.
             ToolbarItem(placement: .topBarTrailing) {
+                // No Refresh item: pull-to-refresh on the list already does it.
                 Menu {
-                    Button { Task { await model.load() } } label: {
-                        Label("Refresh rules", systemImage: "arrow.clockwise")
-                    }
                     if tokens != nil {
                         Button { isAddingAccount = true } label: {
                             Label("Add account", systemImage: "plus")
@@ -297,6 +417,7 @@ struct RulesListView: View {
                 } label: {
                     Image(systemName: "ellipsis")
                 }
+                .disabled(isReordering)
             }
         }
     }
@@ -443,13 +564,19 @@ private struct RuleRow: View {
                         .font(.subheadline.weight(.semibold))
                         .foregroundStyle(DS.Palette.ink40)
                 }
+                // Reordering hides this slot and the list's own drag handle
+                // takes its place. The handle is a little wider than the slot
+                // plus its spacing; the padding makes up the difference, so no
+                // rule name or summary rewraps when the mode changes.
+                .padding(.trailing, 6)
             }
         }
         .frame(minHeight: DS.Metric.rowMinHeight)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(spokenLabel)
-        .accessibilityHint(mode == .normal ? "Opens the rule" : "")
-        .accessibilityAddTraits(mode == .select && isSelected ? [.isButton, .isSelected] : .isButton)
+        .accessibilityHint(mode == .normal ? "Opens the rule" : mode == .reorder ? "Rules run top to bottom. Use the drag handle to move this rule." : "")
+        // Not a button while reordering: a tap does nothing then.
+        .accessibilityAddTraits(mode == .reorder ? [] : mode == .select && isSelected ? [.isButton, .isSelected] : .isButton)
     }
 
     /// One sentence, in reading order: position, name, state, problem.
@@ -475,7 +602,7 @@ private struct RuleRow: View {
                 .font(DS.Font.orderNumber)
                 .foregroundStyle(issue.map { tint($0.level) } ?? DS.Palette.ink40)
         }
-        .frame(width: DS.Metric.orderColumn, alignment: .trailing)
+        .frame(width: DS.Metric.orderColumn, alignment: .leading)
         .accessibilityHidden(true)
     }
 
@@ -653,4 +780,125 @@ private struct SlowRuleStore: RuleStore {
         store: PreviewSeed.store(),
         folders: PreviewSeed.folders
     ))
+}
+
+/// The mailbox list behind the title: one line per mailbox, a checkmark on
+/// the active one, and the way into Manage accounts.
+private struct MailboxSwitcher: View {
+    let accounts: AccountStore
+    let activeID: String
+    let manage: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(accounts.accounts) { account in
+                let isActive = account.id == activeID
+                Button {
+                    accounts.activate(account)
+                    dismiss()
+                } label: {
+                    HStack(spacing: 10) {
+                        Image(systemName: "checkmark")
+                            .font(.footnote.weight(.semibold))
+                            .foregroundStyle(DS.Palette.accent)
+                            .opacity(isActive ? 1 : 0)
+                            .frame(width: 16)
+                            .accessibilityHidden(true)
+                        Text(account.address)
+                            .font(DS.Font.body)
+                            .foregroundStyle(DS.Palette.ink)
+                            .lineLimit(1)
+                            .truncationMode(.middle)
+                        Spacer(minLength: 0)
+                    }
+                    .frame(minHeight: 44)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(isActive ? [.isSelected] : [])
+            }
+
+            Divider().padding(.vertical, 4)
+
+            Button(action: manage) {
+                HStack(spacing: 10) {
+                    Image(systemName: "person.crop.circle")
+                        .font(.footnote.weight(.semibold))
+                        .frame(width: 16)
+                        .accessibilityHidden(true)
+                    Text("Manage accounts")
+                        .font(DS.Font.body)
+                    Spacer(minLength: 0)
+                }
+                .foregroundStyle(DS.Palette.accent)
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 8)
+        // Bounded both ways: long addresses truncate in the middle rather
+        // than pushing the popover past the screen edge.
+        .frame(minWidth: 260, maxWidth: 340)
+        .fixedSize()
+        .dynamicTypeSize(...DynamicTypeSize.xxxLarge)
+    }
+}
+
+// MARK: - Search
+
+/// Switches that hold back a finished feature without deleting it.
+enum FeatureFlag {
+    /// Off: the search box took a full row above every list for something a
+    /// few dozen rules rarely need. The query plumbing stays in the model.
+    static let ruleSearch = false
+}
+
+private struct RuleSearch: ViewModifier {
+    @Binding var query: String
+
+    func body(content: Content) -> some View {
+        if FeatureFlag.ruleSearch {
+            // iOS 26 anchors an unplaced `.searchable` to the bottom of the
+            // screen, below the New rule bar. The spec puts search directly
+            // under the attention banner, above the list, so the placement is
+            // explicit.
+            content.searchable(
+                text: $query,
+                placement: .navigationBarDrawer(displayMode: .always),
+                prompt: "Search rules, senders, folders"
+            )
+        } else {
+            content
+        }
+    }
+}
+
+/// A button that doesn't dim or bounce when pressed — for a title, which
+/// shouldn't flicker as if it were a control.
+private struct StillButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+    }
+}
+
+/// A row's tap and long-press, attachable or not as a whole — so reordering
+/// can take them off and leave the touch to the list's drag.
+private struct RowGestures: ViewModifier {
+    let isEnabled: Bool
+    let onTap: () -> Void
+    let onLongPress: () -> Void
+
+    func body(content: Content) -> some View {
+        if isEnabled {
+            content
+                .onTapGesture(perform: onTap)
+                .onLongPressGesture(minimumDuration: 0.45, perform: onLongPress)
+        } else {
+            content
+        }
+    }
 }

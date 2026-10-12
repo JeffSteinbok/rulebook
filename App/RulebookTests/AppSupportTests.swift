@@ -60,10 +60,10 @@ struct AccountStoreTests {
     }
 
     @Test("Display names read like names", arguments: [
-        ("d.okonjo@company.com", "D Okonjo — Outlook"),
-        ("dana_okonjo@company.com", "Dana Okonjo — Outlook"),
-        ("dana@company.com", "Dana — Outlook"),
-        ("noatsign", "Noatsign — Outlook"),
+        ("d.okonjo@company.com", "D Okonjo · Outlook"),
+        ("dana_okonjo@company.com", "Dana Okonjo · Outlook"),
+        ("dana@company.com", "Dana · Outlook"),
+        ("noatsign", "Noatsign · Outlook"),
     ])
     func displayName(_ address: String, _ expected: String) {
         #expect(Account.displayName(for: address) == expected)

@@ -182,19 +182,19 @@ final class RuleEditorModel {
         } else {
             let joiner = draft.match == .all ? " and " : " or "
             let phrases = conditions.map { profile.phrase(for: $0) }.joined(separator: joiner)
-            head = "When a message matches \(draft.match == .all ? "all of" : "any of") — \(phrases)"
+            head = "When a message matches \(draft.match == .all ? "all of" : "any of"): \(phrases)"
         }
 
         let exceptions = draft.exceptions.filter(\.hasValue)
         let unless = exceptions.isEmpty
             ? ""
-            : " — unless \(exceptions.map { profile.phrase(for: $0) }.joined(separator: " or "))"
+            : ", unless \(exceptions.map { profile.phrase(for: $0) }.joined(separator: " or "))"
 
         let actions = draft.actions.isEmpty
             ? "nothing yet"
             : draft.actions.map { profile.phrase(for: $0) }.joined(separator: ", ")
 
-        return "\(head)\(unless) — then \(actions)."
+        return "\(head)\(unless), then \(actions)."
     }
 
     // MARK: - Validation and save

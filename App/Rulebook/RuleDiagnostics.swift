@@ -48,13 +48,13 @@ struct RuleIssue: Identifiable, Hashable {
     var detail: String {
         switch kind {
         case .serverError:
-            "Exchange reports hasError on this rule. Open it and save again to reinstate it on the server."
+            "Outlook reports an error on this rule. Open it and save again to reinstate it on the server."
         case .missingFolder(let name):
-            "The folder “\(name)” is no longer in this mailbox, so matching mail silently stays in the inbox. Exchange still reports this rule as healthy. Pick a new folder."
+            "The folder “\(name)” is no longer in this mailbox, so matching mail silently stays in the inbox. Outlook still reports this rule as healthy. Pick a new folder."
         case .neverRuns(let blocker):
             "“\(blocker)” stops processing before this rule is reached. Move it above that rule to make it run."
         case .appliesToEverything:
-            "This rule has no conditions, so it acts on every message that arrives. If it was meant for only some messages — say, ones without an attachment — add a condition, or add the opposite as an exception."
+            "This rule has no conditions, so it acts on every message that arrives. If it was meant for only some messages (say, ones without an attachment), add a condition, or add the opposite as an exception."
         }
     }
 

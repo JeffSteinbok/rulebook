@@ -7,11 +7,10 @@ the rules list is the first screen; tap any rule for its detail, and Edit to
 open the editor.
 
 Microsoft Graph scopes requested, and why:
- - MailboxSettings.ReadWrite  — read and write the mail rules themselves
- - MailboxFolder.Read         — resolve the folder names rules file into
- - Mail.ReadBasic             — required by Graph to list mail folders;
-                                the app reads no message data
- - offline_access             — stay signed in between launches
+ - MailboxSettings.ReadWrite: read and write the mail rules themselves
+ - Mail.ReadBasic: list mail folders, so rules can name and pick them;
+   the app reads no message data
+ - offline_access: stay signed in between launches
 
 The app never requests permission to read message bodies. The privacy policy
 at https://rulebook.steinbok.net/privacy.html discloses that the folder-listing

@@ -49,14 +49,7 @@ struct RuleDetailView: View {
                     guard model.requirePro(.editing) else { return }
                     isEditing = true
                 } label: {
-                    if model.isLocked {
-                        HStack(spacing: 4) {
-                            Text("Edit")
-                            Image(systemName: "lock.fill")
-                        }
-                    } else {
-                        Text("Edit")
-                    }
+                    LockableTitle("Edit", isLocked: model.isLocked)
                 }
                     .font(DS.Font.secondary)
                     .disabled(isReadOnly)
@@ -145,7 +138,7 @@ struct RuleDetailView: View {
         if model.isPending(rule) {
             return rule.isEnabled ? "Enabled on this phone" : "Disabled on this phone"
         }
-        return rule.isEnabled ? "Enabled — running on the server" : "Disabled on the server"
+        return rule.isEnabled ? "Enabled, running on the server" : "Disabled on the server"
     }
 
     // MARK: - Issue
@@ -165,7 +158,9 @@ struct RuleDetailView: View {
                     .foregroundStyle(DS.Palette.ink)
                     .fixedSize(horizontal: false, vertical: true)
 
-                Button(issue.fixTitle) { Task { await fix(issue) } }
+                Button { Task { await fix(issue) } } label: {
+                    LockableTitle(issue.fixTitle, isLocked: model.isLocked)
+                }
                     .font(DS.Font.secondary)
                     // The fill is destructive OR warning; both share the ink rule.
                     .foregroundStyle(DS.Palette.onDestructive)
@@ -275,12 +270,21 @@ struct RuleDetailView: View {
 
     private var footer: some View {
         HStack(spacing: 10) {
-            Button("Duplicate") {
+            Button {
                 Task { _ = await model.duplicate(rule) }
+            } label: {
+                LockableTitle("Duplicate", isLocked: model.isLocked)
             }
             .buttonStyle(SecondaryButtonStyle())
 
-            Button("Delete") { confirmDelete = true }
+            // Asked before the confirmation, not after: confirming a delete
+            // only to be told it needs Pro is the wrong order.
+            Button {
+                guard model.requirePro(.delete) else { return }
+                confirmDelete = true
+            } label: {
+                LockableTitle("Delete", isLocked: model.isLocked)
+            }
                 .buttonStyle(SecondaryButtonStyle(destructive: true))
                 .disabled(isReadOnly)
                 .opacity(isReadOnly ? 0.45 : 1)

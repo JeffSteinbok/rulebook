@@ -1,4 +1,4 @@
-# RuleBook iOS — screen spec
+# Rulebook iOS: screen spec
 
 Companion to the prototype in `Rulebook.dc.html`. Every screen maps to
 `RulebookKit` types; nothing here needs a new library API except where noted
@@ -56,8 +56,8 @@ else sentence case.
 Shown **only** when no account is connected. `RulebookApp` decides at launch;
 never a screen someone with an account can reach.
 
-- Full-bleed `accent` field, `RULEBOOK` wordmark, tagline
-  "Outlook mail rules — managed on mobile."
+- Full-bleed `accent` field, `Rulebook` wordmark, tagline
+  "Outlook mail rules,\nmanaged on mobile."
 - **Add account** → §2
 - **About Rulebook** → §7
 - Footer: "Made with ♥ by Jeff Steinbok"

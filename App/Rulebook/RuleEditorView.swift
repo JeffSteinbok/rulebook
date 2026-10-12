@@ -81,10 +81,11 @@ struct RuleEditorView: View {
 
     // MARK: - Step 1
 
+    @ViewBuilder
     private var nameStep: some View {
         Section {
             VStack(alignment: .leading, spacing: 14) {
-                Text("Write it the way you'd say it out loud — you'll be scanning a long list later.")
+                Text("Write it the way you'd say it out loud. You'll be scanning a long list later.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
 
@@ -93,7 +94,13 @@ struct RuleEditorView: View {
                     .font(DS.Font.rowTitle)
             }
             .padding(.bottom, 8)
+        }
+        .listRowBackground(DS.Palette.ground)
 
+        // Its own section, so "Or start from a common one" sits between the
+        // name field and the presets it introduces — as one section's header
+        // it landed above the name field, where the "or" made no sense.
+        Section {
             ForEach(RulePreset.all) { preset in
                 Button {
                     preset.apply(to: model)
@@ -157,7 +164,7 @@ struct RuleEditorView: View {
             Section {
                 // The single most important piece of teaching copy in the app:
                 // MatchMode has no negation, so exclusion happens here.
-                Text("\(model.profile.displayName) has no “does not contain”. To exclude something, add it here instead — if any exception matches, the rule is skipped.")
+                Text("\(model.profile.displayName) has no “does not contain”. To exclude something, add it here instead. If any exception matches, the rule is skipped.")
                     .font(DS.Font.caption)
                     .foregroundStyle(DS.Palette.ink60)
                     .padding(.bottom, 6)

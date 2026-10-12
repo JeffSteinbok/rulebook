@@ -1,6 +1,6 @@
-# Build the RuleBook iOS app
+# Build the Rulebook iOS app
 
-You are working in the `RuleBook` repository — a Swift package containing
+You are working in the `Rulebook` repository — a Swift package containing
 `RulebookKit` (a provider-neutral mail-rules engine with a working Microsoft
 Graph implementation) and a CLI harness. Read `README.md` first; it explains the
 layout and the design of the library in detail.
@@ -12,7 +12,7 @@ to build it, in `App/`, against a design that has already been made.
 
 A `handoff/` folder (unzip it into the repo root, or wherever the user put it):
 
-- `RuleBook-app-spec.md` — every screen, every state, and which
+- `Rulebook-app-spec.md` — every screen, every state, and which
   `ProviderProfile` / `RuleStore` call backs each control. **Read this in full
   before writing code.** It ends with four known gaps in `RulebookKit`.
 - `App/` — 16 Swift files implementing the whole design, plus `README.md`

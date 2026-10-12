@@ -15,7 +15,7 @@ struct DiagnosticsView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text("If something went wrong, copy this into an email to support, or share it. Email addresses are left out, and nothing leaves your device until you send it.")
+                Text("If something went wrong, attach this to a support issue, or share it. Email addresses are left out, and nothing leaves your device until you send it.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)
@@ -46,17 +46,20 @@ struct DiagnosticsView: View {
             } label: {
                 Label(didCopy ? "Copied" : "Copy", systemImage: didCopy ? "checkmark" : "doc.on.doc")
                     .font(DS.Font.button)
-                    .frame(maxWidth: .infinity, minHeight: DS.Metric.controlHeight)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.borderedProminent)
 
             ShareLink(item: report) {
                 Label("Share", systemImage: "square.and.arrow.up")
                     .font(DS.Font.button)
-                    .frame(maxWidth: .infinity, minHeight: DS.Metric.controlHeight)
+                    .frame(maxWidth: .infinity)
             }
             .buttonStyle(.bordered)
         }
+        // Large, not a fixed label height: bordered styles pad around the
+        // label, so a 56pt label made buttons taller than anything else.
+        .controlSize(.large)
         .tint(DS.Palette.accent700)
         .padding(.horizontal, DS.Metric.gutter)
         .padding(.vertical, 14)

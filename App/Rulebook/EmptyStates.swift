@@ -11,6 +11,8 @@ import RulebookKit
 /// back out of. This one is an invitation.
 struct EmptyRulesView: View {
     let profile: ProviderProfile
+    /// Creating a rule needs Pro; the cards say so before they're tapped.
+    var isLocked = false
     let onCreate: (RulePreset?) -> Void
 
     @Environment(\.dynamicTypeSize) private var typeSize
@@ -23,7 +25,7 @@ struct EmptyRulesView: View {
                     .foregroundStyle(DS.Palette.ink)
 
                 // Says what a rule does before asking anyone to make one.
-                Text("A rule is a job your mail server does before you ever see a message — filing it in a folder, marking it read, flagging it. It runs whether your phone is on or not.")
+                Text("A rule is a job your mail server does before you ever see a message: filing it in a folder, marking it read, flagging it. It runs whether your phone is on or not.")
                     .font(DS.Font.body)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)
@@ -49,7 +51,8 @@ struct EmptyRulesView: View {
                             }
                             Spacer(minLength: 8)
                             if !DS.Metric.isAccessibilitySize(typeSize) {
-                                Image(systemName: "chevron.right")
+                                Image(systemName: isLocked ? "lock.fill" : "chevron.right")
+                                    .accessibilityLabel(isLocked ? "Requires Pro" : "")
                                     .font(.subheadline.weight(.semibold))
                                     .foregroundStyle(DS.Palette.ink40)
                                     .padding(.top, 3)
@@ -67,7 +70,9 @@ struct EmptyRulesView: View {
                 }
             }
 
-            Button("Start from scratch instead") { onCreate(nil) }
+            Button { onCreate(nil) } label: {
+                LockableTitle("Start from scratch instead", isLocked: isLocked)
+            }
                 .font(DS.Font.secondary)
                 .foregroundStyle(DS.Palette.accent700)
 
