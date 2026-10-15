@@ -1,0 +1,45 @@
+name: Puppets
+
+on:
+  # Stagger the minute across repositories to spread API and model traffic.
+  schedule:
+    - cron: "0 16 * * *"
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: Report intended mutations without applying them
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: puppets-${{ github.repository }}
+  cancel-in-progress: false
+
+permissions:
+  # The reusable workflow cannot elevate beyond these caller-granted permissions.
+  actions: write
+  # GitHub validates the reusable workflow's provider job before evaluating whether it will
+  # run, so every caller must grant its declared maximum even when using Copilot only.
+  contents: write
+  # Lets the reusable workflow identify its exact GitHub-resolved commit.
+  id-token: write
+  issues: write
+  pull-requests: write
+  copilot-requests: write
+
+jobs:
+  reconcile:
+    uses: JeffSteinbok/puppets/.github/workflows/reconcile.yml@v1
+    with:
+      dry_run: ${{ inputs.dry_run || false }}
+      caller_workflow: puppets.yml
+    secrets:
+      # Required when a profile uses Copilot. GitHub App installation tokens, including
+      # GITHUB_TOKEN, cannot assign coding agents; use a repository-scoped user token.
+      token: ${{ secrets.PUPPETS_TOKEN }}
+      # Optional: only required if a workflow profile sets implementation.provider to
+      # `claude` or `codex`. Uncomment the secrets for whichever provider(s) you use.
+      # anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+      # claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+      # openai_api_key: ${{ secrets.OPENAI_API_KEY }}
