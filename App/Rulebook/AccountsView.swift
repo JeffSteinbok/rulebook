@@ -50,6 +50,17 @@ struct AccountsView: View {
                     .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
                 }
             }
+            if !accounts.hasDemo {
+                Button {
+                    accounts.addDemo()
+                } label: {
+                    Label("Add demo account", systemImage: "sparkles")
+                        .font(DS.Font.rowTitle)
+                        .frame(minHeight: 56)
+                }
+                .listRowBackground(DS.Palette.ground)
+                .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
+            }
         }
         .listStyle(.plain)
         .background(DS.Palette.ground)
@@ -107,7 +118,7 @@ private struct AccountDetailView: View {
         List {
             Section {
                 listRow { DetailRow(key: "Address", value: account.address) }
-                listRow { DetailRow(key: "Server", value: "outlook.office365.com") }
+                listRow { DetailRow(key: "Server", value: account.isDemo ? "Sample data on this device" : "outlook.office365.com") }
                 listRow { DetailRow(key: "Status", value: isActive ? "Active, shown on the rules list" : "Not active") }
                 if let ruleCount {
                     listRow { DetailRow(key: "Rules on server", value: String(ruleCount)) }
@@ -121,7 +132,7 @@ private struct AccountDetailView: View {
             }
 
             Section {
-                Button("Sign out of this mailbox", role: .destructive) {
+                Button(account.isDemo ? "Remove demo account" : "Sign out of this mailbox", role: .destructive) {
                     confirmSignOut = true
                 }
                 .font(DS.Font.rowTitle)
@@ -129,7 +140,9 @@ private struct AccountDetailView: View {
                 .listRowBackground(DS.Palette.ground)
                 .listRowInsets(.init(top: 0, leading: DS.Metric.gutter, bottom: 0, trailing: DS.Metric.gutter))
 
-                Text("Signing out removes Rulebook's access token. The rules stay on the server and keep running.")
+                Text(account.isDemo
+                     ? "The demo account's rules are samples that live only on this device. Removing it discards any changes to them; you can add it again at any time."
+                     : "Signing out removes Rulebook's access token. The rules stay on the server and keep running.")
                     .font(DS.Font.caption)
                     .foregroundStyle(DS.Palette.ink60)
                     .fixedSize(horizontal: false, vertical: true)
@@ -142,25 +155,33 @@ private struct AccountDetailView: View {
         .navigationTitle(account.displayName)
         .navigationBarTitleDisplayMode(.inline)
         .confirmationDialog(
-            "Sign out of \(account.address)?",
+            account.isDemo ? "Remove the demo account?" : "Sign out of \(account.address)?",
             isPresented: $confirmSignOut,
             titleVisibility: .visible
         ) {
-            Button("Sign out", role: .destructive) {
-                // This mailbox's tokens only, never whichever MSAL touched last.
-                Task {
-                    do {
-                        try await tokens.signOut(accountID: account.id)
-                    } catch {
-                        // Keep the mailbox: removing it while its token stays
-                        // in the Keychain would claim a sign-out that didn't
-                        // happen, and re-adding it would skip the sign-in.
-                        DiagnosticsLog.shared.append("sign-out failed: \((error as NSError).domain) \((error as NSError).code)")
-                        signOutFailed = true
-                        return
-                    }
+            if account.isDemo {
+                // No token to revoke: the demo never signed in.
+                Button("Remove", role: .destructive) {
                     accounts.remove(account)
                     dismiss()
+                }
+            } else {
+                Button("Sign out", role: .destructive) {
+                    // This mailbox's tokens only, never whichever MSAL touched last.
+                    Task {
+                        do {
+                            try await tokens.signOut(accountID: account.id)
+                        } catch {
+                            // Keep the mailbox: removing it while its token stays
+                            // in the Keychain would claim a sign-out that didn't
+                            // happen, and re-adding it would skip the sign-in.
+                            DiagnosticsLog.shared.append("sign-out failed: \((error as NSError).domain) \((error as NSError).code)")
+                            signOutFailed = true
+                            return
+                        }
+                        accounts.remove(account)
+                        dismiss()
+                    }
                 }
             }
         }

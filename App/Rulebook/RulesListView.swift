@@ -18,6 +18,15 @@ struct RulesListView: View {
     @State private var showingAccounts = false
     @State private var showingAbout = false
     @State private var showingMailboxes = false
+    @State private var showingPro = false
+
+    /// The app's real entitlement. In the demo account `model.pro` is always
+    /// unlocked, so the purchase is offered from the menu instead; that keeps
+    /// it reviewable without a Microsoft account. Optional because Previews
+    /// don't inject one.
+    @Environment(ProStore.self) private var appPro: ProStore?
+
+    private var isDemoMailbox: Bool { accounts?.active?.isDemo == true }
 
     var body: some View {
         NavigationStack {
@@ -50,6 +59,11 @@ struct RulesListView: View {
                 )) { trigger in
                     if let pro = model.pro {
                         PaywallView(trigger: trigger, pro: pro)
+                    }
+                }
+                .sheet(isPresented: $showingPro) {
+                    if let appPro {
+                        PaywallView(trigger: .editing, pro: appPro)
                     }
                 }
                 .sheet(isPresented: $isAddingAccount) {
@@ -111,6 +125,12 @@ struct RulesListView: View {
                             level: model.attentionLevel
                         ) { model.issuesOnly.toggle() }
                         .disabled(isReordering)
+                    }
+                    if isDemoMailbox {
+                        Text("Demo account: sample rules on this device, with every Pro feature open. Changes reset when you relaunch.")
+                            .font(DS.Font.caption)
+                            .foregroundStyle(DS.Palette.ink60)
+                            .fixedSize(horizontal: false, vertical: true)
                     }
                     syncLine
                     filterTabs
@@ -407,8 +427,18 @@ struct RulesListView: View {
                         Button { isAddingAccount = true } label: {
                             Label("Add account", systemImage: "plus")
                         }
+                        if accounts?.hasDemo == false {
+                            Button { accounts?.addDemo() } label: {
+                                Label("Add demo account", systemImage: "sparkles")
+                            }
+                        }
                         Button { showingAccounts = true } label: {
                             Label("Manage accounts", systemImage: "person.crop.circle")
+                        }
+                    }
+                    if let appPro, !appPro.isPro {
+                        Button { showingPro = true } label: {
+                            Label("Rulebook Pro", systemImage: "lock.open")
                         }
                     }
                     Button { showingAbout = true } label: {

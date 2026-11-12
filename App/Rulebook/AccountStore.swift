@@ -23,6 +23,18 @@ struct Account: Identifiable, Codable, Hashable {
             .joined(separator: " ")
         return "\(words) · \(provider)"
     }
+
+    /// The built-in demo mailbox: sample rules on this device, no sign-in.
+    /// App Review needs every paid feature reachable without a real Microsoft
+    /// account, and this is how. Recognised by its id, so the stored shape
+    /// doesn't change and no migration is needed.
+    static let demo = Account(
+        id: "rulebook.demo",
+        address: "demo@rulebook.example",
+        displayName: "Demo account"
+    )
+
+    var isDemo: Bool { id == Self.demo.id }
 }
 
 @MainActor
@@ -47,6 +59,11 @@ final class AccountStore {
 
     var isEmpty: Bool { accounts.isEmpty }
 
+    var hasDemo: Bool { accounts.contains { $0.isDemo } }
+
+    /// Adds the demo mailbox and switches to it.
+    func addDemo() { add(.demo) }
+
     func add(_ account: Account) {
         accounts.removeAll { $0.id == account.id }
         accounts.append(account)
@@ -55,6 +72,7 @@ final class AccountStore {
     }
 
     func remove(_ account: Account) {
+        if account.isDemo { PreviewSeed.resetDemo() }
         accounts.removeAll { $0.id == account.id }
         if activeID == account.id { activeID = accounts.first?.id }
         persist()

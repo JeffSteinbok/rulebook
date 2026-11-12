@@ -74,4 +74,11 @@ enum PreviewSeed {
     static func store() -> InMemoryRuleStore {
         InMemoryRuleStore(seed: rules, capabilities: GraphRuleMapper.capabilities)
     }
+
+    /// The demo mailbox's rules. One store rather than one per switch, so edits
+    /// survive switching mailboxes and back. Nothing is written to disk, so a
+    /// relaunch starts from the seed again, and so does removing the mailbox.
+    @MainActor static private(set) var demoStore = store()
+
+    @MainActor static func resetDemo() { demoStore = store() }
 }
