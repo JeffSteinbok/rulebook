@@ -93,4 +93,65 @@ final class RulebookUITests: XCTestCase {
             return false
         }
     }
+
+    /// The demo account App Review uses: added from the gate, every paid
+    /// action open, Pro still on offer, and removable again. Launches without
+    /// `-demo`, through the real account flow, from no saved mailboxes.
+    func testDemoAccountAddsOpensEverythingAndRemoves() {
+        let app = XCUIApplication()
+        // Argument-domain defaults: no saved mailboxes, nothing bought.
+        app.launchArguments = ["-rulebook.accounts", "<data></data>", "-rulebook.pro.lastKnown", "NO"]
+        app.launch()
+
+        let addDemo = app.buttons["Add demo account"]
+        XCTAssertTrue(addDemo.waitForExistence(timeout: 10))
+        snapshot(app, "1-gate")
+        addDemo.tap()
+
+        XCTAssertTrue(app.navigationBars["Rulebook"].waitForExistence(timeout: 10))
+        XCTAssertTrue(app.staticTexts.matching(NSPredicate(format: "label BEGINSWITH 'Demo account'")).firstMatch.exists)
+        snapshot(app, "2-demo-rules")
+
+        // Paid actions go straight through, with no paywall.
+        app.buttons["Reorder rules"].tap()
+        XCTAssertTrue(app.buttons["Finish reordering"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Reordering rules needs Pro"].exists)
+        snapshot(app, "3-reorder")
+        app.buttons["Finish reordering"].tap()
+
+        let newRule = app.buttons.matching(NSPredicate(format: "label CONTAINS[c] 'New rule'")).firstMatch
+        newRule.tap()
+        XCTAssertTrue(app.textFields.firstMatch.waitForExistence(timeout: 5))
+        XCTAssertFalse(app.staticTexts["Editing rules needs Pro"].exists)
+        snapshot(app, "4-new-rule")
+        app.buttons["Cancel"].tap()
+
+        // The purchase is still reachable, from the menu.
+        let bar = app.navigationBars["Rulebook"]
+        bar.buttons.element(boundBy: bar.buttons.count - 1).tap()
+        XCTAssertTrue(app.buttons["Rulebook Pro"].waitForExistence(timeout: 5))
+        XCTAssertFalse(app.buttons["Add demo account"].exists, "Only one demo account.")
+        snapshot(app, "5-menu")
+        app.buttons["Manage accounts"].tap()
+
+        let demoRow = app.buttons.matching(NSPredicate(format: "label BEGINSWITH 'Demo account'")).firstMatch
+        XCTAssertTrue(demoRow.waitForExistence(timeout: 5))
+        demoRow.tap()
+
+        let remove = app.buttons["Remove demo account"]
+        XCTAssertTrue(remove.waitForExistence(timeout: 5))
+        snapshot(app, "6-mailboxes")
+        remove.tap()
+        app.buttons["Remove"].tap()
+
+        XCTAssertTrue(app.buttons["Add demo account"].waitForExistence(timeout: 10), "Back at the gate.")
+        snapshot(app, "7-removed")
+    }
+
+    private func snapshot(_ app: XCUIApplication, _ name: String) {
+        let attachment = XCTAttachment(screenshot: app.screenshot())
+        attachment.name = name
+        attachment.lifetime = .keepAlways
+        add(attachment)
+    }
 }

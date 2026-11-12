@@ -232,6 +232,11 @@ struct GateView: View {
                 Button("Add account") { isAdding = true }
                     .buttonStyle(GateButtonStyle(filled: true))
 
+                // No Microsoft account needed: sample rules on this device,
+                // with every feature open, so App Review can see the whole app.
+                Button("Add demo account") { accounts.addDemo() }
+                    .buttonStyle(GateButtonStyle(filled: false))
+
                 Button("About Rulebook") { showingAbout = true }
                     .buttonStyle(GateButtonStyle(filled: false))
 

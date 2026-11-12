@@ -55,10 +55,14 @@ jobs:
           echo "id=$simulator_id" >> "$GITHUB_OUTPUT"
 
       # One `xcodebuild test` for both targets, so the simulator boots once.
+      # Ad-hoc signed, not unsigned: CODE_SIGNING_ALLOWED=NO drops the
+      # simulator's keychain entitlement, MSAL then fails at launch, and any
+      # test that starts without `-demo` sees "Rulebook couldn't start"
+      # instead of the start screen. Ad-hoc needs no certificate.
       - name: Unit and UI tests
         run: |
           xcodebuild test \
             -project App/Rulebook.xcodeproj \
             -scheme Rulebook \
             -destination "platform=iOS Simulator,id=${{ steps.simulator.outputs.id }}" \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGN_IDENTITY=- CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= PROVISIONING_PROFILE_SPECIFIER=

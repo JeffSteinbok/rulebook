@@ -117,6 +117,19 @@ struct RootView: View {
 
     private func rebuild() {
         guard let account = accounts.active else { built = nil; return }
+        if account.isDemo {
+            // Sample data on this device, with every paid feature open: the
+            // demo exists so App Review can see the full app without a
+            // Microsoft account or a purchase. A real mailbox still needs Pro.
+            let model = RulesListViewModel(
+                store: PreviewSeed.demoStore,
+                folders: PreviewSeed.folders,
+                profile: ProviderCatalog.outlook
+            )
+            model.pro = ProStore(alwaysUnlocked: true)
+            built = (account.id, model)
+            return
+        }
         // Pinned to this mailbox's MSAL account, so nothing else can redirect it.
         let mailbox = tokens.tokenProvider(for: account.id)
         // Both stores are `any RuleStore`, so this is the only line that knows
